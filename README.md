@@ -1,5 +1,7 @@
 # Reiknibókin
 
+**Opna appið:** https://aronhogni.github.io/reiknibokin/
+
 Gagnvirkt stærðfræðiapp á íslensku fyrir 9 ára krakka. Dæmin fylgja sömu flokkum og uppsetningu og vinnuheftin.
 
 - **Lota 1 · Heilar tölur:** Tugakerfið · Talnalína og neikvæðar tölur · Samlagning, frádráttur og peningar
@@ -24,7 +26,7 @@ Ný dæmi eru búin til af handahófi og þau klárast aldrei.
 
 ## Á iPad
 
-1. Opnaðu `index.html` í Safari, eða hlekkinn á appið.
+1. Opnaðu https://aronhogni.github.io/reiknibokin/ í Safari.
 2. Veldu **Deila → Bæta á heimaskjá** (Add to Home Screen).
 
 Þá opnast appið eins og venjulegt app, á öllum skjánum og með uglutákni.
@@ -41,4 +43,4 @@ Stjörnur og árangur vistast í vafranum (`localStorage`) á því tæki sem er
 
 ## Breytingar
 
-Breyttu `reiknibokin.html` og keyrðu svo `sh build.sh` til að uppfæra `index.html`.
+Breyttu `reiknibokin.html`, keyrðu `sh build.sh` til að uppfæra `index.html`, og sendu svo upp með `git commit` og `git push`. GitHub Pages uppfærir síðuna sjálfkrafa eftir um mínútu.
