@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reiknibókin">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1F38" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+</head>
+<body>
+<title>Reiknibókin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: rúðustrikuð reiknibók – sex litaðir flokkar (hlutar), dæmin sem spjöld á rúðupappír, útskýring opnast undir hverju dæmi */
+:root{
+  --paper:#F5F8FF; --grid:#DFE7FA; --card:#FFFFFF; --ink:#1D2242; --muted:#5A6288; --line:#CDD6EF;
+  --blue:#2F6BFF; --teal:#0B9A94; --orange:#EE7410; --purple:#7A4AE8; --pink:#DB3D7A; --green:#1F9D50;
+  --star:#FFB400; --star-bg:#FFF3CC; --on:#FFFFFF;
+  --good:#15924A; --good-bg:#E2F7EA; --bad:#D42F42; --bad-bg:#FDE6EA;
+  --hint:#B07800; --hint-bg:#FFF5D6; --hint-line:#F2C440; --mercury:#E0463A;
+  --font-d:'Fredoka','Baloo 2',ui-rounded,'Arial Rounded MT Bold',system-ui,sans-serif;
+  --font-b:'Nunito',ui-rounded,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11152A; --grid:#1B2140; --card:#1A1F38; --ink:#EEF1FF; --muted:#A4ACCD; --line:#2F3760;
+  --blue:#7299FF; --teal:#2FC9C1; --orange:#FFA04D; --purple:#A688FF; --pink:#FF7EAD; --green:#4FD181;
+  --star:#FFC933; --star-bg:#3A3112; --on:#0E1124;
+  --good:#52DB8A; --good-bg:#12331F; --bad:#FF7484; --bad-bg:#3B1622;
+  --hint:#FFD36B; --hint-bg:#2D2711; --hint-line:#8E7120; --mercury:#FF6A5C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11152A; --grid:#1B2140; --card:#1A1F38; --ink:#EEF1FF; --muted:#A4ACCD; --line:#2F3760;
+  --blue:#7299FF; --teal:#2FC9C1; --orange:#FFA04D; --purple:#A688FF; --pink:#FF7EAD; --green:#4FD181;
+  --star:#FFC933; --star-bg:#3A3112; --on:#0E1124;
+  --good:#52DB8A; --good-bg:#12331F; --bad:#FF7484; --bad-bg:#3B1622;
+  --hint:#FFD36B; --hint-bg:#2D2711; --hint-line:#8E7120; --mercury:#FF6A5C; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--paper);color:var(--ink);font-family:var(--font-b);font-size:18px;line-height:1.5;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:26px 26px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+h1,h2,h3,h4{font-family:var(--font-d);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit}
+b{font-weight:800}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--card);border-bottom:2px solid var(--line)}
+.top-in{max-width:980px;margin:0 auto;padding-block:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:4px 0;font-family:var(--font-d);font-weight:700;font-size:1.4rem}
+.logo .owl{width:40px;height:40px}
+.stars{display:flex;align-items:center;gap:6px;font-family:var(--font-d);font-weight:600;font-size:1.2rem;background:var(--star-bg);padding:4px 14px 4px 8px;border-radius:999px;font-variant-numeric:tabular-nums}
+.stars svg{width:26px;height:26px}
+.stars.pop{animation:pop .5s}
+@keyframes pop{40%{transform:scale(1.25)}}
+
+main{max-width:980px;margin:0 auto;padding-block:22px 80px}
+
+/* home */
+.hero{display:flex;gap:18px;align-items:center;margin-bottom:26px}
+.hero .owl{width:92px;height:92px;flex:none}
+.hero h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700}
+.hero p{margin:.3em 0 0;color:var(--muted);max-width:52ch}
+.lota{margin-bottom:30px}
+.lota-h{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.lota-h h2{font-size:1.5rem}
+.lota-h span{font-family:var(--font-d);color:var(--muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:.85rem}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.hcard{--cs:color-mix(in srgb,var(--c) 14%,var(--card));text-align:left;display:flex;flex-direction:column;gap:10px;background:var(--card);border:2.5px solid var(--c);border-radius:22px;padding:18px;cursor:pointer;box-shadow:0 6px 0 var(--c);transition:transform .12s,box-shadow .12s;min-width:0}
+@media (hover:hover){.hcard:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--c)}}
+.hcard:active{transform:translateY(4px);box-shadow:0 2px 0 var(--c)}
+.hcard:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.hc-top{display:flex;align-items:center;gap:12px}
+.sym{flex:none;width:58px;height:58px;border-radius:18px;background:var(--c);color:var(--on);display:grid;place-items:center;font-family:var(--font-d);font-weight:700;font-size:1.9rem;line-height:1}
+.hc-num{font-family:var(--font-d);font-size:.85rem;color:var(--c);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.hc-name{font-family:var(--font-d);font-weight:600;font-size:1.3rem;line-height:1.15}
+.hc-types{font-size:.92rem;color:var(--muted);line-height:1.4}
+.prog{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-size:.95rem;font-weight:500}
+.bar{flex:1;height:12px;border-radius:99px;background:var(--cs);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width .5s}
+.medal{font-size:.85rem;color:var(--muted)}
+
+/* hluti view */
+.back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 16px;cursor:pointer;font-family:var(--font-d);font-weight:500;margin-bottom:16px}
+.back:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.hhead{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.hhead .sym{width:70px;height:70px;font-size:2.3rem;border-radius:22px}
+.hhead h2{font-size:clamp(1.5rem,4.5vw,2.1rem)}
+.hhead .hc-num{font-size:.9rem}
+.hhead .prog{min-width:200px;flex:1;max-width:320px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tab{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:7px 16px;cursor:pointer;font-family:var(--font-d);font-weight:500;font-size:1rem}
+.tab[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:var(--on)}
+.tab:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.tdesc{background:color-mix(in srgb,var(--c) 10%,var(--card));border:2px dashed color-mix(in srgb,var(--c) 45%,var(--card));border-radius:16px;padding:10px 16px;margin-bottom:16px;font-weight:700}
+.ctx{margin-bottom:16px}
+.plist{display:grid;gap:18px}
+.more{display:flex;justify-content:center;margin-top:24px}
+
+/* problem card */
+.pcard{position:relative;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.pcard.solved{border-color:var(--good)}
+.ptop{display:flex;gap:14px;align-items:flex-start;min-width:0}
+.plabel{flex:none;width:40px;height:40px;border-radius:50%;background:var(--c);color:var(--on);display:grid;place-items:center;font-family:var(--font-d);font-weight:700;font-size:1.2rem}
+.pcard.solved .plabel{background:var(--good)}
+.pq{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.pq p{margin:0}
+.ptag{align-self:flex-start;font-family:var(--font-d);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--c);font-weight:600}
+.bignum{font-family:var(--font-d);font-weight:500;font-size:clamp(1.5rem,5vw,2rem);display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-variant-numeric:tabular-nums}
+.bignum.sm{font-size:clamp(1.25rem,4vw,1.6rem)}
+.bignum .mark{color:var(--c);text-decoration:underline 4px;text-underline-offset:6px;font-weight:700}
+.words{font-family:var(--font-d);font-size:1.35rem;font-weight:500;color:var(--c)}
+.svar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-d);font-size:1.2rem}
+.rows2{display:grid;gap:10px}
+.rows2>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-d);font-size:1.15rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--font-d);font-size:1.25rem;font-weight:500;background:color-mix(in srgb,var(--c) 12%,var(--card));border:2px solid color-mix(in srgb,var(--c) 40%,var(--card));border-radius:12px;padding:2px 12px;font-variant-numeric:tabular-nums}
+.order{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--font-d);font-size:1.3rem}
+.small{font-size:.95rem;color:var(--muted)}
+
+/* inputs: reiknikassar */
+.fwrap{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}
+.ans{font-family:var(--font-d);font-weight:600;font-size:1.45rem;color:var(--ink);width:calc(var(--w,3) * .72em + 1.1em);min-width:2.3em;height:2.1em;text-align:center;border:3px solid color-mix(in srgb,var(--c) 55%,var(--line));border-radius:12px;background:var(--paper);padding:0 .25em;font-variant-numeric:tabular-nums;transition:border-color .15s,background .15s}
+.ans:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent)}
+.ans.ok,.choice.ok{border-color:var(--good);background:var(--good-bg)}
+.ans.bad,.choice.bad{border-color:var(--bad);background:var(--bad-bg);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.neg{width:2em;height:2em;border-radius:10px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-family:var(--font-d);font-weight:700;font-size:1.05rem}
+.choices{display:flex;flex-wrap:wrap;gap:10px}
+.choice{font-family:var(--font-d);font-weight:600;font-size:1.4rem;min-width:3.6em;padding:6px 18px;border-radius:14px;border:3px solid var(--line);background:var(--paper);cursor:pointer}
+.choice.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,var(--card))}
+.choice:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+/* buttons */
+.pbtns{display:flex;flex-wrap:wrap;gap:10px;padding-left:54px}
+.btn{--bc:var(--c);display:inline-flex;align-items:center;gap:8px;font-family:var(--font-d);font-weight:600;font-size:1.08rem;padding:9px 18px;border-radius:14px;border:2.5px solid var(--bc);background:var(--bc);color:var(--on);cursor:pointer;box-shadow:0 4px 0 color-mix(in srgb,var(--bc) 62%,#000);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--bc) 62%,#000)}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn svg{width:20px;height:20px;flex:none}
+.b-help{--bc:var(--hint-line);color:var(--ink)}
+.b-show{background:var(--card);color:var(--ink);--bc:var(--line);box-shadow:0 4px 0 var(--line)}
+.b-help.nudge{animation:nudge 1s 2}
+@keyframes nudge{30%{transform:rotate(-3deg) scale(1.05)}60%{transform:rotate(3deg) scale(1.05)}}
+.btn.big{font-size:1.25rem;padding:12px 26px}
+
+.pmsg:empty{display:none}
+.pmsg{margin-left:54px;font-family:var(--font-d);font-weight:500;font-size:1.1rem;padding:8px 14px;border-radius:12px}
+.pmsg.good{background:var(--good-bg);color:var(--good)}
+.pmsg.bad{background:var(--bad-bg);color:var(--bad)}
+.pmsg.info{background:color-mix(in srgb,var(--c) 10%,var(--card));color:var(--ink)}
+
+/* explanation */
+[hidden]{display:none!important}
+.pexp{margin-left:54px;background:var(--hint-bg);border:2.5px solid var(--hint-line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.exp-head{display:flex;align-items:center;gap:10px}
+.exp-head .owl{width:46px;height:46px;flex:none}
+.exp-head h4{font-size:1.2rem}
+.diag{background:var(--card);border-left:6px solid var(--bad);border-radius:12px;padding:10px 14px}
+.diag h5{margin:0 0 4px;font-family:var(--font-d);font-size:1rem;font-weight:600;color:var(--bad)}
+.diag p{margin:0}
+.exp-sub{font-family:var(--font-d);font-weight:600;font-size:1.05rem}
+.pvis{background:var(--card);border-radius:14px;padding:14px;display:flex;justify-content:center;min-width:0;overflow-x:auto}
+.pvis:empty{display:none}
+.psteps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:st}
+.psteps li{counter-increment:st;display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:12px;opacity:.6}
+.psteps li::before{content:counter(st);flex:none;width:28px;height:28px;border-radius:50%;background:var(--card);border:2px solid var(--hint-line);display:grid;place-items:center;font-family:var(--font-d);font-weight:600;font-size:.95rem}
+.psteps li.cur{opacity:1;background:var(--card);box-shadow:0 0 0 2px var(--hint-line)}
+.psteps li.cur::before{background:var(--hint-line);color:var(--ink)}
+.psteps li.past{opacity:.85}
+.psteps li>div{flex:1;min-width:0;padding-top:2px}
+.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.pnav .btn{font-size:1rem;padding:7px 14px}
+.pnav .cnt{font-family:var(--font-d);color:var(--muted);font-size:.95rem}
+.b-next{--bc:var(--c)}
+.b-prev,.b-all{background:var(--card);color:var(--ink);--bc:var(--line);box-shadow:0 3px 0 var(--line)}
+.cr{color:var(--bad);font-weight:800}
+.tip{display:block;color:var(--muted);font-size:.95rem;margin-top:2px}
+.t-col{color:var(--teal);font-weight:800}.e-col{color:var(--orange);font-weight:800}
+
+/* place-value */
+.pl1{--pc:var(--purple)}.pl2{--pc:var(--blue)}.pl3{--pc:var(--teal)}.pl4{--pc:var(--orange)}
+.tblwrap{overflow-x:auto;max-width:100%}
+.pvt{border-collapse:separate;border-spacing:4px;font-family:var(--font-d)}
+.pvt th{background:color-mix(in srgb,var(--pc) 18%,var(--card));color:var(--pc);font-weight:600;font-size:.9rem;padding:6px 10px;border-radius:10px 10px 4px 4px;min-width:4.6em}
+.pvt td{text-align:center;font-size:1.6rem;font-weight:600;color:var(--pc);background:var(--paper);border:2px solid color-mix(in srgb,var(--pc) 35%,var(--line));border-radius:4px 4px 10px 10px;height:2.3em;min-width:4.6em;padding:4px}
+.pvt td.hi{background:color-mix(in srgb,var(--pc) 22%,var(--card));border-color:var(--pc)}
+.pvt td .ans{--c:var(--pc)}
+.numc{font-family:var(--font-d);font-weight:700;font-size:2.2rem;letter-spacing:.08em;text-align:center}
+.numc span{color:var(--pc)}
+.visstack{display:flex;flex-direction:column;align-items:center;gap:10px}
+.shift{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* column arithmetic grid */
+.cgwrap{overflow-x:auto;max-width:100%}
+.cg{display:grid;grid-template-columns:1.6em repeat(4,2.7em);font-family:var(--font-d);font-variant-numeric:tabular-nums;width:max-content}
+.cg>div{display:grid;place-items:center;position:relative}
+.cg-h{font-weight:600;font-size:.95rem;color:var(--pc);background:color-mix(in srgb,var(--pc) 16%,var(--card));margin:0 2px;border-radius:8px 8px 0 0;height:1.9em}
+.cg-c{height:1.7em;font-size:1rem;color:var(--bad);font-weight:700}
+.cg-d{height:1.9em;font-size:1.65rem;font-weight:500;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.cg-op{font-size:1.6rem;font-weight:600;color:var(--c)}
+.cg-r{border-top:3px solid var(--ink);height:2.3em}
+.cg .hi{background:color-mix(in srgb,var(--hint-line) 30%,transparent)}
+.cg-h.hi{background:var(--hint-line);color:var(--ink)}
+.cg s{text-decoration-color:var(--bad);text-decoration-thickness:2px;color:var(--muted)}
+.cg .bor{position:absolute;top:-.55em;right:.05em;font-size:.95rem;font-weight:700;color:var(--bad);line-height:1}
+.cg .ans.dig{--w:1;min-width:0;width:2.1em;height:1.85em;font-size:1.4rem;padding:0;border-radius:9px}
+.cg input.memo{width:2em;height:1.5em;font-family:var(--font-d);font-size:.95rem;font-weight:700;text-align:center;color:var(--bad);border:1.5px dashed var(--line);border-radius:7px;background:transparent;padding:0}
+.cg input.memo:focus{outline:none;border-color:var(--bad)}
+
+/* long division (skíðabrekkan) */
+.ldwrap{overflow-x:auto;max-width:100%}
+.ld{display:grid;grid-template-columns:2.6em repeat(var(--n),1.45em);grid-auto-rows:1.7em;font-family:var(--font-d);font-size:1.7rem;font-weight:500;width:max-content;font-variant-numeric:tabular-nums;padding-right:.4em}
+.ldc{display:grid;place-items:center}
+.ldc.dv{justify-items:end;padding-right:2px;display:flex;align-items:center;justify-content:flex-end}
+.ldc.dv .br{font-size:1.25em;line-height:1;margin-left:1px;transform:scaleY(1.15) translateY(-.02em)}
+.ldc.dd{border-top:3px solid var(--ink)}
+.ldc.q{color:var(--bad);font-weight:700}
+.ldc.ul{border-bottom:3px solid var(--ink)}
+.ldc.op{justify-items:end}
+.ldc.faint{color:var(--muted);opacity:.6}
+.ldc.down{color:var(--blue);font-weight:700}
+.ldc.now{background:color-mix(in srgb,var(--hint-line) 40%,transparent);border-radius:6px}
+.ld-ans{display:flex;align-items:center;justify-content:flex-end}
+.ld-ans .fwrap{width:100%}
+.ld-ans .ans{width:100%;min-width:0;height:1.5em;font-size:1.5rem;text-align:right;padding-right:.2em}
+
+/* number line, thermometer */
+.svgwrap{overflow-x:auto;max-width:100%;width:100%}
+.nl{width:100%;max-width:700px;min-width:480px;height:auto;display:block;margin:0 auto}
+.nl-t{font:600 19px var(--font-d);fill:var(--ink);text-anchor:middle}
+.nl-m{font:700 20px var(--font-d);text-anchor:middle}
+.nl-j{font:700 16px var(--font-d);text-anchor:middle}
+.thermo-wrap{display:flex;justify-content:center}
+.th{width:280px;max-width:100%;height:auto;display:block}
+.th-board{fill:none;stroke:var(--line);stroke-width:2}
+.th-warm{fill:color-mix(in srgb,var(--orange) 9%,var(--card))}
+.th-cold{fill:color-mix(in srgb,var(--blue) 12%,var(--card))}
+.th-zero{stroke:var(--blue);stroke-width:2;stroke-dasharray:6 5;opacity:.7}
+.th-zone{font:600 12px var(--font-d);fill:var(--muted);letter-spacing:.04em}
+.th-ic{font-size:20px}
+.th-big{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.th-small{stroke:var(--muted);stroke-width:1.5;stroke-linecap:round}
+.th-t{font:700 18px var(--font-d);fill:var(--ink)}
+.th-t0{fill:var(--blue);font-size:21px}
+.th-u{font:700 17px var(--font-d);fill:var(--muted)}
+.th-glass{fill:var(--card);stroke:var(--ink);stroke-width:3}
+.th-merc{fill:var(--mercury)}
+.th-shine{fill:#fff;opacity:.55}
+.th-shine-l{stroke:var(--line);stroke-width:3;stroke-linecap:round;opacity:.9}
+.th-lhl{fill:color-mix(in srgb,var(--orange) 22%,var(--card));stroke:var(--orange);stroke-width:2}
+.th-dot{fill:var(--orange)}
+.th-dn{font:700 11px var(--font-d);fill:#fff}
+.th-hl{stroke:var(--blue);stroke-width:2.5;stroke-dasharray:5 4}
+.th-pill{fill:var(--blue)}
+.th-pt{font:700 15px var(--font-d);fill:var(--on)}
+
+/* dots, plates, area */
+.dotrows{display:flex;flex-direction:column;gap:6px}
+.dr{display:flex;align-items:center;gap:12px}
+.drd{display:flex;gap:5px;padding:5px 8px;border-radius:10px;background:color-mix(in srgb,var(--c) 10%,var(--card));border:2px solid color-mix(in srgb,var(--c) 30%,var(--card))}
+.dot{width:16px;height:16px;border-radius:50%;background:var(--c);display:block}
+.dr b{font-family:var(--font-d);font-weight:600;color:var(--c);min-width:2em}
+.groups{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.grp{display:grid;grid-template-columns:repeat(var(--gc,4),16px);gap:5px;padding:8px;border-radius:12px;border:2px dashed color-mix(in srgb,var(--c) 50%,var(--card))}
+.itemsrow{display:flex;flex-wrap:wrap;gap:6px;max-width:520px}
+.it{width:22px;height:22px;border-radius:50%;display:block;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--orange) 55%,#fff) 0 25%,var(--orange) 26%);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--orange) 70%,#000)}
+.plates{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.plate{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-d);font-weight:600;color:var(--c)}
+.plate-items{width:96px;min-height:96px;border-radius:50%;background:var(--paper);border:4px solid color-mix(in srgb,var(--c) 45%,var(--line));display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:3px;padding:12px}
+.plate-items .it{width:15px;height:15px}
+.skip{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-family:var(--font-d)}
+.sk{display:flex;flex-direction:column;align-items:center;min-width:2.6em;padding:2px 6px 4px;border-radius:12px;background:color-mix(in srgb,var(--c) 13%,var(--card));font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums}
+.sk small{font-size:.7rem;color:var(--muted);font-weight:500}
+.sk.last{background:var(--c);color:var(--on)}
+.sk.last small{color:var(--on)}
+.sk-ar{color:var(--muted)}
+.area{display:flex;gap:8px;align-items:stretch;font-family:var(--font-d);width:100%;max-width:520px}
+.area-side{display:grid;place-items:center;font-size:1.4rem;font-weight:600;color:var(--c);padding-top:1.7em}
+.area-body{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.area-top{display:flex;gap:6px;font-size:1.2rem;font-weight:600;text-align:center}
+.area-top span{min-width:5em}
+.area-top .t{color:var(--teal)}.area-top .e{color:var(--orange)}
+.area-boxes{display:flex;gap:6px;min-height:110px}
+.ab{min-width:5em;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px;font-size:1.1rem;text-align:center}
+.ab b{font-size:1.35rem}
+.ab1{background:color-mix(in srgb,var(--teal) 20%,var(--card));border:2.5px solid var(--teal)}
+.ab2{background:color-mix(in srgb,var(--orange) 20%,var(--card));border:2.5px solid var(--orange)}
+.ab.q{color:var(--muted)}
+.fam{display:flex;flex-direction:column;align-items:center;gap:0;font-family:var(--font-d)}
+.fam-tri{position:relative;width:200px;height:160px}
+.fam-tri::before{content:"";position:absolute;inset:0;clip-path:polygon(50% 0,100% 100%,0 100%);background:color-mix(in srgb,var(--c) 18%,var(--card))}
+.fam-tri span{position:absolute;font-size:1.6rem;font-weight:700}
+.fam-tri .ft{left:50%;top:34px;transform:translateX(-50%);color:var(--c)}
+.fam-tri .fl{left:30px;bottom:12px}.fam-tri .fr{right:30px;bottom:12px}
+.fam-tri .fx{left:50%;bottom:14px;transform:translateX(-50%);font-size:1.1rem;color:var(--muted)}
+.pairs{border-collapse:collapse;font-family:var(--font-d);font-variant-numeric:tabular-nums}
+.pairs td,.pairs th{padding:4px 10px;border-bottom:1px solid var(--line);text-align:left}
+.pairs th{font-weight:600;color:var(--muted);font-size:.9rem}
+.pairs tr.no td{color:var(--muted);text-decoration:line-through}
+.pairs tr.best td{background:var(--good-bg);color:var(--good);font-weight:700}
+
+/* shop */
+.shop{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:14px 18px}
+.shop h3{font-size:1.2rem;width:100%}
+.shop table{border-collapse:collapse;font-variant-numeric:tabular-nums}
+.shop td{padding:6px 14px;border-bottom:2px dotted var(--line);font-size:1.05rem}
+.shop td:last-child{text-align:right;font-family:var(--font-d);font-weight:600;color:var(--c)}
+.mt{border-collapse:separate;border-spacing:4px;font-family:var(--font-d);font-variant-numeric:tabular-nums}
+.mt th{background:color-mix(in srgb,var(--c) 18%,var(--card));color:var(--c);font-size:1.3rem;min-width:2.8em;height:2.2em;border-radius:10px}
+.mt th.x{background:var(--c);color:var(--on)}
+.mt td{text-align:center;font-size:1.35rem;font-weight:600;min-width:2.8em;height:2.2em;background:var(--paper);border:2px solid var(--line);border-radius:10px}
+.mt td .ans{width:2.6em;min-width:0;height:1.8em;font-size:1.25rem;border-width:2.5px}
+.mt tr.hi td{background:color-mix(in srgb,var(--hint-line) 35%,var(--card));border-color:var(--hint-line)}
+.mt td.empty{color:transparent}
+
+/* confetti */
+.conf{position:absolute;left:var(--x);top:var(--y);width:10px;height:14px;border-radius:3px;pointer-events:none;animation:conf .9s ease-out forwards}
+@keyframes conf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+/* snertiskjáir (iPad o.fl.) */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,.hcard,.tab,.choice,.btn,.neg{touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media (pointer:coarse){
+  .neg{width:46px;height:46px;font-size:1.3rem}
+  .tab{min-height:46px;padding:9px 18px}
+  .btn{min-height:50px}
+  .choice{min-height:56px}
+  .cg input.memo{font-size:16px;width:2.2em;height:1.8em}
+  .back{min-height:46px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+@media (max-width:560px){
+  body{font-size:17px}
+  .pbtns,.pmsg,.pexp{margin-left:0;padding-left:0}
+  .pexp{padding:12px}
+  .pcard{padding:14px}
+  .plabel{width:34px;height:34px;font-size:1.05rem}
+  .ptop{gap:10px}
+  .btn{font-size:1rem;padding:8px 14px}
+  .hero .owl{width:70px;height:70px}
+  .pvt th,.pvt td{min-width:3.6em}
+  .pvt th{font-size:.78rem;padding:5px 4px}
+}
+</style>
+
+<header class="top gut"><div class="top-in">
+  <button class="logo" id="logo" type="button" aria-label="Forsíða"><span id="logoOwl"></span>Reiknibókin</button>
+  <div class="stars" id="stars" title="Stjörnur sem þú hefur safnað"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z" style="fill:var(--star);stroke:color-mix(in srgb,var(--star) 70%,#000);stroke-width:1.2;stroke-linejoin:round"/></svg><span id="starN">0</span></div>
+</div></header>
+<main class="gut" id="app"></main>
+
+<script>
+"use strict";
+/* ================= helpers ================= */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+/* jöfn dreifing rétts svars: dregið úr stokkuðum bunka, aldrei sami stafur tvisvar í röð */
+const DECKS={};
+function deal(key,n){const d=DECKS[key]||(DECKS[key]={cards:[],hist:[]});
+  if(!d.cards.length){const max=n>2?1:2;let c;
+    do{c=shuffle([...Array(n).keys(),...Array(n).keys()]);}while([...d.hist,...c].some((x,i,a)=>i>=max&&a.slice(i-max,i).every(y=>y===x)));
+    d.cards=c;}
+  const v=d.cards.shift();d.hist=[...d.hist,v].slice(-2);return v;}
+const range=(a,b)=>{if(b===undefined){b=a-1;a=0;}const r=[];for(let i=a;i<=b;i++)r.push(i);return r;};
+const M=n=>n<0?'−'+(-n):String(n);
+const pad4=x=>String(x).padStart(4,' ').split('').map(c=>c===' '?null:+c);
+const PL=[{k:'Þ',n:'Þúsundir',v:1000,c:'pl1'},{k:'H',n:'Hundruð',v:100,c:'pl2'},{k:'T',n:'Tugir',v:10,c:'pl3'},{k:'E',n:'Einingar',v:1,c:'pl4'}];
+const PN=['Þúsundir','Hundruð','Tugir','Einingar'];
+const PACC=['þúsundirnar','hundruðin','tugina','einingarnar'];
+const PDAT=['þúsundunum','hundruðunum','tugunum','einingunum'];
+const PSEAT=['þúsundasætinu','hundraðasætinu','tugasætinu','einingasætinu'];
+const PNOUN=(d,i)=>d===1?['þúsund','hundrað','tugur','eining'][i]:['þúsund','hundruð','tugir','einingar'][i];
+const NAMES=[['Anna','hún'],['Jón','hann'],['Sara','hún'],['Óli','hann'],['Embla','hún'],['Aron','hann'],['Katla','hún'],['Birkir','hann'],['Hekla','hún'],['Dagur','hann']];
+
+function parseNum(s){s=String(s).replace(/[−–—]/g,'-').replace(/[\s.]/g,'').replace(',','.');if(s===''||s==='-')return null;const n=Number(s);return isNaN(n)?NaN:n;}
+
+/* number words (íslenska) */
+const UN=['','eitt','tvö','þrjú','fjögur','fimm','sex','sjö','átta','níu'];
+const UM=['','einn','tveir','þrír','fjórir','fimm','sex','sjö','átta','níu'];
+const TEEN=['tíu','ellefu','tólf','þrettán','fjórtán','fimmtán','sextán','sautján','átján','nítján'];
+const TENS=['','','tuttugu','þrjátíu','fjörutíu','fimmtíu','sextíu','sjötíu','áttatíu','níutíu'];
+function words(n){
+  const th=Math.floor(n/1000),h=Math.floor(n/100)%10,r=n%100,parts=[];
+  if(th)parts.push({w:UN[th]+' þúsund',v:th*1000});
+  if(h)parts.push({w:UN[h]+(h===1?' hundrað':' hundruð'),v:h*100});
+  let comp=false;
+  if(r){let w;if(r<10)w=UM[r];else if(r<20)w=TEEN[r-10];else if(r%10===0)w=TENS[r/10];else{w=TENS[Math.floor(r/10)]+' og '+UM[r%10];comp=true;}parts.push({w,v:r});}
+  const ws=parts.map(p=>p.w);
+  if(ws.length>1&&!comp)ws.splice(ws.length-1,0,'og');
+  return {text:ws.join(' '),parts};
+}
+
+/* ================= visuals ================= */
+function numColored(n){const s=String(n);return `<div class="numc">${s.split('').map((c,i)=>`<span class="${PL[4-s.length+i].c}">${c}</span>`).join('')}</div>`;}
+function pvTable(n,o={}){const from=o.from??0,to=o.to??3,hi=o.hi??-1;const d=String(n).padStart(4,' ').split('');
+  return `<div class="tblwrap"><table class="pvt"><tr>${PL.map(p=>`<th class="${p.c}">${p.n}</th>`).join('')}</tr><tr>${PL.map((p,i)=>`<td class="${p.c}${i===hi?' hi':''}">${i>=from&&i<=to&&d[i]!==' '?d[i]:''}</td>`).join('')}</tr></table></div>`;}
+
+function numLine(o){
+  const min=o.min??-10,max=o.max??10,W=640,pad=32,y=86,H=128;
+  const X=v=>pad+(v-min)*(W-2*pad)/(max-min);
+  const labels=o.labels||range(min,max).filter(v=>v%5===0);
+  const marks=o.marks||[],mv=new Set(marks.map(m=>m.v));
+  let s=`<svg class="nl" viewBox="0 0 ${W} ${H}" role="img" aria-label="Talnalína">`;
+  s+=`<line x1="${pad-18}" y1="${y}" x2="${W-pad+18}" y2="${y}" style="stroke:var(--ink);stroke-width:2.5"/>`;
+  s+=`<path d="M${W-pad+24} ${y} l-11 -6.5 v13z" style="fill:var(--ink)"/><path d="M${pad-24} ${y} l11 -6.5 v13z" style="fill:var(--ink)"/>`;
+  for(let v=min;v<=max;v++){const big=v%5===0;s+=`<line x1="${X(v)}" x2="${X(v)}" y1="${y-(big?11:6)}" y2="${y+(big?11:6)}" style="stroke:var(--ink);stroke-width:${big?2.5:1.5}"/>`;
+    if(labels.includes(v)&&!mv.has(v))s+=`<text x="${X(v)}" y="${y+34}" class="nl-t">${M(v)}</text>`;}
+  (o.jumps||[]).forEach(j=>{const x1=X(j.from),x2=X(j.to),hh=Math.min(50,12+Math.abs(x2-x1)*.28),cy=y-7,col=j.color||'var(--c)';
+    s+=`<path d="M${x1} ${cy} Q ${(x1+x2)/2} ${cy-2*hh} ${x2} ${cy}" style="fill:none;stroke:${col};stroke-width:3;stroke-linecap:round"/>`;
+    const tx=(x2-x1)/2,ty=2*hh,L=Math.hypot(tx,ty)||1,ux=tx/L,uy=ty/L,bx=x2-ux*11,by=cy-uy*11,px=-uy,py=ux;
+    s+=`<path d="M${x2} ${cy} L${bx+px*6} ${by+py*6} L${bx-px*6} ${by-py*6}z" style="fill:${col}"/>`;
+    if(j.label!==undefined)s+=`<text x="${(x1+x2)/2}" y="${cy-hh-7}" class="nl-j" style="fill:${col}">${j.label}</text>`;});
+  marks.forEach(m=>{const col=m.color||'var(--c)';s+=`<circle cx="${X(m.v)}" cy="${y}" r="8" style="fill:${col};stroke:var(--card);stroke-width:2.5"/><text x="${X(m.v)}" y="${y+34}" class="nl-m" style="fill:${col}">${m.label??M(m.v)}</text>`;});
+  (o.letters||[]).forEach(l=>{s+=`<text x="${X(l.v)}" y="${y-50}" class="nl-m" style="fill:var(--blue);font-size:24px">${l.ch}</text><path d="M${X(l.v)} ${y-44} v18 M${X(l.v)-6} ${y-33} l6 8 l6 -8" style="fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/>`;});
+  return `<div class="svgwrap">${s}</svg></div>`;
+}
+
+function thermo(t,o={}){
+  /* kvarði: 25 gráður sem ná alltaf yfir 0 og hitann */
+  const min=t<=0?-15:-5,max=min+25,per=15,top=40,Y=v=>top+(max-v)*per,bot=Y(min);
+  const cx=112,hw=15,r=27,B=bot+42,dy=Math.sqrt(r*r-hw*hw),W=290,H=B+r+14,y0=Y(0);
+  const L=Math.round(t/5)*5,u=Math.random().toString(36).slice(2,7);
+  let s=`<svg class="th" viewBox="0 0 ${W} ${H}" role="img" aria-label="Hitamælir sem sýnir hitastig">`;
+  s+=`<defs><clipPath id="thc${u}"><rect x="6" y="6" width="${W-12}" height="${H-12}" rx="22"/></clipPath></defs>`;
+  s+=`<g clip-path="url(#thc${u})"><rect x="6" y="6" width="${W-12}" height="${y0-6}" class="th-warm"/><rect x="6" y="${y0}" width="${W-12}" height="${H-y0}" class="th-cold"/></g>`;
+  s+=`<rect x="6" y="6" width="${W-12}" height="${H-12}" rx="22" class="th-board"/>`;
+  s+=`<text x="${W-22}" y="${top+8}" class="th-ic" text-anchor="end">☀️</text><text x="${W-22}" y="${bot-2}" class="th-ic" text-anchor="end">❄️</text>`;
+  s+=`<text x="${W-22}" y="${y0-8}" class="th-zone" text-anchor="end">hlýtt</text><text x="${W-22}" y="${y0+20}" class="th-zone" text-anchor="end">frost</text>`;
+  s+=`<line x1="${cx-hw-26}" x2="${W-16}" y1="${y0}" y2="${y0}" class="th-zero"/>`;
+  /* strik og tölur */
+  for(let v=min;v<=max;v++){const big=v%5===0,y=Y(v),len=big?18:9,xl=cx-hw-4,xr=cx+hw+4;
+    s+=`<line x1="${xl-len}" x2="${xl}" y1="${y}" y2="${y}" class="${big?'th-big':'th-small'}"/><line x1="${xr}" x2="${xr+len}" y1="${y}" y2="${y}" class="${big?'th-big':'th-small'}"/>`;
+    if(big){if(o.hl&&v===L&&L!==t)s+=`<rect x="${xl-len-50}" y="${y-13}" width="44" height="26" rx="13" class="th-lhl"/>`;
+      s+=`<text x="${xl-len-8}" y="${y+6}" class="th-t${v===0?' th-t0':''}" text-anchor="end">${M(v)}</text>`;}}
+  s+=`<text x="22" y="${top-14}" class="th-u">°C</text>`;
+  /* glerið */
+  s+=`<path d="M${cx-hw} ${B-dy} V${top-14+hw} A${hw} ${hw} 0 0 1 ${cx+hw} ${top-14+hw} V${B-dy} A${r} ${r} 0 1 1 ${cx-hw} ${B-dy}Z" class="th-glass"/>`;
+  /* vökvinn */
+  s+=`<rect x="${cx-7}" y="${Y(t)}" width="14" height="${B-Y(t)}" rx="7" class="th-merc"/><rect x="${cx-7}" y="${Y(t)+7}" width="14" height="${B-Y(t)-7}" class="th-merc"/>`;
+  s+=`<circle cx="${cx}" cy="${B}" r="${r-7}" class="th-merc"/><circle cx="${cx-7}" cy="${B-7}" r="5" class="th-shine"/>`;
+  s+=`<line x1="${cx-hw+6}" x2="${cx-hw+6}" y1="${top}" y2="${B-dy-4}" class="th-shine-l"/>`;
+  if(o.hl){const d=Math.abs(t-L),sg=t>L?1:-1,xd=cx+hw+30;
+    for(let i=1;i<=d;i++)s+=`<circle cx="${xd}" cy="${Y(L+sg*i)}" r="7.5" class="th-dot"/><text x="${xd}" y="${Y(L+sg*i)+4}" class="th-dn" text-anchor="middle">${i}</text>`;
+    const ya=Y(t),xa=d?xd+11:cx+hw+8;
+    s+=`<line x1="${cx-hw-26}" x2="${d?cx+hw+6:xa}" y1="${ya}" y2="${ya}" class="th-hl"/>`;
+    s+=`<path d="M${xa} ${ya} l9 -10 h52 a10 10 0 0 1 10 10 a10 10 0 0 1 -10 10 h-52z" class="th-pill"/><text x="${xa+38}" y="${ya+5}" class="th-pt" text-anchor="middle">${M(t)}°</text>`;}
+  return s+'</svg>';
+}
+
+function colGrid(o){
+  const hi=o.hi??-1,cls=i=>i===hi?' hi':'';
+  let h='<div class="cgwrap"><div class="cg">';
+  h+='<div></div>'+PL.map((p,i)=>`<div class="cg-h ${p.c}${cls(i)}">${p.k}</div>`).join('');
+  h+='<div></div>'+PL.map((p,i)=>`<div class="cg-c${cls(i)}">${o.carry?o.carry[i]:''}</div>`).join('');
+  h+='<div></div>'+o.top.map((c,i)=>`<div class="cg-d${cls(i)}">${c.now!=null?`<span class="bor">${c.now}</span><s>${c.d}</s>`:c.d}</div>`).join('');
+  h+=`<div class="cg-op">${o.op}</div>`+o.bot.map((c,i)=>`<div class="cg-d${cls(i)}">${c}</div>`).join('');
+  h+='<div></div>'+o.res.map((c,i)=>`<div class="cg-d cg-r${cls(i)}">${c}</div>`).join('');
+  return h+'</div></div>';
+}
+function colProblem(a,b,op){
+  const A=pad4(a),B=pad4(b);
+  return colGrid({op,top:A.map(x=>({d:x??''})),bot:B.map(x=>x??''),carry:range(4).map(k=>`[[m:${k}]]`),res:range(4).map(k=>`[[0:${k}]]`)});
+}
+
+function addSteps(a,b){
+  const A=pad4(a),B=pad4(b),carry=Array(4).fill(''),res=Array(4).fill(''),steps=[],sum=a+b,lenS=String(sum).length;
+  const snap=hi=>colGrid({op:'+',top:A.map(x=>({d:x??''})),bot:B.map(x=>x??''),carry:carry.slice(),res:res.slice(),hi});
+  steps.push({t:`Settu dæmið upp: <b>einingar undir einingum</b>, tugir undir tugum. Byrjaðu alltaf <b>hægra megin</b>, í einingunum.`,v:snap(-1)});
+  let c=0;
+  for(let i=3;i>=4-lenS;i--){
+    const da=A[i]??0,db=B[i]??0,s=da+db+c;let t;
+    if(A[i]==null&&B[i]==null){t=`<b>${PN[i]}:</b> hér er bara geymdi <span class="cr">1</span>-inn. Skrifaðu <b>1</b>.`;}
+    else{const parts=[];if(A[i]!=null)parts.push(da);if(B[i]!=null)parts.push(db);if(c)parts.push(`<span class="cr">${c}</span> (geymdur)`);
+      t=`<b>${PN[i]}:</b> ${parts.join(' + ')} = ${s}.`;
+      if(s>=10&&i>0)t+=` Það er 10 eða meira! Skrifaðu <b>${s%10}</b> og geymdu <span class="cr">1</span> fyrir ofan ${PACC[i-1]}.`;else t+=` Skrifaðu <b>${s}</b>.`;}
+    res[i]=String(s%10);c=Math.floor(s/10);if(c&&i>0)carry[i-1]='1';
+    steps.push({t,v:snap(i)});
+  }
+  steps.push({t:`Svarið er <b>${sum}</b>.`,v:snap(-1)});
+  return steps;
+}
+function subSteps(a,b){
+  const A=pad4(a),B=pad4(b),cur=A.slice(),changed=A.map(()=>false),res=Array(4).fill(''),steps=[],lenA=String(a).length,D=a-b;
+  const snap=hi=>colGrid({op:'−',top:A.map((x,i)=>({d:x??'',now:changed[i]?cur[i]:null})),bot:B.map(x=>x??''),carry:Array(4).fill(''),res:res.slice(),hi});
+  steps.push({t:`Settu dæmið upp: stærri talan efst og <b>einingar undir einingum</b>. Byrjaðu <b>hægra megin</b>. Við tökum alltaf <b>neðri töluna frá efri tölunni</b>.`,v:snap(-1)});
+  for(let i=3;i>=4-lenA;i--){
+    const bt=B[i]??0;let t=`<b>${PN[i]}:</b> `;
+    if(cur[i]<bt){
+      let j=i-1;while(cur[j]===0)j--;
+      t+=`${cur[i]} − ${bt} gengur ekki, því ${cur[i]} er minna en ${bt}. `;
+      if(j===i-1)t+=`Fáum lánað 1 frá ${PDAT[j]}: <s>${cur[j]}</s> verður <span class="cr">${cur[j]-1}</span>, og ${cur[i]} verður <span class="cr">${cur[i]+10}</span>. `;
+      else t+=`Það er 0 í ${PDAT[i-1]}, svo við förum lengra til vinstri og fáum lánað frá ${PDAT[j]}: <s>${cur[j]}</s> verður <span class="cr">${cur[j]-1}</span>. ${j<i-2?'Núllin verða':'Núllið verður'} fyrst 10, lánar svo 1 áfram og verður <span class="cr">9</span>. Þá verður ${cur[i]} að <span class="cr">${cur[i]+10}</span>. `;
+      cur[j]--;changed[j]=true;for(let k=j+1;k<i;k++){cur[k]=9;changed[k]=true;}cur[i]+=10;changed[i]=true;
+    }
+    const r=cur[i]-bt;
+    if(i===4-lenA&&r===0&&i<3){t+=`${cur[i]} − ${bt} = 0. Við skrifum ekki 0 fremst í tölu.`;res[i]='';}
+    else{t+=B[i]==null?`Ekkert að draga frá, svo <b>${cur[i]}</b> fer beint niður.`:`${cur[i]} − ${bt} = <b>${r}</b>.`;res[i]=String(r);}
+    steps.push({t,v:snap(i)});
+  }
+  steps.push({t:`Svarið er <b>${D}</b>. Prófum: ${D} + ${b} = ${a} ✓`,v:snap(-1)});
+  return steps;
+}
+function bugSFL(a,b){const A=String(a),B=String(b).padStart(A.length,'0');let r='';for(let i=0;i<A.length;i++)r+=Math.abs(+A[i]-+B[i]);return +r;}
+function bugNoDec(a,b){const A=String(a),B=String(b).padStart(A.length,'0');let r='';for(let i=0;i<A.length;i++){const t=+A[i],u=+B[i];r+=t<u?t+10-u:t-u;}return +r;}
+function bugNoCarry(a,b){const L=Math.max(String(a).length,String(b).length),A=String(a).padStart(L,'0'),B=String(b).padStart(L,'0');let r='';for(let i=0;i<L;i++)r+=(+A[i]+ +B[i])%10;return +r;}
+function subDiag(a,b,v){
+  if(v==null||isNaN(v)||v===a-b)return '';
+  if(v===bugSFL(a,b)&&v===bugNoDec(a,b))return `Passaðu lánin! Þegar efri talan er minni en sú neðri þarf að <b>fá lánað</b> frá næsta dálki til vinstri. Þá verður efri talan 10 stærri, og talan sem lánaði verður <b>einum minni</b>. Strikaðu yfir hana og skrifaðu nýju töluna fyrir ofan.`;
+  if(v===bugSFL(a,b)&&bugSFL(a,b)!==a-b){const A=String(a),B=String(b).padStart(A.length,'0');let k=A.length-1;while(k>=0&&+A[k]>=+B[k])k--;const i=4-A.length+k;
+    return `Þú tókst <b>minni töluna frá stærri</b> í hverjum dálki, líka þegar efri talan var minni. Í ${PDAT[i]} reiknaðir þú ${B[k]} − ${A[k]}, en þar stendur ${A[k]} efst. Í frádrætti tökum við alltaf <b>neðri töluna frá efri tölunni</b>. Ef efri talan er minni þarf að <b>fá lánað</b> frá næsta dálki til vinstri.`;}
+  if(v===bugNoDec(a,b))return `Þú fékkst lánað, en gleymdir að <b>minnka töluna</b> í dálkinum sem þú fékkst lánað frá. Strikaðu yfir hana og skrifaðu einum minna fyrir ofan.`;
+  if(v===a+b)return `Þú lagðir saman. Hér á að <b>draga frá</b>.`;
+  return `Prófum svarið þitt. Ef það er rétt, þá á ${M(v)} + ${b} að vera ${a}. En ${M(v)} + ${b} = ${v+b}. Farðu yfir hvern dálk og passaðu lánin.`;
+}
+function addDiag(a,b,v){
+  if(v==null||isNaN(v)||v===a+b)return '';
+  if(v===bugNoCarry(a,b)&&bugNoCarry(a,b)!==a+b)return `Þú gleymdir að <b>geyma</b>. Þegar summan í dálki er 10 eða meira skrifum við bara einingarnar og geymum 1 í næsta dálki til vinstri.`;
+  if(v===a*10+b||v===a+b*10)return `Passaðu að <b>einingar standi undir einingum</b>. Tölurnar eiga að raðast upp hægra megin.`;
+  if(v===a-b||v===b-a)return `Þú dróst frá. Hér á að <b>leggja saman</b>.`;
+  return `Prófum svarið þitt. Ef það er rétt, þá á ${M(v)} − ${b} að vera ${a}. En ${M(v)} − ${b} = ${M(v-b)}. Gáðu hvort þú gleymdir að geyma.`;
+}
+function multDiag(a,b,v){
+  if(v==null||isNaN(v)||v===a*b)return '';
+  if(v===a+b)return `Þú lagðir saman. Punkturinn · þýðir <b>sinnum</b>.`;
+  if(v===a*(b+1)||v===b*(a+1))return `Þú ert <b>einum hóp of mikið</b>. Teldu aftur og passaðu að telja ekki einu sinni of oft.`;
+  if(v===a*(b-1)||v===b*(a-1))return `Þú ert <b>einum hóp of lítið</b>. Teldu aftur og passaðu að telja alla hópana.`;
+  return '';
+}
+
+function dotRows(rows,cols,tot=true){return `<div class="dotrows">${range(rows).map(r=>`<div class="dr"><span class="drd">${range(cols).map(()=>'<i class="dot"></i>').join('')}</span>${tot?`<b>${cols*(r+1)}</b>`:''}</div>`).join('')}</div>`;}
+function groupsVis(n,per){const gc=per<=4?per:per<=9?3:4;return `<div class="groups">${range(n).map(()=>`<div class="grp" style="--gc:${gc}">${range(per).map(()=>'<i class="dot"></i>').join('')}</div>`).join('')}</div>`;}
+function skipBubbles(k,m){return `<div class="skip">${range(1,m).map(i=>`<span class="sk${i===m?' last':''}"><small>${i}.</small>${k*i}</span>`).join('<span class="sk-ar">›</span>')}</div>`;}
+function itemsRow(n){return `<div class="itemsrow">${range(n).map(()=>'<i class="it"></i>').join('')}</div>`;}
+function plates(g,per){return `<div class="plates">${range(g).map(()=>`<div class="plate"><div class="plate-items">${range(per).map(()=>'<i class="it"></i>').join('')}</div><span>${per||''}</span></div>`).join('')}</div>`;}
+function areaModel(a,n,stage=3){const T=n-n%10,U=n%10;
+  const box=(cls,flex,lab,val,show)=>`<div class="ab ${cls}${show?'':' q'}" style="flex:${flex}">${a} · ${lab}<b>${show?'= '+val:'= ?'}</b></div>`;
+  return `<div class="area"><div class="area-side">${a}</div><div class="area-body"><div class="area-top"><span class="t" style="flex:${T}">${T}</span>${U?`<span class="e" style="flex:${Math.max(U*1.6,4)}">${U}</span>`:''}</div><div class="area-boxes">${box('ab1',T,T,a*T,stage>=1)}${U?box('ab2',Math.max(U*1.6,4),U,a*U,stage>=2):''}</div></div></div>`;}
+function famVis(p,a,b,op){return `<div class="fam"><div class="fam-tri"><span class="ft">${p}</span><span class="fl">${a}</span><span class="fx">${op||'· og :'}</span><span class="fr">${b}</span></div></div>`;}
+
+/* long division */
+function ldModel(D,d){const ds=String(D).split('').map(Number);let cur=0,started=false;const st=[],skip=[];
+  for(let i=0;i<ds.length;i++){cur=cur*10+ds[i];if(!started&&cur<d){skip.push(cur);continue;}started=true;const q=Math.floor(cur/d);st.push({end:i,cur,q,prod:q*d,rem:cur-q*d});cur=cur-q*d;}
+  return {ds,st,skip,Q:Math.floor(D/d)};}
+function ldHTML(D,d,sn,o={}){
+  const {ds,st}=ldModel(D,d),n=ds.length,cells=[],C=(r,c,txt,cls)=>cells.push(`<div class="ldc ${cls||''}" style="grid-row:${r};grid-column:${c}">${txt}</div>`);
+  if(o.ans)cells.push(`<div class="ld-ans" style="grid-row:1;grid-column:2 / span ${n}">[[0]]</div>`);
+  else st.forEach((s,k)=>{if(sn>=2*k+1)C(1,s.end+2,s.q,'q'+(sn===2*k+1?' now':''));});
+  C(2,1,`${d}<span class="br">)</span>`,'dv');ds.forEach((x,i)=>C(2,i+2,x,'dd'));
+  let r=3;
+  st.forEach((s,k)=>{if(sn<2*k+1)return;const ps=String(s.prod),start=s.end-ps.length+1,now=sn===2*k+1?' now':'';
+    C(r,start+1,'−','op');ps.split('').forEach((x,j)=>C(r,start+2+j,x,'ul'+now));r++;
+    if(sn>=2*k+2){const last=k===st.length-1,now2=sn===2*k+2?' now':'';
+      C(r,s.end+2,s.rem,(s.rem===0&&!last?'faint':'')+now2);
+      if(!last)C(r,s.end+3,ds[s.end+1],'down'+now2);r++;}});
+  return `<div class="ldwrap"><div class="ld" style="--n:${n}">${cells.join('')}</div></div>`;
+}
+function ldSteps(D,d){
+  const m=ldModel(D,d),steps=[],f=m.st[0];
+  steps.push({t:`Svarið kemur <b>ofan á línuna</b>. Byrjum vinstra megin.`+(m.skip.length?` ${d} gengur ekki upp í ${m.skip[m.skip.length-1]}. Skoðum þá <b>${f.cur}</b>.`:` Skoðum fyrst <b>${f.cur}</b>.`),v:ldHTML(D,d,0)});
+  m.st.forEach((s,k)=>{const last=k===m.st.length-1;
+    steps.push({t:`${s.cur} : ${d} = <b>${s.q}</b>, því ${s.q} × ${d} = ${s.prod}${s.prod!==s.cur?` (en ${s.q+1} × ${d} = ${(s.q+1)*d} er of mikið)`:''}. Skrifaðu <span class="cr">${s.q}</span> ofan á línuna og ${s.prod} undir.`,v:ldHTML(D,d,2*k+1)});
+    steps.push({t:`${s.cur} − ${s.prod} = ${s.rem}.`+(last?' Ekkert eftir, við erum búin!':` Færðu <b>${m.ds[s.end+1]}</b> niður. Þá fáum við <b>${s.rem*10+m.ds[s.end+1]}</b>.`),v:ldHTML(D,d,2*k+2)});});
+  steps.push({t:`Svar = <b>${m.Q}</b>. Prófum með margföldun: ${m.Q} × ${d} = ${D} ✓`});
+  return steps;
+}
+function ldNum(){for(;;){const d=R(2,9),q=R(12,199),D=d*q;if(D<100||D>999)continue;if(String(q).includes('0'))continue;return {D,d,q};}}
+
+/* ================= problem types ================= */
+function rndNum(len,z=.3){const d=[R(1,9)];for(let i=1;i<len;i++)d.push(Math.random()<z?0:R(1,9));return +d.join('');}
+const ok1=(f,v)=>v===f.ans;
+const T={};
+
+/* --- Lota 1 / Hluti 1: Tugakerfið --- */
+T.saeti={name:'Sætistaflan',desc:'Skrifaðu töluna í sætistöfluna. Einn tölustafur í hvern reit.',gen(){
+  const n=rndNum(pick([3,4,4]),.3),d=String(n).padStart(4,' ').split('');
+  const fields=PL.map((p,i)=>({ans:d[i]===' '?0:+d[i],blank:d[i]===' ',w:1,disp:d[i]===' '?'':d[i]}));
+  return {fields,
+    html:`<p>Skrifaðu töluna í sætistöfluna. Einn tölustafur í hvern reit.</p><div class="bignum">${n}</div><div class="tblwrap"><table class="pvt"><tr>${PL.map(p=>`<th class="${p.c}">${p.n}</th>`).join('')}</tr><tr>${PL.map((p,i)=>`<td class="${p.c}">[[${i}]]</td>`).join('')}</tr></table></div>`,
+    check:v=>fields.map((f,i)=>f.blank?(v[i]===null||v[i]===0):v[i]===f.ans),
+    explain(v){let diag='';const bi=v.findIndex((x,i)=>x!=null&&x>9&&fields[i].ans>0&&x===fields[i].ans*PL[i].v);
+      if(bi>=0)diag=`Þú skrifaðir <b>${v[bi]}</b> í reitinn <b>${PL[bi].n}</b>. Í sætistöflunni fer bara <b>einn tölustafur</b> í hvern reit, svo þar á bara að standa ${fields[bi].ans}. Reiturinn sjálfur segir okkur að þetta séu ${PN[bi].toLowerCase()}.`;
+      else if(v.some(x=>x!=null&&(x>9||isNaN(x))))diag='Mundu: bara <b>einn tölustafur</b> í hvern reit. Ef það eru engir tugir (eða hundruð) skrifum við <b>0</b>.';
+      else if(v.some((x,i)=>x!=null&&x!==fields[i].ans&&!fields[i].blank))diag='Passaðu röðina. Byrjaðu <b>hægra megin</b>: síðasti tölustafurinn er alltaf einingarnar.';
+      const s=String(n),first=4-s.length,steps=[{t:`Byrjum <b>hægra megin</b>. Síðasti tölustafurinn í ${n} er alltaf <b>einingarnar</b>.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:4})}</div>`}];
+      for(let i=3;i>=first;i--){const dd=+d[i];steps.push({t:dd===0?`<b>0</b> stendur í ${PSEAT[i]}. Það þýðir að það eru engir ${PN[i].toLowerCase()}, en við skrifum samt <b>0</b> í reitinn!`:`<b>${dd}</b> stendur í ${PSEAT[i]} → ${dd} ${PNOUN(dd,i)}.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:i,hi:i})}</div>`});}
+      if(first>0)steps.push({t:`Talan hefur bara ${s.length} tölustafi, svo reiturinn <b>Þúsundir</b> er tómur (eða 0).`});
+      return {diag,steps};}};
+}};
+T.gildi={name:'Gildi tölustafs',desc:'Hvers virði er litaði tölustafurinn þar sem hann stendur?',gen(){
+  const len=pick([3,4]);let n,pos;do{n=rndNum(len,.15);pos=R(0,len-1);}while(String(n)[pos]==='0');
+  const s=String(n),d=+s[pos],pi=4-len+pos,val=d*PL[pi].v;
+  return {fields:[{ans:val,w:4}],
+    html:`<p>Hvert er gildi <b>litaða</b> tölustafsins?</p><div class="bignum">${s.split('').map((c,i)=>i===pos?`<span class="mark">${c}</span>`:c).join('')}</div><div class="svar">Gildi: [[0]]</div>`,
+    explain(v){const x=v[0];let diag='';
+      if(x===d&&val!==d)diag=`Þú skrifaðir bara tölustafinn sjálfan. En spurt er um <b>gildið</b>, það er hvað hann er mikils virði þar sem hann stendur í tölunni.`;
+      else if(x!=null&&[1,10,100,1000].some(p=>x===d*p))diag=`Þú taldir sætin vitlaust. Teldu frá hægri: <b>einingar, tugir, hundruð, þúsundir</b>.`;
+      return {diag,steps:[
+        {t:'Settu töluna í sætistöfluna.',v:pvTable(n,{hi:pi})},
+        {t:`Litaði tölustafurinn <b>${d}</b> stendur í ${PSEAT[pi]}.`},
+        {t:`${d} ${PNOUN(d,pi)} = <b>${val}</b>. Það er gildið.`+(pi<3?` <span class="tip">Gott ráð: skrifaðu ${d} og settu 0 í staðinn fyrir alla tölustafina hægra megin við hann.</span>`:'')}]};}};
+}};
+T.einatala={name:'Skrifaðu sem eina tölu',desc:'Settu hlutana saman í eina tölu. Passaðu þig þegar sæti vantar!',gen(){
+  const n=rndNum(pick([3,4,4]),.45),s=String(n),parts=s.split('').map((c,i)=>+c*10**(s.length-1-i)).filter(x=>x>0);
+  return {fields:[{ans:n,w:4}],
+    html:`<p>Skrifaðu sem eina tölu. Passaðu þig þegar sæti vantar!</p><div class="bignum sm">${parts.join(' + ')} = [[0]]</div>`,
+    explain(v){const x=v[0];let diag='';const nz=+s.split('').filter(c=>c!=='0').join('');
+      if(x===nz&&nz!==n)diag='Það vantar sæti! Þegar engir tugir (eða hundruð) eru í dæminu verðum við samt að skrifa <b>0</b> í það sæti. Annars verður talan allt of lítil.';
+      const first=4-s.length,steps=[{t:'Skoðum hvern hluta og setjum hann í rétt sæti í sætistöflunni.',v:pvTable(n,{to:-1})}];
+      for(let i=first;i<4;i++){const dd=+s[i-first];steps.push({t:dd?`${dd*PL[i].v} = ${dd} ${PNOUN(dd,i)} → skrifum <b>${dd}</b> í ${PSEAT[i]}.`:`Það eru engir ${PN[i].toLowerCase()} í dæminu → skrifum <b>0</b> í ${PSEAT[i]}.`,v:pvTable(n,{from:first,to:i,hi:i})});}
+      steps.push({t:`Lesum töluna: <b>${n}</b>.`,v:numColored(n)});return {diag,steps};}};
+}};
+T.summa={name:'Skrifaðu sem summu',desc:'Skiptu tölunni í hluta: þúsundir + hundruð + tugi + einingar.',gen(){
+  let n;do{n=rndNum(pick([3,4]),.3);}while(String(n).split('').filter(c=>c!=='0').length<2);
+  const s=String(n),parts=s.split('').map((c,i)=>+c*10**(s.length-1-i)).filter(x=>x>0);
+  const fields=parts.map(p=>({ans:p,w:4}));
+  return {fields,
+    html:`<p>Skrifaðu töluna sem summu. Dæmi: 362 = 300 + 60 + 2</p><div class="bignum sm">${n} = ${parts.map((p,i)=>`[[${i}]]`).join(' + ')}</div>`,
+    check(v){const used=new Set();return v.map(x=>{if(x!=null&&parts.includes(x)&&!used.has(x)){used.add(x);return true;}return false;});},
+    explain(v){let diag='';
+      if(v.some(x=>x!=null&&x<10&&!parts.includes(x)))diag='Skrifaðu <b>gildi</b> hvers tölustafs, ekki bara tölustafinn. Til dæmis eru 5 hundruð = 500.';
+      const first=4-s.length;
+      return {diag,steps:[{t:'Settu töluna í sætistöfluna.',v:pvTable(n)},
+        ...s.split('').map((c,k)=>({c:+c,i:first+k})).filter(o=>o.c>0).map(o=>({t:`${o.c} í ${PSEAT[o.i]} = <b>${o.c*PL[o.i].v}</b>`,v:pvTable(n,{hi:o.i})})),
+        ...(s.includes('0')?[{t:'Núllin þurfum við ekki að skrifa í summuna, því 0 bætir engu við.'}]:[]),
+        {t:`${n} = <b>${parts.join(' + ')}</b>`}]};}};
+}};
+T.ord={name:'Orð í tölustafi',desc:'Lestu töluna í orðum og skrifaðu hana með tölustöfum.',gen(){
+  const n=rndNum(pick([3,4,4]),.35),W=words(n);
+  return {fields:[{ans:n,w:4}],
+    html:`<p>Skrifaðu með tölustöfum.</p><p class="words">„${W.text}“</p>`,
+    explain(v){const x=v[0];let diag='';const s=String(n),nz=+s.split('').filter(c=>c!=='0').join('');
+      if(x===nz&&nz!==n)diag='Það vantar <b>0</b>! Þegar engir tugir eða hundruð eru nefnd, verðum við að skrifa 0 í það sæti.';
+      else if(x!=null&&String(x).length>s.length)diag=`Þú skrifaðir of marga tölustafi. Ekki skrifa „${W.parts[0].v}“ og svo restina á eftir. Settu hvern hluta í sitt sæti í sætistöflunni.`;
+      return {diag,steps:[{t:'Skiptum orðunum í hluta:'},...W.parts.map(p=>({t:`„${p.w}“ → <b>${p.v}</b>`})),
+        {t:`Setjum hlutana í sætistöfluna. Þar sem ekkert er nefnt kemur <b>0</b>.`,v:pvTable(n)},
+        {t:`${W.parts.map(p=>p.v).join(' + ')} = <b>${n}</b>`,v:numColored(n)}]};}};
+}};
+T.staersta={name:'Stærsta og minnsta tala',desc:'Búðu til stærstu og minnstu töluna úr tölustöfunum.',gen(){
+  const len=pick([3,3,4]),ds=shuffle(range(1,9)).slice(0,len),big=+ds.slice().sort((a,b)=>b-a).join(''),small=+ds.slice().sort((a,b)=>a-b).join('');
+  const list=ds.slice(0,-1).join(', ')+' og '+ds[ds.length-1];
+  return {fields:[{ans:big,w:4},{ans:small,w:4}],
+    html:`<p>Notaðu tölustafina <b>${list}</b>. Hver tölustafur má bara koma einu sinni.</p><div class="rows2"><div>Stærsta talan: [[0]]</div><div>Minnsta talan: [[1]]</div></div>`,
+    explain(v){let diag='';
+      if(v[0]===small&&v[1]===big)diag='Þú víxlaðir svörunum. Stærsta talan á að fara efst og minnsta talan neðst.';
+      else if(v.some(x=>x!=null&&String(x).split('').sort().join('')!==ds.slice().sort().join('')))diag=`Notaðu nákvæmlega tölustafina ${list}, hvern einu sinni.`;
+      const bs=String(big).split(''),ss=String(small).split('');
+      return {diag,steps:[
+        {t:'Fremsta sætið (lengst til vinstri) er mest virði. Þangað viljum við setja stærsta tölustafinn til að fá stóra tölu.'},
+        {t:`<b>Stærsta talan:</b> raðaðu frá stærsta til minnsta: ${bs.join(', ')} → <b>${big}</b>.`,v:numColored(big)},
+        {t:`<b>Minnsta talan:</b> raðaðu frá minnsta til stærsta: ${ss.join(', ')} → <b>${small}</b>.`,v:numColored(small)}]};}};
+}};
+T.rada={name:'Raðaðu tölum',desc:'Raðaðu tölunum eftir stærð. Byrjaðu á minnstu tölunni.',count:6,gen(){
+  let nums;
+  if(Math.random()<.5){const d=shuffle(range(1,9)).slice(0,3);nums=shuffle([[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]].map(p=>+p.map(i=>d[i]).join('')));}
+  else{const h=R(2,8);const set=new Set();while(set.size<5){set.add(R(Math.max(1,h-1),h+1)*100+R(0,99));}nums=shuffle([...set]);}
+  const sorted=nums.slice().sort((a,b)=>a-b);
+  return {fields:sorted.map(x=>({ans:x,w:3})),
+    html:`<p>Raðaðu tölunum eftir stærð. Byrjaðu á minnstu tölunni.</p><div class="chips">${nums.map(x=>`<span class="chip">${x}</span>`).join('')}</div><div class="order">${sorted.map((x,i)=>`[[${i}]]`).join('<span>&lt;</span>')}</div>`,
+    explain(v){let diag='';const rev=sorted.slice().reverse();
+      if(v.every((x,i)=>x===rev[i]))diag='Þú raðaðir frá stærstu tölunni. Hér á að byrja á <b>minnstu</b> tölunni.';
+      else if(v.some(x=>x!=null&&!nums.includes(x)))diag='Passaðu að skrifa tölurnar nákvæmlega eins og þær standa.';
+      const groups={};sorted.forEach(x=>{const h=Math.floor(x/100);(groups[h]=groups[h]||[]).push(x);});
+      const steps=[{t:'Berum fyrst saman <b>hundruðin</b> (fremsta tölustafinn). Því færri hundruð, því minni tala.'}];
+      Object.keys(groups).sort((a,b)=>a-b).forEach(h=>{const g=groups[h];
+        if(g.length===1)steps.push({t:`Talan með ${h} hundruð: <b>${g[0]}</b>.`});
+        else{const sameT=g.every(x=>Math.floor(x/10)===Math.floor(g[0]/10));
+          steps.push({t:`${g.join(', ')} hafa allar <b>${h} hundruð</b>. Þá berum við saman <b>${sameT?'einingarnar':'tugina'}</b>: ${g.join(' &lt; ')}.`});}});
+      steps.push({t:`Röðin er: <b>${sorted.join(' &lt; ')}</b>`});
+      return {diag,steps};}};
+}};
+
+/* --- Lota 1 / Hluti 2: Talnalína og neikvæðar tölur --- */
+T.merkja={name:'Merktu á talnalínuna',desc:'Hvaða stafur sýnir töluna? Hvert strik er 1.',gen(){
+  const vals=new Set();while(vals.size<4){const v=R(-9,9);if(v!==0&&v!==5&&v!==-5)vals.add(v);}
+  const vs=[...vals].sort((a,b)=>a-b),chs=['A','B','C','D'],k=deal('merkja',4),v=vs[k];
+  return {fields:[{type:'choice',opts:chs,ans:k}],
+    html:`<p>Hvaða stafur sýnir töluna <b>${M(v)}</b>?</p>${numLine({labels:[-10,-5,0,5,10],letters:vs.map((x,i)=>({v:x,ch:chs[i]}))})}[[0]]`,
+    explain(x){let diag='';const j=x[0];
+      if(j!=null&&j!==k&&vs[j]!==undefined){const w=vs[j];diag=w===-v?`Stafurinn ${chs[j]} er við ${M(w)}. Hann er réttu megin frá 0, en <b>öfugu megin</b>. ${v<0?'Mínustölur eru vinstra megin við 0.':'Plústölur eru hægra megin við 0.'}`:`Stafurinn ${chs[j]} er við ${M(w)}, ekki ${M(v)}. Teldu strikin frá 0.`;}
+      const sg=v<0?-1:1,hops=range(1,Math.abs(v)).map(i=>({from:sg*(i-1),to:sg*i,color:'var(--orange)'}));
+      return {diag,steps:[
+        {t:'Finndu fyrst <b>0</b> á línunni.',v:numLine({labels:[-10,-5,5,10],marks:[{v:0,color:'var(--blue)'}]})},
+        {t:v<0?`${M(v)} er mínustala, svo hún er <b>vinstra megin</b> við 0.`:`${v} er plústala, svo hún er <b>hægra megin</b> við 0.`},
+        {t:`Teldu ${Math.abs(v)} strik frá 0: ${range(1,Math.abs(v)).map(i=>M(sg*i)).join(', ')}.`,v:numLine({labels:[-10,-5,5,10],marks:[{v:0,color:'var(--blue)'}],jumps:hops})},
+        {t:`Þar er stafurinn <b>${chs[k]}</b>.`,v:numLine({labels:[-10,-5,0,5,10],letters:vs.map((x,i)=>({v:x,ch:chs[i]})),marks:[{v,color:'var(--orange)',label:M(v)}]})}]};}};
+}};
+T.stafur={name:'Talnalínan',desc:'Hvaða tala er við stafinn? Hvert strik er 1.',gen(){
+  let v;do{v=R(-9,9);}while(v===0||v===5||v===-5);
+  const ch=pick(['A','B','C','D']);
+  return {fields:[{ans:v,w:2,neg:true}],
+    html:`<p>Hvaða tala er við stafinn <b>${ch}</b>?</p>${numLine({labels:[-10,0,10],letters:[{v,ch}]})}<div class="svar">${ch} = [[0]]</div>`,
+    explain(x){x=x[0];let diag='';
+      if(x===-v)diag='Athugaðu hvoru megin við 0 stafurinn er. <b>Vinstra megin</b> við 0 eru mínustölur, <b>hægra megin</b> eru plústölur.';
+      else if(x!=null&&Math.abs(x-v)<=2)diag='Næstum því! Teldu strikin aftur frá 0, eitt hopp í einu.';
+      const sg=v<0?-1:1,hops=range(1,Math.abs(v)).map(i=>({from:sg*(i-1),to:sg*i,color:'var(--orange)'}));
+      return {diag,steps:[
+        {t:'Finndu fyrst <b>0</b> á línunni.',v:numLine({labels:[-10,10],letters:[{v,ch}],marks:[{v:0,color:'var(--blue)'}]})},
+        {t:v<0?`Stafurinn er <b>vinstra megin</b> við 0, svo talan er <b>mínustala</b>.`:`Stafurinn er <b>hægra megin</b> við 0, svo talan er plústala.`},
+        {t:`Teldu hoppin frá 0: ${range(1,Math.abs(v)).map(i=>M(sg*i)).join(', ')}.`,v:numLine({labels:[-10,10],letters:[{v,ch}],marks:[{v:0,color:'var(--blue)'}],jumps:hops})},
+        {t:`Stafurinn ${ch} er við <b>${M(v)}</b>.`,v:numLine({labels:[-10,0,10],marks:[{v,color:'var(--orange)'}]})}]};}};
+}};
+T.hitamaelir={name:'Hitamælirinn',desc:'Lestu af hitamælinum. Hvert lítið strik er 1 gráða.',gen(){
+  let t;do{t=R(-14,19);}while(t%5===0&&Math.random()<.8);
+  return {fields:[{ans:t,w:2,neg:true}],
+    html:`<p>Lestu af hitamælinum. Hvað er hitastigið?</p><div class="thermo-wrap">${thermo(t)}</div><div class="svar">[[0]] °C</div>`,
+    explain(x){x=x[0];let diag='';
+      if(x===-t&&t!==0)diag=t<0?'Súlan endar <b>fyrir neðan 0</b>, svo hitinn er í <b>mínus</b>. Mundu eftir mínusmerkinu (ýttu á ±).':'Súlan endar fyrir ofan 0, svo hitinn er í plús.';
+      else if(x!=null&&Math.abs(x-t)<=3)diag='Næstum því! Teldu litlu strikin vandlega frá næstu tölu. Hvert strik er 1 gráða.';
+      const L=Math.round(t/5)*5,diff=Math.abs(t-L),up=t>L,seq=range(1,diff).map(i=>M(L+(up?i:-i))).join(', ');
+      return {diag,steps:[
+        {t:'Stóru strikin eru á 5 gráða fresti. Hvert <b>lítið strik er 1 gráða</b>.',v:thermo(t)},
+        {t:t>=0?'Rauða súlan endar fyrir ofan 0, svo hitinn er í plús.':'Rauða súlan endar <b>fyrir neðan 0</b>, svo hitinn er í <b>mínus</b>.'},
+        {t:diff===0?`Súlan endar beint á <b>${M(L)}</b>.`:`Næsta tala við endann á súlunni er ${M(L)}. Teldu ${diff} ${diff===1?'strik':'strik'} ${up?'upp':'niður'}: ${seq}.`,v:thermo(t,{hl:true})},
+        {t:`Hitinn er <b>${M(t)} °C</b>.`}]};}};
+}};
+T.hitabreyting={name:'Hitinn breytist',desc:'Hækkar = upp (til hægri). Lækkar = niður (til vinstri).',gen(){
+  let s,c,up,r;do{s=R(-8,9);c=R(2,9);up=Math.random()<.5;r=up?s+c:s-c;}while(r<-15||r>15||s===0||(Math.random()<.65&&!((s>0&&r<0)||(s<0&&r>0))));
+  return {fields:[{ans:r,w:2,neg:true}],
+    html:`<p>Hitinn var <b>${M(s)} °C</b>. Hann ${up?'<b>hækkaði</b>':'<b>lækkaði</b>'} um <b>${c} gráður</b>. Hver er hitinn núna?</p>${numLine({min:-15,max:15,marks:[{v:s,color:'var(--blue)'}]})}<div class="svar">Núna er hann [[0]] °C</div>`,
+    explain(x){x=x[0];let diag='';const opp=up?s-c:s+c;
+      if(x===opp)diag=`${up?'Hækkaði':'Lækkaði'} þýðir að fara <b>${up?'upp, til hægri':'niður, til vinstri'}</b> á talnalínunni. Þú fórst í öfuga átt.`;
+      else if(x===-r&&r!==0)diag='Passaðu <b>mínusmerkið</b>. Ef hitinn endar fyrir neðan 0 er hann í mínus.';
+      const cross=(s>0&&r<0)||(s<0&&r>0),line=o=>numLine(Object.assign({min:-15,max:15},o));
+      const steps=[{t:`Byrjum á <b>${M(s)}</b> á talnalínunni.`,v:line({marks:[{v:s,color:'var(--blue)'}]})}];
+      if(cross){const toZero=Math.abs(s),rest=c-toZero;
+        steps.push({t:`${up?'Hækkar':'Lækkar'} þýðir að fara ${up?'til hægri':'til vinstri'}. Frá ${M(s)} að 0 eru <b>${toZero}</b> gráður.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:0,label:(up?'+':'−')+toZero,color:'var(--orange)'}]})});
+        steps.push({t:`Við áttum að fara ${c}. ${c} − ${toZero} = ${rest}, svo við förum <b>${rest}</b> í viðbót ${up?'upp':'niður'} frá 0.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:0,label:(up?'+':'−')+toZero,color:'var(--orange)'},{from:0,to:r,label:(up?'+':'−')+rest,color:'var(--pink)'}]})});
+      }else steps.push({t:`${up?'Hækkar':'Lækkar'} þýðir að fara ${up?'til hægri':'til vinstri'}. Förum <b>${c}</b> skref.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:r,label:(up?'+':'−')+c,color:'var(--orange)'}]})});
+      steps.push({t:`Við lendum á <b>${M(r)}</b>. Hitinn er ${M(r)} °C.`,v:line({marks:[{v:s,color:'var(--blue)'},{v:r,color:'var(--orange)'}]})});
+      return {diag,steps};}};
+}};
+T.staerri={name:'Hvor er stærri?',desc:'Talan sem er lengra til hægri á talnalínunni er stærri.',gen(){
+  let a,b;do{a=R(-10,10);b=R(-10,10);}while(a===b||(a>=0&&b>=0));
+  if((a>b?0:1)!==deal('staerri',2))[a,b]=[b,a];
+  const hi=Math.max(a,b),lo=Math.min(a,b);
+  return {fields:[{type:'choice',opts:[M(a),M(b)],ans:a>b?0:1}],
+    html:`<p>Hvor talan er stærri? Veldu hana.</p>[[0]]`,
+    explain(x){let diag='';
+      if(x[0]!=null&&x[0]!==(a>b?0:1))diag=lo<0&&hi<0?`${M(lo)} lítur út fyrir að vera stór af því ${-lo} er stór tala. En með mínus er það öfugt: ${M(lo)} er <b>lengra frá 0 til vinstri</b>, svo hún er minni.`:`Allar plústölur og 0 eru <b>stærri</b> en mínustölur.`;
+      return {diag,steps:[
+        {t:'Settu báðar tölurnar á talnalínuna.',v:numLine({marks:[{v:a,color:'var(--blue)'},{v:b,color:'var(--orange)'}]})},
+        {t:'Talan sem er <b>lengra til hægri</b> er alltaf stærri.'},
+        {t:`${M(hi)} er hægra megin við ${M(lo)}, svo <b>${M(hi)}</b> er stærri. Við skrifum ${M(hi)} &gt; ${M(lo)}.`}]};}};
+}};
+T.mismunur={name:'Mismunur',desc:'Mismunur = hversu langt er á milli talnanna á talnalínunni.',gen(){
+  const mode=pick(['pp','np','np','nn']);let a,b;
+  if(mode==='pp'){a=R(8,20);b=R(1,a-2);}else if(mode==='np'){a=R(-9,-1);b=R(1,10);}else{a=R(-10,-3);b=R(a+1,-1);}
+  const lo=Math.min(a,b),hi=Math.max(a,b),ans=hi-lo,min=mode==='pp'?0:-10,max=mode==='pp'?20:10;
+  return {fields:[{ans,w:2}],
+    html:`<p>Finndu mismun talnanna <b>${M(a)}</b> og <b>${M(b)}</b>.</p><p class="small">Mismunur = hversu langt er á milli talnanna á talnalínunni.</p><div class="svar">Mismunur: [[0]]</div>`,
+    explain(x){x=x[0];let diag='';
+      if(mode==='np'&&x!=null&&x!==ans)diag=`Þegar önnur talan er í mínus og hin í plús þurfum við að fara <b>yfir 0</b>. Fyrst frá ${M(a)} að 0, svo frá 0 að ${b}, og leggja saman.`;
+      else if(mode==='nn'&&x===Math.abs(a)+Math.abs(b))diag='Báðar tölurnar eru vinstra megin við 0, svo við förum <b>ekki</b> yfir 0. Teldu bara bilið á milli þeirra.';
+      const line=o=>numLine(Object.assign({min,max},o)),mk=[{v:a,color:'var(--blue)'},{v:b,color:'var(--orange)'}];
+      const steps=[{t:'Finnum báðar tölurnar á talnalínunni.',v:line({marks:mk})}];
+      if(mode==='np'){
+        steps.push({t:`Frá ${M(a)} að 0 eru <b>${-a}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'}]})});
+        steps.push({t:`Frá 0 að ${b} eru <b>${b}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'},{from:0,to:b,label:b,color:'var(--orange)'}]})});
+        steps.push({t:`Leggjum saman: ${-a} + ${b} = <b>${ans}</b>.`});
+      }else{
+        steps.push({t:`Teljum frá ${M(lo)} upp í ${M(hi)}.`,v:line({marks:mk,jumps:[{from:lo,to:hi,label:ans,color:'var(--pink)'}]})});
+        steps.push({t:mode==='pp'?`Eða reiknum: ${hi} − ${lo} = <b>${ans}</b>.`:`Það eru <b>${ans}</b> skref á milli. (${-lo} − ${-hi} = ${ans})`});
+      }
+      return {diag,steps};}};
+}};
+T.hugar={name:'Reiknaðu í huganum',desc:'Skiptu tölunum í tugi og einingar. Það gerir reikninginn léttari.',gen(){
+  const mode=pick(['aT','ab','sT','sb','HT','p9','m9']);let a,b,op,steps,ans;
+  const sp=n=>`<span class="t-col">${n-n%10}</span> + <span class="e-col">${n%10}</span>`;
+  if(mode==='aT'){a=R(21,69);if(a%10===0)a++;b=R(1,3)*10;op='+';ans=a+b;steps=[{t:`${b} eru bara tugir. Leggjum saman tugina: ${a-a%10} + ${b} = ${a-a%10+b}.`},{t:`Einingarnar (${a%10}) haldast eins.`},{t:`${a-a%10+b} + ${a%10} = <b>${ans}</b>`}];}
+  else if(mode==='ab'){do{a=R(21,78);b=R(11,29);}while(a%10+b%10>9||a+b>99||a%10===0||b%10===0);op='+';ans=a+b;
+    steps=[{t:`Skiptum tölunum í tugi og einingar: ${a} = ${sp(a)} og ${b} = ${sp(b)}.`},{t:`Tugir: <span class="t-col">${a-a%10} + ${b-b%10} = ${a-a%10+b-b%10}</span>`},{t:`Einingar: <span class="e-col">${a%10} + ${b%10} = ${a%10+b%10}</span>`},{t:`Saman: ${a-a%10+b-b%10} + ${a%10+b%10} = <b>${ans}</b>`}];}
+  else if(mode==='sT'){a=R(41,99);if(a%10===0)a++;b=R(1,Math.floor(a/10)-1)*10;op='−';ans=a-b;steps=[{t:`${b} eru bara tugir. Drögum tugina frá: ${a-a%10} − ${b} = ${a-a%10-b}.`},{t:`Einingarnar (${a%10}) haldast eins.`},{t:`${a-a%10-b} + ${a%10} = <b>${ans}</b>`}];}
+  else if(mode==='sb'){do{a=R(45,99);b=R(11,a-20);}while(a%10<b%10||b%10===0);op='−';ans=a-b;
+    steps=[{t:`Skiptum ${b} í tugi og einingar: ${b} = ${sp(b)}.`},{t:`Fyrst tugina: ${a} − <span class="t-col">${b-b%10}</span> = ${a-b+b%10}`},{t:`Svo einingarnar: ${a-b+b%10} − <span class="e-col">${b%10}</span> = <b>${ans}</b>`}];}
+  else if(mode==='HT'){do{a=R(11,48)*10;b=R(1,6)*10;}while(Math.floor(a/100)!==Math.floor((a+b)/100)||a%100===0);op='+';ans=a+b;
+    steps=[{t:`${a} = ${a/10} tugir og ${b} = ${b/10} tugir.`},{t:`${a/10} tugir + ${b/10} tugir = ${(a+b)/10} tugir.`},{t:`${(a+b)/10} tugir = <b>${ans}</b>`}];}
+  else if(mode==='p9'){a=R(23,78);b=pick([9,19,29]);if(a+b>99)a=99-b-R(0,10);op='+';ans=a+b;
+    steps=[{t:`${b} er næstum ${b+1}. Plús ${b} er það sama og plús ${b+1} og svo mínus 1.`},{t:`${a} + ${b+1} = ${a+b+1}`},{t:`${a+b+1} − 1 = <b>${ans}</b>`}];}
+  else{a=R(42,99);b=pick([9,19,29]);if(a-b<10)a+=20;op='−';ans=a-b;
+    steps=[{t:`${b} er næstum ${b+1}. Mínus ${b} er það sama og mínus ${b+1} og svo plús 1.`},{t:`${a} − ${b+1} = ${a-b-1}`},{t:`${a-b-1} + 1 = <b>${ans}</b>`}];}
+  return {fields:[{ans,w:3}],
+    html:`<p>Reiknaðu í huganum.</p><div class="bignum">${a} ${op} ${b} = [[0]]</div>`,
+    explain(x){x=x[0];let diag='';
+      if(mode==='p9'&&x===a+b+1)diag=`Þú bættir ${b+1} við en gleymdir að taka <b>1</b> frá aftur.`;
+      else if(mode==='m9'&&x===a-b-1)diag=`Þú tókst ${b+1} frá en gleymdir að bæta <b>1</b> við aftur.`;
+      else if(x!=null&&x!==ans)diag=op==='+'?`Prófum: ef ${M(x)} er rétt, þá ætti ${M(x)} − ${b} að vera ${a}. En það er ${M(x-b)}.`:`Prófum: ef ${M(x)} er rétt, þá ætti ${M(x)} + ${b} að vera ${a}. En það er ${x+b}.`;
+      return {diag,steps};}};
+}};
+
+/* --- Lota 1 / Hluti 3: Samlagning, frádráttur og peningar --- */
+T.samlagning={name:'Samlagning í reitum',desc:'Einn tölustafur í hvern reit. Mundu að geyma þegar summan er 10 eða meira.',gen(){
+  let a,b;do{if(Math.random()<.55){a=R(105,899);b=R(105,899);}else{a=R(1005,4999);b=R(105,999);}}while(bugNoCarry(a,b)===a+b||a+b>9999);
+  return {fields:[{type:'cols',n:4,ans:a+b}],
+    html:`<p>Reiknaðu í reitunum: <b>${a} + ${b}</b></p><p class="small">Skrifaðu svarið í neðstu röðina. Litlu reitirnir efst eru fyrir geymdar tölur.</p>${colProblem(a,b,'+')}`,
+    explain(v){return {diag:addDiag(a,b,v[0]),steps:addSteps(a,b)};}};
+}};
+T.fradrattur={name:'Frádráttur í reitum',desc:'Neðri talan frá efri tölunni. Ef efri talan er minni, fáðu lánað frá næsta dálki.',gen(){
+  let a,b;const mode=pick(['b','b','z','4']);
+  do{if(mode==='b'){a=R(312,989);b=R(105,a-100);}else if(mode==='z'){a=pick([R(2,9)*100,R(2,9)*100+R(1,9),R(2,9)*100+R(1,9)*10]);b=R(105,a-100);}else{a=R(1005,2999);b=R(105,999);}}
+  while(bugNoDec(a,b)===a-b||a-b<100);
+  return {fields:[{type:'cols',n:4,ans:a-b}],
+    html:`<p>Reiknaðu í reitunum: <b>${a} − ${b}</b></p><p class="small">Skrifaðu svarið í neðstu röðina. Litlu reitirnir efst eru fyrir lán.</p>${colProblem(a,b,'−')}`,
+    explain(v){return {diag:subDiag(a,b,v[0]),steps:subSteps(a,b)};}};
+}};
+const SHOP=['Blýantur','Strokleður','Reglustika','Stílabók','Litakassi','Yddari','Límstifti','Skæri','Tússpennar','Teikniblokk','Pennaveski','Vatnslitir'];
+T.bud={name:'Skólabúðin',desc:'Skoðaðu verðlistann og svaraðu. Til baka = það sem þú borgar − verðið.',
+  ctx(){const names=shuffle(SHOP).slice(0,5),ranges=[[45,195],[100,260],[150,390],[250,480],[340,690]],used=new Set();
+    const items=names.map((n,i)=>{let p;do{p=R(ranges[i][0]/5,ranges[i][1]/5)*5;}while(used.has(p)||p%10===0&&Math.random()<.3);used.add(p);return {n,p};});
+    return {items,html:`<div class="shop"><h3>Verðlisti skólabúðarinnar</h3><table>${items.map(it=>`<tr><td>${it.n}</td><td>${it.p} kr</td></tr>`).join('')}</table></div>`};},
+  gen(ctx,idx){
+    const it=ctx.items,kind=['saman','tilbaka1','tilbaka2',pick(['munur','askorun'])][idx%4],[nm,pr]=pick(NAMES);
+    const two=()=>{const s=shuffle(it).slice(0,2);return s;};
+    let html,ans,explain;
+    if(kind==='saman'){const [x,y]=two();ans=x.p+y.p;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b> og <b>${y.n.toLowerCase()}</b>. Hvað kostar það samtals?</p>`;
+      explain=v=>({diag:addDiag(x.p,y.p,v[0]),steps:[{t:`„Samtals“ þýðir að <b>leggja saman</b>: ${x.p} + ${y.p}.`},...addSteps(Math.max(x.p,y.p),Math.min(x.p,y.p)).slice(0,-1),{t:`Það kostar samtals <b>${ans} kr</b>.`}]});}
+    else if(kind==='tilbaka1'){const x=pick(it),pay=x.p<500?500:1000;ans=pay-x.p;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>${pay} kr</b>. Hvað fær ${pr} til baka?</p>`;
+      explain=v=>({diag:subDiag(pay,x.p,v[0]),steps:[{t:`Til baka = það sem borgað er − verðið: <b>${pay} − ${x.p}</b>.`},...subSteps(pay,x.p).slice(0,-1),{t:`${nm} fær <b>${ans} kr</b> til baka.`}]});}
+    else if(kind==='tilbaka2'){let x,y;do{[x,y]=two();}while(x.p+y.p>=1000);const s=x.p+y.p;ans=1000-s;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b> og <b>${y.n.toLowerCase()}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>1000 kr</b>. Hvað fær ${pr} til baka?</p>`;
+      explain=v=>({diag:v[0]===1000-x.p||v[0]===1000-y.p?'Þú gleymdir öðrum hlutnum. Fyrst þarf að finna hvað <b>báðir hlutirnir</b> kosta saman.':subDiag(1000,s,v[0]),
+        steps:[{t:`Þetta eru tvö skref. <b>Fyrst</b> finnum við hvað hlutirnir kosta saman: ${x.p} + ${y.p}.`},...addSteps(Math.max(x.p,y.p),Math.min(x.p,y.p)).slice(1,-1),{t:`Saman kosta þeir <b>${s} kr</b>. <b>Svo</b> reiknum við til baka: 1000 − ${s}.`},...subSteps(1000,s).slice(1,-1),{t:`${nm} fær <b>${ans} kr</b> til baka.`}]});}
+    else if(kind==='munur'){let x,y;do{[x,y]=two();}while(x.p===y.p);if(x.p<y.p)[x,y]=[y,x];ans=x.p-y.p;html=`<p>Hvað kostar <b>${x.n.toLowerCase()}</b> miklu meira en <b>${y.n.toLowerCase()}</b>?</p>`;
+      explain=v=>({diag:subDiag(x.p,y.p,v[0]),steps:[{t:`„Miklu meira“ spyr um <b>mismuninn</b>. Við drögum ódýrara verðið frá dýrara verðinu: ${x.p} − ${y.p}.`},...subSteps(x.p,y.p).slice(0,-1),{t:`${x.n} kostar <b>${ans} kr</b> meira.`}]});}
+    else{const pairs=[];for(let i=0;i<it.length;i++)for(let j=i+1;j<it.length;j++)pairs.push({a:it[i],b:it[j],s:it[i].p+it[j].p});
+      const sums=pairs.map(p=>p.s).sort((a,b)=>a-b);let B=pick([500,600,700,800]);while(B<sums[0])B+=100;
+      const okp=pairs.filter(p=>p.s<=B),best=okp.reduce((m,p)=>p.s>m.s?p:m,okp[0]);ans=B-best.s;
+      html=`<p><b>Áskorun:</b> Þú átt <b>${B} kr</b>. Þú átt að kaupa <b>tvo mismunandi hluti</b> og fá sem <b>minnst</b> til baka. Hvað færðu mikið til baka?</p>`;
+      explain=v=>({diag:v[0]!=null&&v[0]<ans&&v[0]>=0?'Athugaðu: getur þú keypt þá hluti fyrir peninginn? Samanlagt verð má ekki vera meira en það sem þú átt.':v[0]!=null&&v[0]>ans?'Það eru til tveir hlutir sem kosta meira saman en þeir sem þú valdir, en samt ekki meira en þú átt.':'',
+        steps:[{t:`Prófum öll pörin og leggjum verðin saman. Strikað er yfir þau sem kosta meira en ${B} kr.`,v:`<table class="pairs"><tr><th>Hlutir</th><th>Saman</th></tr>${pairs.sort((a,b)=>b.s-a.s).map(p=>`<tr class="${p===best?'best':p.s>B?'no':''}"><td>${p.a.n} + ${p.b.n}</td><td>${p.s} kr</td></tr>`).join('')}</table>`},
+          {t:`Dýrasta parið sem passar er <b>${best.a.n.toLowerCase()} og ${best.b.n.toLowerCase()}</b> á ${best.s} kr.`},
+          {t:`Til baka: ${B} − ${best.s} = <b>${ans} kr</b>.`}]});}
+    return {fields:[{ans,w:4}],html:html+`<div class="svar">Svar: [[0]] kr</div>`,explain};}
+};
+T.ordplus={name:'Orðadæmi',desc:'Lestu vel. Á að leggja saman eða draga frá?',gen(){
+  const [nm,pr]=pick(NAMES);
+  const tpl=pick([
+    ()=>{const a=R(320,690),b=R(110,a-100);return {a,b,op:'−',q:`Í skólanum eru ${a} nemendur. ${b} þeirra eru stelpur. Hversu margir eru strákar?`,why:'Við tökum stelpurnar frá öllum nemendunum. Þá eru strákarnir eftir.',u:'strákar'};},
+    ()=>{const a=R(1200,4800),b=R(120,890);return {a,b,op:'+',q:`Á bókasafninu voru ${a} bækur. Svo voru keyptar ${b} nýjar bækur. Hvað eru bækurnar margar núna?`,why:'Það bætast bækur við, svo við <b>leggjum saman</b>.',u:'bækur'};},
+    ()=>{const a=R(160,390),b=R(60,a-40);return {a,b,op:'−',q:`Í flugvél eru ${a} sæti. ${b} farþegar eru komnir um borð. Hversu mörg sæti eru laus?`,why:'Við tökum fullu sætin frá öllum sætunum.',u:'sæti'};},
+    ()=>{const a=R(260,880),b=R(180,790);return {a,b,op:'+',q:`Á laugardaginn komu ${a} á fótboltaleik og á sunnudaginn komu ${b}. Hversu margir komu samtals?`,why:'„Samtals“ þýðir að <b>leggja saman</b>.',u:'manns'};},
+    ()=>{const a=R(52,98)*10,b=R(15,a/10-12)*10+pick([0,5]);return {a,b,op:'−',q:`${nm} átti ${a} kr. ${pr==='hún'?'Hún':'Hann'} keypti bók á ${b} kr. Hvað á ${pr} mikið eftir?`,why:'Peningurinn minnkar þegar keypt er, svo við <b>drögum frá</b>.',u:'kr'};},
+    ()=>({a:1491,b:914,op:'−',q:'Hekla er 1491 m á hæð og Esja er 914 m á hæð. Hvað er Hekla mörgum metrum hærri en Esja?',why:'„Hvað er … hærri“ spyr um <b>mismuninn</b>, svo við drögum frá.',u:'m'})
+  ])();
+  const {a,b,op}=tpl,ans=op==='+'?a+b:a-b;
+  return {fields:[{ans,w:4}],
+    html:`<p>${tpl.q}</p><div class="svar">Svar: [[0]] ${tpl.u}</div>`,
+    explain(v){const x=v[0];let diag=op==='+'?addDiag(a,b,x):subDiag(a,b,x);
+      if(op==='+'&&x===a-b)diag='Hér á að <b>leggja saman</b>. '+tpl.why;if(op==='−'&&x===a+b)diag='Hér á að <b>draga frá</b>. '+tpl.why;
+      return {diag,steps:[{t:tpl.why},{t:`Dæmið er: <b>${a} ${op} ${b}</b>`},...(op==='+'?addSteps(a,b):subSteps(a,b)).slice(0,-1),{t:`Svar: <b>${ans} ${tpl.u}</b>`}]};}};
+}};
+
+/* --- Lota 2 / Hluti 1: Margföldun --- */
+T.endurtekin={name:'Margföldun = endurtekin samlagning',desc:'Skrifaðu sem margföldunardæmi og reiknaðu. Dæmi: 2 + 2 + 2 = 2 · 3 = 6',gen(){
+  const a=R(2,9),n=R(3,6),p=a*n;
+  return {fields:[{ans:a,w:1},{ans:n,w:1},{ans:p,w:2}],
+    html:`<p>Skrifaðu sem margföldunardæmi og reiknaðu.</p><div class="bignum sm">${Array(n).fill(a).join(' + ')} = [[0]] · [[1]] = [[2]]</div>`,
+    check(v){const pairOk=(v[0]===a&&v[1]===n)||(v[0]===n&&v[1]===a);return [pairOk,pairOk,v[2]===p];},
+    explain(v){let diag='';
+      if(!((v[0]===a&&v[1]===n)||(v[0]===n&&v[1]===a))&&(v[0]!=null||v[1]!=null))diag=`Fyrri talan er talan sem er lögð saman. Seinni talan segir <b>hversu oft</b> hún kemur fyrir. Teldu hversu oft ${a} kemur fyrir.`;
+      else if(v[2]!=null&&v[2]!==p)diag=multDiag(a,n,v[2])||'Teldu aftur, eina röð í einu.';
+      return {diag,steps:[
+        {t:`Talan <b>${a}</b> kemur <b>${n} sinnum</b> fyrir. Hver röð er einn ${a}.`,v:dotRows(n,a,false)},
+        {t:`Þá getum við skrifað <b>${a} · ${n}</b>. (${n} · ${a} gefur sama svar.)`},
+        {t:`Teljum ${a} í einu, eina röð í einu: ${range(1,n).map(i=>a*i).join(', ')}.`,v:dotRows(n,a,true)},
+        {t:`${a} · ${n} = <b>${p}</b>`}]};}};
+}};
+T.vantar={name:'Hvaða tölu vantar?',desc:'Finndu töluna sem vantar í margföldunardæmið.',gen(){
+  const a=R(2,9),b=R(2,9),p=a*b,left=Math.random()<.5,k=left?a:b,m=left?b:a;
+  return {fields:[{ans:m,w:1}],
+    html:`<p>Hvaða tölu vantar?</p><div class="bignum">${left?`${a} · [[0]]`:`[[0]] · ${b}`} = ${p}</div>`,
+    explain(v){const x=v[0];let diag='';
+      if(x!=null&&!isNaN(x)&&x!==m)diag=`Prófum svarið þitt: ${k} · ${x} = ${k*x}. ${k*x>p?'Það er <b>of mikið</b>, prófaðu minni tölu.':'Það er <b>of lítið</b>, prófaðu stærri tölu.'}`;
+      return {diag,steps:[
+        {t:`Spurningin er: <b>hversu oft</b> þurfum við ${k} til að fá ${p}?`},
+        {t:`Teljum ${k} í einu þar til við komum í ${p}:`,v:skipBubbles(k,m)},
+        {t:`Við töldum <b>${m}</b> sinnum. Svo ${left?`${k} · ${m}`:`${m} · ${k}`} = ${p}.`},
+        {t:`Þetta er líka deilingardæmið ${p} : ${k} = ${m}.`}]};}};
+}};
+const TIP={2:'Tvöfaldaðu töluna.',3:'Teldu 3 í einu: 3, 6, 9, 12, 15…',4:'Tvöfaldaðu tvisvar: 4 · 7 → 14 → 28.',5:'Sinnum 5 endar alltaf á 0 eða 5. Það er helmingurinn af sinnum 10.',6:'Sinnum 5 og bættu einu sinni við: 6 · 7 = 35 + 7 = 42.',7:'Sinnum 5 plús sinnum 2: 7 · 6 = 30 + 12 = 42.',8:'Tvöfaldaðu þrisvar: 8 · 6 → 12 → 24 → 48.',9:'Sinnum 10 og taktu einu sinni frá: 9 · 6 = 60 − 6 = 54.'};
+T.tafla={name:'Margföldunartaflan',desc:'Margfaldaðu töluna í röðinni við töluna efst í dálkinum.',count:5,gen(){
+  const rows=shuffle(range(2,9)).slice(0,3).sort((a,b)=>a-b),cols=shuffle(range(3,9)).slice(0,3).sort((a,b)=>a-b);
+  const fields=[];rows.forEach(r=>cols.forEach(c=>fields.push({ans:r*c,w:2})));
+  const table=(fillTo,hiRow,inputs)=>`<div class="tblwrap"><table class="mt"><tr><th class="x">×</th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>${rows.map((r,ri)=>`<tr class="${ri===hiRow?'hi':''}"><th>${r}</th>${cols.map((c,ci)=>`<td class="${!inputs&&ri>fillTo?'empty':''}">${inputs?`[[${ri*3+ci}]]`:(ri<=fillTo?r*c:'·')}</td>`).join('')}</tr>`).join('')}</table></div>`;
+  return {fields,
+    html:`<p>Fylltu í margföldunartöfluna.</p>${table(0,-1,true)}`,
+    explain(v){const wrong=[];rows.forEach((r,ri)=>cols.forEach((c,ci)=>{const x=v[ri*3+ci];if(x!=null&&x!==r*c)wrong.push(`${r} · ${c}`);}));
+      const diag=wrong.length?`Athugaðu þessa reiti aftur: <b>${wrong.join(', ')}</b>. Skoðaðu ráðin hér fyrir neðan.`:'';
+      return {diag,steps:[{t:'Í hverjum reit margföldum við töluna <b>í röðinni</b> (vinstra megin) við töluna <b>efst í dálkinum</b>.',v:table(-1,-1,false)},
+        ...rows.map((r,ri)=>({t:`Röðin <b>${r}</b>: ${cols.map(c=>`${r} · ${c} = ${r*c}`).join(', ')}.<span class="tip">Ráð: ${TIP[r]}</span>`,v:table(ri,ri,false)}))]};}};
+}};
+T.tugir={name:'Sinnum 10, 100 og tugir',desc:'Hvað gerist við töluna þegar þú margfaldar með 10 eða 100?',gen(){
+  const kind=Math.random()<.12?'q':pick(['10','10','100','T0','T0']);
+  if(kind==='q'){const opts=shuffle(['Það bætist 0 aftan við hana','Það bætist 10 við hana','Hún verður helmingi minni']);
+    return {fields:[{type:'choice',opts,ans:opts.indexOf('Það bætist 0 aftan við hana')}],html:`<p>Hvað gerist við töluna þegar þú margfaldar hana með 10?</p>[[0]]`,
+      explain(){return {diag:'',steps:[{t:'Skoðum dæmi: 7 · 10 = 70 og 45 · 10 = 450.'},{t:'Hver tölustafur færist <b>eitt sæti til vinstri</b> og verður 10 sinnum meira virði.',v:`<div class="shift">${pvTable(45)}<b>→</b>${pvTable(450)}</div>`},{t:'Þá kemur <b>0</b> í einingasætið. Það bætist 0 aftan við töluna.'}]};}};}
+  let a,b,ans,steps;
+  if(kind==='10'){a=pick([R(2,9),R(11,99)]);b=10;ans=a*10;steps=[{t:'Þegar við margföldum með 10 verður hver tölustafur 10 sinnum meira virði og færist <b>eitt sæti til vinstri</b>.',v:`<div class="shift">${pvTable(a)}<b>→</b>${pvTable(ans)}</div>`},{t:`Þá kemur <b>0</b> í einingasætið: ${a} · 10 = <b>${ans}</b>.`}];}
+  else if(kind==='100'){a=pick([R(2,9),R(2,9),R(11,25)]);b=100;ans=a*100;steps=[{t:'Sinnum 100 er eins og sinnum 10 tvisvar. Tölustafirnir færast <b>tvö sæti til vinstri</b>.',v:`<div class="shift">${pvTable(a)}<b>→</b>${pvTable(ans)}</div>`},{t:`Þá koma <b>tvö núll</b> aftan við: ${a} · 100 = <b>${ans}</b>.`}];}
+  else{a=R(2,9);const t=R(2,9);b=t*10;ans=a*b;steps=[{t:`${b} er það sama og <b>${t} tugir</b>.`},{t:`${a} · ${t} tugir = ${a*t} tugir. (${a} · ${t} = ${a*t})`},{t:`${a*t} tugir = <b>${ans}</b>.<span class="tip">Ráð: reiknaðu ${a} · ${t} og bættu 0 aftan við.</span>`}];}
+  return {fields:[{ans,w:4}],html:`<p>Margfaldaðu.</p><div class="bignum">${a} · ${b} = [[0]]</div>`,
+    explain(v){const x=v[0];let diag='';
+      if(x!=null&&x*10===ans)diag='Þú gleymdir <b>núllinu</b>!';else if(x===ans*10)diag='Þú settir <b>einu núlli of mikið</b>.';else if(x===a+b)diag=`Þú lagðir ${b} við. Hér á að margfalda.`;
+      else if(x!=null&&x!==ans&&kind==='T0')diag=`Byrjaðu á ${a} · ${b/10}. Bættu svo 0 aftan við.`;
+      return {diag,steps};}};
+}};
+T.ordmarg={name:'Orðadæmi',desc:'Finndu hversu margir hópar eru og hversu margir eru í hverjum hóp.',gen(){
+  const [nm,pr]=pick(NAMES);
+  const t=pick([
+    ()=>{const a=R(6,12),n=R(3,8);return {a,n,q:`Í einum kassa eru ${a} egg. Hversu mörg egg eru í ${n} kössum?`,g:'kassar',u:'egg'};},
+    ()=>{const a=R(2,9)*10,n=R(3,6);return {a,n,q:`Eitt epli kostar ${a} kr. Hvað kosta ${n} epli?`,g:'epli',u:'kr',tens:true};},
+    ()=>{const n=R(3,9);return {a:8,n,q:`Kónguló hefur 8 fætur. Hversu margir fætur eru á ${n} köngulóm?`,g:'köngulær',u:'fætur'};},
+    ()=>{const a=R(4,8),n=R(3,6);return {a,n,q:`Í stofunni eru ${n} raðir af stólum og ${a} stólar í hverri röð. Hversu margir stólar eru í stofunni?`,g:'raðir',u:'stólar'};},
+    ()=>{const a=R(5,9),n=R(3,7);return {a,n,q:`${nm} les ${a} blaðsíður á dag. Hversu margar blaðsíður les ${pr} á ${n} dögum?`,g:'dagar',u:'blaðsíður'};},
+    ()=>{const n=R(3,9);return {a:4,n,q:`Bíll hefur 4 dekk. Hversu mörg dekk eru á ${n} bílum?`,g:'bílar',u:'dekk'};}
+  ])();
+  const {a,n}=t,ans=a*n;
+  return {fields:[{ans,w:3}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+    explain(v){const x=v[0];const diag=x===a+n?'Þú lagðir saman. Hér eru margir <b>jafnstórir hópar</b>, svo við margföldum.':multDiag(a,n,x);
+      const steps=[{t:`Það eru <b>${n} hópar</b> (${t.g}) og <b>${a}</b> í hverjum hóp.`,v:a<=12&&!t.tens?groupsVis(n,a):''},{t:`Jafnstórir hópar → við <b>margföldum</b>: ${n} · ${a}.`}];
+      if(t.tens)steps.push({t:`${a} kr = ${a/10} tugir. ${n} · ${a/10} tugir = ${n*a/10} tugir = ${ans}.`});else steps.push({t:`Teljum ${a} í einu: ${range(1,n).map(i=>a*i).join(', ')}.`,v:skipBubbles(a,n)});
+      steps.push({t:`Svar: <b>${ans} ${t.u}</b>`});return {diag,steps};}};
+}};
+
+/* --- Lota 2 / Hluti 2: Eins stafs tala sinnum tveggja stafa tala --- */
+function mult12Diag(a,n,x){const T=n-n%10,U=n%10,ans=a*n;if(x==null||isNaN(x)||x===ans)return '';
+  if(x===a*T)return `Þú gleymdir að margfalda <b>einingarnar</b> (${a} · ${U}) og leggja þær við.`;
+  if(x===a*T+U)return `Þú gleymdir að margfalda einingarnar með ${a}. Það þarf að reikna <b>${a} · ${U}</b> líka.`;
+  if(x===a*(T/10)+a*U)return `Mundu að ${T/10} í ${n} eru <b>tugir</b>. ${a} · ${T/10} tugir = ${a*T}, ekki ${a*T/10}.`;
+  if(String(x)===`${a*T/10}${a*U}`)return 'Þú skrifaðir svörin hlið við hlið. Það þarf að <b>leggja þau saman</b>.';
+  if(x===a+n)return 'Þú lagðir saman. Punkturinn · þýðir sinnum.';
+  return `Prófaðu að skipta ${n} í ${T} + ${U}. Margfaldaðu hvorn hluta með ${a} og leggðu svo saman.`;}
+function mult12Steps(a,n){const T=n-n%10,U=n%10;return [
+  {t:`Skiptum ${n} í tugi og einingar: ${n} = <span class="t-col">${T}</span> + <span class="e-col">${U}</span>.`,v:areaModel(a,n,0)},
+  {t:`<span class="t-col">${a} · ${T} = ${a*T}</span> <span class="tip">(${a} · ${T/10} = ${a*T/10}, og bætum 0 aftan við)</span>`,v:areaModel(a,n,1)},
+  {t:`<span class="e-col">${a} · ${U} = ${a*U}</span>`,v:areaModel(a,n,2)},
+  {t:`Leggjum saman: ${a*T} + ${a*U} = <b>${a*n}</b>`}];}
+T.eydur={name:'Fylltu í eyðurnar',desc:'Skiptu tveggja stafa tölunni í tugi og einingar og margfaldaðu hvorn hluta.',gen(){
+  const a=R(2,9);let n;do{n=R(12,49);}while(n%10===0);const T=n-n%10,U=n%10;
+  return {fields:[{ans:a*T,w:3},{ans:a*U,w:2},{ans:a*n,w:3}],
+    html:`<div class="rows2"><div class="bignum sm"><b>${a} · ${n}</b> →</div><div>${a} · ${T} = [[0]]</div><div>${a} · ${U} = [[1]]</div><div>Samtals: [[2]]</div></div>`,
+    explain(v){let diag='';if(v[0]!=null&&v[0]===a*T/10)diag=`${a} · ${T}: mundu eftir <b>núllinu</b>! ${T} eru ${T/10} tugir.`;
+      else if(v[2]!=null&&v[0]!=null&&v[1]!=null&&v[2]!==v[0]+v[1])diag='Samtals: leggðu saman svörin tvö.';
+      return {diag,steps:mult12Steps(a,n)};}};
+}};
+T.reikna12={name:'Reiknaðu',desc:'Þú mátt velja aðferð. Gott ráð: skiptu í tugi og einingar.',gen(){
+  const a=R(2,9);let n;do{n=R(12,69);}while(n%10===0);
+  return {fields:[{ans:a*n,w:3}],html:`<p>Reiknaðu.</p><div class="bignum">${a} · ${n} = [[0]]</div>`,
+    explain(v){return {diag:mult12Diag(a,n,v[0]),steps:mult12Steps(a,n)};}};
+}};
+T.ord12={name:'Orðadæmi',desc:'Lestu vel og finndu margföldunardæmið.',gen(){
+  const [nm,pr]=pick(NAMES);
+  const t=pick([
+    ()=>{const a=R(2,5),n=R(32,58);return {a,n,q:`Bekkurinn fer í ferð með ${a} rútum. Í hverri rútu eru ${n} sæti. Hversu mörg sæti eru samtals?`,u:'sæti'};},
+    ()=>{const a=R(3,8),n=R(5,19)*5;return {a,n,q:`Eitt límmiðaspjald kostar ${n} kr. Hvað kosta ${a} límmiðaspjöld?`,u:'kr'};},
+    ()=>{const a=R(3,7),n=pick([12,18,24,36]);return {a,n,q:`Í einum litakassa eru ${n} litir. Hversu margir litir eru í ${a} kössum?`,u:'litir'};},
+    ()=>{const n=R(12,20);return {a:7,n,q:`Ein vika hefur 7 daga. Hversu margir dagar eru í ${n} vikum?`,u:'dagar'};},
+    ()=>{const a=R(3,6),n=R(21,28);return {a,n,q:`Í hverjum bekk eru ${n} nemendur. Í árganginum eru ${a} bekkir. Hversu margir nemendur eru í árganginum?`,u:'nemendur'};},
+    ()=>{const a=R(4,9),n=R(13,25);return {a,n,q:`${nm} hjólar ${n} km á viku. Hversu marga km hjólar ${pr} á ${a} vikum?`,u:'km'};}
+  ])();
+  const {a,n}=t;
+  return {fields:[{ans:a*n,w:4}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+    explain(v){return {diag:mult12Diag(a,n,v[0]),steps:[{t:`Það eru <b>${a}</b> jafnstórir hópar með <b>${n}</b> í hverjum. Dæmið er <b>${a} · ${n}</b>.`},...mult12Steps(a,n),{t:`Svar: <b>${a*n} ${t.u}</b>`}]};}};
+}};
+T.askorun12={name:'Áskorun: hvort er meira?',desc:'Reiknaðu bæði dæmin og berðu saman.',count:10,gen(){
+  let a,x,b,y;do{a=R(3,9);b=R(3,9);x=R(12,49);y=R(12,49);}while(a===b||x%10===0||y%10===0||a*x===b*y||Math.abs(a*x-b*y)>40);
+  if((a*x>b*y?0:1)!==deal('askorun12',2)){[a,b]=[b,a];[x,y]=[y,x];}
+  const p1=a*x,p2=b*y,opts=[`${a} · ${x}`,`${b} · ${y}`];
+  const calc=(m,n)=>{const T=n-n%10,U=n%10;return `${m} · ${n} = ${m} · ${T} + ${m} · ${U} = ${m*T} + ${m*U} = <b>${m*n}</b>`;};
+  return {fields:[{type:'choice',opts,ans:p1>p2?0:1}],html:`<p><b>Áskorun:</b> Hvort er meira? Reiknaðu bæði og veldu.</p>[[0]]`,
+    explain(v){return {diag:v[0]!=null&&v[0]!==(p1>p2?0:1)?'Reiknaðu bæði dæmin alveg til enda áður en þú velur. Það er ekki nóg að skoða bara stærstu töluna.':'',
+      steps:[{t:calc(a,x),v:areaModel(a,x)},{t:calc(b,y),v:areaModel(b,y)},{t:`${Math.max(p1,p2)} &gt; ${Math.min(p1,p2)}, svo <b>${p1>p2?opts[0]:opts[1]}</b> er meira.`}]};}};
+}};
+
+/* --- Lota 2 / Hluti 3: Deiling og skíðabrekkan --- */
+T.skipta={name:'Skiptu jafnt',desc:'Deiling er að skipta jafnt. Þú mátt teikna.',gen(){
+  const g=R(2,6),k=R(2,9),p=g*k;
+  const t=pick([
+    {q:`${p} kökum er skipt jafnt á ${g} diska. Hversu margar kökur fara á hvern disk?`,th:'kökur',co:'diska',one:'disk'},
+    {q:`${p} blýöntum er skipt jafnt á ${g} hópa. Hversu marga blýanta fær hver hópur?`,th:'blýanta',co:'hópa',one:'hóp'},
+    {q:`${p} eplum er skipt jafnt í ${g} körfur. Hversu mörg epli fara í hverja körfu?`,th:'epli',co:'körfur',one:'körfu'},
+    {q:`${p} límmiðum er skipt jafnt á milli ${g} krakka. Hversu marga límmiða fær hvert barn?`,th:'límmiða',co:'krakka',one:'barn'}]);
+  return {fields:[{ans:k,w:1}],html:`<p>${t.q}</p>${itemsRow(p)}<div class="bignum sm">${p} : ${g} = [[0]]</div>`,
+    explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==k?`Prófum: ef ${x} færu á hvern ${t.one} þyrftum við ${g} · ${x} = ${g*x} ${t.th}. En við eigum ${p}.`:'';
+      const steps=[{t:`Við eigum <b>${p}</b> ${t.th} og <b>${g}</b> ${t.co}.`,v:`<div class="visstack">${itemsRow(p)}${plates(g,0)}</div>`},
+        {t:`Setjum <b>eina</b> á hvern ${t.one} í einu. Eftir eina umferð eru ${g} farnar.`,v:`<div class="visstack">${itemsRow(p-g)}${plates(g,1)}</div>`}];
+      if(k>2)steps.push({t:`Höldum áfram, eina umferð í einu…`,v:`<div class="visstack">${itemsRow(p-2*g)}${plates(g,2)}</div>`});
+      steps.push({t:`Nú er allt búið. Á hverjum ${t.one} eru <b>${k}</b>. Svo ${p} : ${g} = ${k}.`,v:plates(g,k)});
+      steps.push({t:`Prófum með margföldun: ${g} · ${k} = ${p} ✓`});return {diag,steps};}};
+}};
+T.fjolskylda={name:'Margföldun og deiling eiga saman',desc:'Skrifaðu tvö deilidæmi út frá margföldunardæminu.',gen(){
+  let a,b;do{a=R(2,9);b=R(2,9);}while(a===b);const p=a*b;
+  return {fields:[{ans:a,w:1},{ans:b,w:1},{ans:b,w:1},{ans:a,w:1}],
+    html:`<div class="rows2"><div class="bignum sm">${a} · ${b} = ${p} →</div><div class="bignum sm">${p} : [[0]] = [[1]]</div><div class="bignum sm">${p} : [[2]] = [[3]]</div></div>`,
+    check(v){const f=(x,y)=>[x===a||x===b,(x===a&&y===b)||(x===b&&y===a)];const r1=f(v[0],v[1]),r2=f(v[2],v[3]);if(r1[1]&&r2[1]&&v[0]===v[2]){r2[0]=false;r2[1]=false;}return [r1[0],r1[1],r2[0],r2[1]];},
+    explain(v){let diag='';if(v[0]!=null&&v[0]===v[2]&&v[1]===v[3])diag='Þú skrifaðir sama dæmið tvisvar. Í seinna dæminu deilum við með <b>hinni</b> tölunni.';
+      else if(v.some((x,i)=>x!=null&&x===p))diag=`${p} er talan sem við deilum. Það eru hinar tvær tölurnar (${a} og ${b}) sem fara í eyðurnar.`;
+      return {diag,steps:[{t:`${a}, ${b} og ${p} eru <b>talnafjölskylda</b>. Þær eiga saman.`,v:famVis(p,a,b)},
+        {t:`Ef ${a} · ${b} = ${p}, þá er <b>${p} : ${a} = ${b}</b>.`},{t:`Og líka <b>${p} : ${b} = ${a}</b>.`},
+        {t:'Deiling er öfug margföldun. Hún spyr: hvaða tala sinnum hin talan gefur stóru töluna?'}]};}};
+}};
+T.deila={name:'Reiknaðu deilingu',desc:'Hugsaðu: hvaða tala sinnum deilirinn gefur stóru töluna?',gen(){
+  const d=R(2,10),q=R(2,10),p=d*q;
+  return {fields:[{ans:q,w:2}],html:`<p>Reiknaðu.</p><div class="bignum">${p} : ${d} = [[0]]</div>`,
+    explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==q?`Prófum svarið þitt: ${x} · ${d} = ${x*d}. Það á að vera ${p}, svo ${x*d>p?'svarið er <b>of stórt</b>':'svarið er <b>of lítið</b>'}.`:'';
+      const steps=[{t:`${p} : ${d} spyr: <b>hvaða tala sinnum ${d} er ${p}?</b>`},{t:`Teljum ${d} í einu þar til við komum í ${p}:`,v:skipBubbles(d,q)},{t:`Við töldum ${q} sinnum. ${q} · ${d} = ${p}, svo ${p} : ${d} = <b>${q}</b>.`}];
+      if(d===10)steps.push({t:`Ráð: að deila með 10 er eins og að taka núllið aftan af: ${p} → ${q}.`});
+      return {diag,steps};}};
+}};
+T.skidabrekka={name:'Skíðabrekkan',desc:'Deildu skref fyrir skref. Svarið kemur ofan á línuna.',gen(){
+  const {D,d,q}=ldNum();
+  return {fields:[{ans:q,w:3}],html:`<p>Reiknaðu með skíðabrekkunni. Skrifaðu svarið ofan á línuna.</p>${ldHTML(D,d,0,{ans:true})}`,
+    explain(v){const x=v[0];let diag='';
+      if(x!=null&&!isNaN(x)&&x!==q){diag=`Prófum svarið þitt með margföldun: ${x} × ${d} = ${x*d}. Það á að vera ${D}.`;
+        if(String(x).length<String(q).length)diag+=' Það vantar tölustaf í svarið. Mundu að <b>færa næsta tölustaf niður</b> og deila aftur, alveg þar til allir tölustafirnir eru búnir.';
+        else if(String(x).length>String(q).length)diag+=` Svarið er of langt. Ef ${d} gengur ekki upp í fyrsta tölustafinn skrifum við <b>ekkert</b> fyrir ofan hann, heldur skoðum fyrstu tvo tölustafina.`;}
+      return {diag,steps:ldSteps(D,d)};}};
+}};
+T.ordeiling={name:'Orðadæmi',desc:'Notaðu skíðabrekkuna. Orð eins og „jafnt“ og „í hvern“ segja okkur að deila.',gen(){
+  const {D,d,q}=ldNum();
+  const t=pick([
+    {q:`${D} nemendur fara í ferð með ${d} jafnstórum rútum. Hversu margir nemendur eru í hverri rútu?`,u:'nemendur',w:'„jafnstórum“'},
+    {q:`Bakarinn á ${D} múffur. Hann setur ${d} múffur í hvern kassa. Hversu marga kassa getur hann fyllt?`,u:'kassar',w:'„í hvern“'},
+    {q:`${D} krakkar á íþróttamóti skiptast í ${d} jafnstór lið. Hversu margir eru í hverju liði?`,u:'krakkar',w:'„jafnstór“'},
+    {q:`Bóndinn á ${D} egg og setur ${d} egg í hvern bakka. Hversu marga bakka fyllir hann?`,u:'bakkar',w:'„í hvern“'},
+    {q:`Bók er ${D} blaðsíður. ${NAMES[R(0,9)][0]} les hana á ${d} dögum og les jafnmargar síður á hverjum degi. Hversu margar síður á dag?`,u:'síður',w:'„jafnmargar“'}]);
+  return {fields:[{ans:q,w:3}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+    explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==q?(x===D*d?'Þú margfaldaðir. Hér er verið að skipta jafnt, svo við <b>deilum</b>.':x===D-d?'Þú dróst frá. Hér er verið að skipta jafnt, svo við <b>deilum</b>.':`Prófum með margföldun: ${x} × ${d} = ${x*d}, en það á að vera ${D}.`):'';
+      return {diag,steps:[{t:`Orðið ${t.w} segir okkur að við eigum að <b>deila</b>: ${D} : ${d}.`},...ldSteps(D,d).slice(0,-1),{t:`Svar: <b>${q} ${t.u}</b>. Prófum: ${q} × ${d} = ${D} ✓`}]};}};
+}};
+
+/* ================= categories ================= */
+const LOTUR=[
+  {name:'Heilar tölur',num:'Lota 1',hlutar:[
+    {id:'tugakerfid',name:'Tugakerfið',sym:'#',c:'--blue',types:['saeti','gildi','einatala','summa','ord','staersta','rada']},
+    {id:'talnalina',name:'Talnalína og neikvæðar tölur',sym:'±',c:'--teal',types:['merkja','stafur','hitamaelir','hitabreyting','staerri','mismunur','hugar']},
+    {id:'peningar',name:'Samlagning, frádráttur og peningar',sym:'kr',c:'--orange',types:['samlagning','fradrattur','bud','ordplus']}]},
+  {name:'Margföldun og deiling',num:'Lota 2',hlutar:[
+    {id:'margfoldun',name:'Margföldun',sym:'×',c:'--purple',types:['endurtekin','vantar','tafla','tugir','ordmarg']},
+    {id:'tveggjastafa',name:'Eins stafs tala sinnum tveggja stafa tala',sym:'7·4',c:'--pink',types:['eydur','reikna12','ord12','askorun12']},
+    {id:'deiling',name:'Deiling og skíðabrekkan',sym:'÷',c:'--green',types:['skipta','fjolskylda','deila','skidabrekka','ordeiling']}]}];
+const HL={};LOTUR.forEach(l=>l.hlutar.forEach((h,i)=>{h.lota=l;h.idx=i+1;HL[h.id]=h;}));
+T.blandad={name:'Blandað',desc:'Allskonar dæmi úr þessum hluta, í bland.',mixed:true};
+
+/* ================= state ================= */
+const store={get(k,d){try{const v=localStorage.getItem('reiknibok_'+k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem('reiknibok_'+k,JSON.stringify(v));}catch(e){}}};
+let S=store.get('state',null);if(!S||typeof S!=='object')S={stars:0,done:{}};if(!S.done)S.done={};
+const save=()=>store.set('state',S);
+let view={h:null,type:null,problems:[],ctx:null};let pidN=0;
+const app=document.getElementById('app');
+
+const OWL=`<svg class="owl" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 14l8 8M50 14l-8 8" style="stroke:var(--purple);stroke-width:5;stroke-linecap:round"/><ellipse cx="32" cy="38" rx="22" ry="23" style="fill:var(--purple)"/><ellipse cx="32" cy="45" rx="13" ry="13" style="fill:color-mix(in srgb,var(--purple) 35%,#fff)"/><circle cx="23" cy="30" r="9" style="fill:#fff"/><circle cx="41" cy="30" r="9" style="fill:#fff"/><circle cx="24" cy="31" r="4.5" style="fill:#1D2242"/><circle cx="40" cy="31" r="4.5" style="fill:#1D2242"/><circle cx="25.5" cy="29.5" r="1.5" style="fill:#fff"/><circle cx="41.5" cy="29.5" r="1.5" style="fill:#fff"/><path d="M29 37l3 5 3-5z" style="fill:#FFB400"/><path d="M15 22c3-4 10-5 13-2M49 22c-3-4-10-5-13-2" style="fill:none;stroke:#1D2242;stroke-width:2;stroke-linecap:round"/></svg>`;
+document.getElementById('logoOwl').innerHTML=OWL;
+const PRAISE=['Frábært!','Vel gert!','Snillingur!','Hárrétt!','Glæsilegt!','Rétt hjá þér!','Flott!','Algjör meistari!'];
+const ICON={check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg>',
+  bulb:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3zM9.5 19h5M10.5 21.5h3" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" style="fill:none;stroke:currentColor;stroke-width:2.2"/><circle cx="12" cy="12" r="3" style="fill:currentColor"/></svg>',
+  dice:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round"/><circle cx="8.5" cy="8.5" r="1.6" style="fill:currentColor"/><circle cx="15.5" cy="15.5" r="1.6" style="fill:currentColor"/><circle cx="12" cy="12" r="1.6" style="fill:currentColor"/></svg>'};
+
+function updStars(pop){document.getElementById('starN').textContent=S.stars;if(pop){const e=document.getElementById('stars');e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');}}
+function progHTML(h){const n=S.done[h.id]||0,goal=n<20?20:n<50?50:100;return `<div class="prog"><div class="bar"><i style="width:${Math.min(100,n/goal*100)}%"></i></div><span>${n} rétt</span></div>`;}
+
+/* ================= rendering ================= */
+function renderHome(){
+  view.h=null;
+  app.innerHTML=`<section class="hero">${OWL}<div><h1>Hæ! Hvað viltu æfa í dag?</h1><p>Veldu flokk. Skrifaðu svarið í kassann og ýttu á <b>Athuga svar</b>. Ef eitthvað er snúið getur þú ýtt á <b>Útskýring</b> og séð hvernig á að reikna.</p></div></section>`+
+  LOTUR.map(l=>`<section class="lota"><div class="lota-h"><span>${l.num}</span><h2>${l.name}</h2></div><div class="hgrid">${l.hlutar.map(h=>`
+    <button class="hcard" type="button" data-h="${h.id}" style="--c:var(${h.c})"><div class="hc-top"><div class="sym">${h.sym}</div><div><div class="hc-num">Hluti ${h.idx}</div><div class="hc-name">${h.name}</div></div></div>
+    <div class="hc-types">${h.types.map(t=>T[t].name).join(' · ')}</div>${progHTML(h)}</button>`).join('')}</div></section>`).join('');
+  window.scrollTo(0,0);
+}
+function renderHluti(id,type){
+  const h=HL[id];if(!h){renderHome();return;}
+  view.h=h;view.type=type&&(h.types.includes(type)||type==='blandad')?type:h.types[0];
+  const tabs=[...h.types,'blandad'];
+  app.innerHTML=`<div style="--c:var(${h.c})"><button class="back" type="button" id="back">← Allir flokkar</button>
+   <header class="hhead"><div class="sym">${h.sym}</div><div style="flex:1;min-width:200px"><div class="hc-num">${h.lota.num} · Hluti ${h.idx}</div><h2>${h.name}</h2></div><div id="hprog" style="flex:1;min-width:180px;max-width:300px">${progHTML(h)}</div></header>
+   <nav class="tabs" aria-label="Tegundir dæma">${tabs.map(t=>`<button class="tab" type="button" data-t="${t}" aria-pressed="${t===view.type}">${t==='blandad'?ICON.dice.replace('<svg','<svg style="width:16px;height:16px;vertical-align:-2px"')+' ':''}${T[t].name}</button>`).join('')}</nav>
+   <div class="tdesc" id="tdesc"></div><div class="ctx" id="ctx"></div><div class="plist" id="plist"></div>
+   <div class="more"><button class="btn big b-new" type="button" id="newset">${ICON.dice} Ný dæmi</button></div></div>`;
+  newSet();
+}
+function newSet(){
+  const h=view.h,tp=T[view.type];
+  document.getElementById('tdesc').textContent=tp.desc;
+  view.ctx=tp.ctx?tp.ctx():null;
+  document.getElementById('ctx').innerHTML=view.ctx?view.ctx.html:'';
+  const cnt=tp.count||12;view.problems=[];
+  for(let i=0;i<(tp.mixed?12:cnt);i++){let p;
+    if(tp.mixed){const tk=pick(h.types),tt=T[tk];const c=tt.ctx?tt.ctx():null;p=tt.gen(c,R(0,3));p.tag=tt.name;if(c)p.pre=c.html;}
+    else p=tp.gen(view.ctx,i);
+    p.pid='p'+(pidN++);p.state={tries:0,scored:false,revealed:false};view.problems.push(p);}
+  document.getElementById('plist').innerHTML=view.problems.map((p,i)=>cardHTML(p,i)).join('');
+}
+function fieldHTML(pid,f,i){
+  if(f.type==='choice')return `<span class="choices" data-i="${i}" role="group">${f.opts.map((o,j)=>`<button type="button" class="choice" id="${pid}-c${i}-${j}" data-j="${j}">${o}</button>`).join('')}</span>`;
+  return `<span class="fwrap"><input id="${pid}-f${i}" class="ans" data-i="${i}" style="--w:${f.w||3}" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Svar">${f.neg?`<button type="button" class="neg" data-i="${i}" aria-label="Setja eða taka mínus">±</button>`:''}</span>`;
+}
+function cardHTML(p,idx){
+  let body=p.html;if(!/\[\[/.test(body))body+='<div class="svar">Svar: [[0]]</div>';
+  body=body.replace(/\[\[(m|\d+)(?::(\d+))?\]\]/g,(m,i,k)=>{
+    if(i==='m')return `<input class="memo" id="${p.pid}-m${k}" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Minnisreitur">`;
+    if(k!==undefined)return `<input class="ans dig" id="${p.pid}-f${i}-${k}" data-i="${i}" data-k="${k}" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Tölustafur">`;
+    return fieldHTML(p.pid,p.fields[+i],+i);});
+  return `<article class="pcard" id="${p.pid}" data-idx="${idx}">
+    <div class="ptop"><span class="plabel">${'abcdefghijklmnop'[idx]}</span><div class="pq">${p.tag?`<span class="ptag">${p.tag}</span>`:''}${p.pre||''}${body}</div></div>
+    <div class="pbtns"><button class="btn b-check" type="button">${ICON.check}Athuga svar</button><button class="btn b-help" type="button">${ICON.bulb}Útskýring</button><button class="btn b-show" type="button">${ICON.eye}Sýna svar</button></div>
+    <div class="pmsg" aria-live="polite"></div><div class="pexp" hidden></div></article>`;
+}
+
+/* ================= interaction ================= */
+const probOf=card=>view.problems.find(p=>p.pid===card.id);
+function getVals(card,p){return p.fields.map((f,i)=>{
+  if(f.type==='choice'){const b=card.querySelector(`.choices[data-i="${i}"] .choice.sel`);return b?Number(b.dataset.j):null;}
+  if(f.type==='cols'){const ds=[...card.querySelectorAll(`input.dig[data-i="${i}"]`)].sort((a,b)=>a.dataset.k-b.dataset.k).map(x=>x.value.trim());const s=ds.join('');return s===''?null:parseNum(s);}
+  const el=card.querySelector(`input.ans[data-i="${i}"]`);return el?parseNum(el.value):null;});}
+const checkVals=(p,v)=>p.check?p.check(v):p.fields.map((f,i)=>v[i]===f.ans);
+function fieldEls(card,i,f){if(f.type==='choice')return [...card.querySelectorAll(`.choices[data-i="${i}"] .choice.sel`)];return [...card.querySelectorAll(`input.ans[data-i="${i}"]`)];}
+function clearMarks(card){card.querySelectorAll('.ok,.bad').forEach(e=>e.classList.remove('ok','bad'));}
+function msg(card,cls,txt){const m=card.querySelector('.pmsg');m.className='pmsg '+cls;m.innerHTML=txt;}
+
+function doCheck(card){
+  const p=probOf(card);if(!p)return;const v=getVals(card,p);
+  if(v.every(x=>x===null)){msg(card,'info','Skrifaðu svarið þitt í kassann fyrst.');return;}
+  const ok=checkVals(p,v);clearMarks(card);
+  p.fields.forEach((f,i)=>{const els=fieldEls(card,i,f);void card.offsetWidth;els.forEach(e=>e.classList.add(ok[i]?'ok':'bad'));});
+  p.state.tries++;
+  if(ok.every(Boolean)){
+    let extra='';
+    if(!p.state.revealed&&!p.state.scored){p.state.scored=true;const g=p.state.tries===1?2:1;S.stars+=g;S.done[view.h.id]=(S.done[view.h.id]||0)+1;save();updStars(true);extra=` +${g} ${g===1?'stjarna':'stjörnur'}`;const hp=document.getElementById('hprog');if(hp)hp.innerHTML=progHTML(view.h);}
+    msg(card,'good',pick(PRAISE)+extra);card.classList.add('solved');confetti(card);
+    const ex=card.querySelector('.pexp');if(!ex.hidden&&ex.dataset.diag==='1')openExplain(card,true);
+  }else{
+    const n=ok.filter(x=>!x).length,tot=ok.length;
+    msg(card,'bad',(tot>1&&n<tot?`Næstum því! ${n} af ${tot} ${n===1?'reit er':'reitum eru'} ekki rétt${n===1?'ur':'ir'}. `:'Ekki alveg rétt. ')+'Prófaðu aftur eða ýttu á <b>Útskýring</b>.');
+    const hb=card.querySelector('.b-help');hb.classList.remove('nudge');void hb.offsetWidth;hb.classList.add('nudge');
+    const ex=card.querySelector('.pexp');if(!ex.hidden)openExplain(card,true);
+  }
+}
+function openExplain(card,force){
+  const p=probOf(card);if(!p)return;const ex=card.querySelector('.pexp');
+  if(!ex.hidden&&!force){ex.hidden=true;return;}
+  const v=getVals(card,p),ok=checkVals(p,v),wrong=p.state.tries>0&&!p.state.revealed&&v.some(x=>x!==null)&&!ok.every(Boolean);
+  let E;try{E=p.explain(v,ok);}catch(e){E={diag:'',steps:[{t:'Úps, útskýringin fannst ekki.'}]};}
+  const diag=wrong?(E.diag||'Svarið passar ekki alveg. Förum saman í gegnum dæmið skref fyrir skref og sjáum hvar munar.'):'';
+  ex.dataset.diag=diag?'1':'0';
+  ex.innerHTML=`<div class="exp-head">${OWL}<h4>${wrong?'Ugla hjálpar þér':'Svona reiknum við'}</h4></div>
+    ${diag?`<div class="diag"><h5>Hvað fór úrskeiðis?</h5><p>${diag}</p></div><div class="exp-sub">Svona reiknum við:</div>`:''}
+    <div class="pvis"></div><ol class="psteps">${E.steps.map(s=>`<li><div>${s.t}</div></li>`).join('')}</ol>
+    <div class="pnav"><button class="btn b-prev" type="button">← Til baka</button><button class="btn b-next" type="button">Næsta skref →</button><button class="btn b-all" type="button">Sýna öll skref</button><span class="cnt"></span></div>`;
+  ex._steps=E.steps;ex._cur=0;ex.hidden=false;showStep(ex);
+}
+function showStep(ex){
+  const st=ex._steps,c=ex._cur,lis=ex.querySelectorAll('.psteps li');
+  lis.forEach((li,j)=>{li.hidden=j>c;li.classList.toggle('cur',j===c);li.classList.toggle('past',j<c);});
+  let vis='';for(let j=Math.min(c,st.length-1);j>=0;j--){if(st[j].v){vis=st[j].v;break;}}
+  ex.querySelector('.pvis').innerHTML=vis;
+  ex.querySelector('.b-prev').disabled=c===0;ex.querySelector('.b-prev').style.visibility=c===0?'hidden':'visible';
+  const nx=ex.querySelector('.b-next'),al=ex.querySelector('.b-all');const end=c>=st.length-1;nx.hidden=end;al.hidden=end;
+  ex.querySelector('.cnt').textContent=`Skref ${c+1} af ${st.length}`;
+}
+function doShow(card){
+  const p=probOf(card);if(!p)return;p.state.revealed=true;clearMarks(card);
+  p.fields.forEach((f,i)=>{
+    if(f.type==='choice'){card.querySelectorAll(`.choices[data-i="${i}"] .choice`).forEach((b,j)=>{b.classList.toggle('sel',j===f.ans);if(j===f.ans)b.classList.add('ok');});}
+    else if(f.type==='cols'){const s=String(f.ans).padStart(f.n,' ');card.querySelectorAll(`input.dig[data-i="${i}"]`).forEach(el=>{el.value=s[+el.dataset.k].trim();el.classList.add('ok');});}
+    else{const el=card.querySelector(`input.ans[data-i="${i}"]`);if(el){el.value=f.disp!==undefined?f.disp:M(f.ans);el.classList.add('ok');}}});
+  msg(card,'info','Hér er rétta svarið. Ýttu á <b>Útskýring</b> til að sjá hvernig það er reiknað.');
+  const ex=card.querySelector('.pexp');if(!ex.hidden)openExplain(card,true);
+}
+function confetti(card){
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['var(--blue)','var(--orange)','var(--pink)','var(--green)','var(--star)','var(--purple)'],b=card.querySelector('.b-check'),x=b.offsetLeft+b.offsetWidth/2,y=b.offsetTop;
+  for(let i=0;i<18;i++){const s=document.createElement('i');s.className='conf';s.style.cssText=`--x:${x}px;--y:${y}px;--dx:${R(-140,140)}px;--dy:${R(-150,-30)}px;--r:${R(-300,300)}deg;background:${pick(cols)}`;card.appendChild(s);setTimeout(()=>s.remove(),950);}
+}
+
+app.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t)return;
+  const card=t.closest('.pcard');
+  if(t.classList.contains('hcard')){location.hash=t.dataset.h;return;}
+  if(t.id==='back'){location.hash='';renderHome();return;}
+  if(t.classList.contains('tab')){view.type=t.dataset.t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b===t));newSet();return;}
+  if(t.id==='newset'){newSet();document.getElementById('tdesc').scrollIntoView({behavior:'smooth',block:'start'});return;}
+  if(!card)return;
+  if(t.classList.contains('b-check'))doCheck(card);
+  else if(t.classList.contains('b-help'))openExplain(card,false);
+  else if(t.classList.contains('b-show'))doShow(card);
+  else if(t.classList.contains('choice')){t.parentElement.querySelectorAll('.choice').forEach(b=>b.classList.remove('sel','ok','bad'));t.classList.add('sel');}
+  else if(t.classList.contains('neg')){const el=card.querySelector(`input.ans[data-i="${t.dataset.i}"]`);let s=el.value.replace(/[−–—]/g,'-').trim();el.value=s.startsWith('-')?s.slice(1):'−'+s;el.classList.remove('ok','bad');el.focus();}
+  else{const ex=t.closest('.pexp');if(!ex)return;
+    if(t.classList.contains('b-next'))ex._cur=Math.min(ex._steps.length-1,ex._cur+1);
+    else if(t.classList.contains('b-prev'))ex._cur=Math.max(0,ex._cur-1);
+    else if(t.classList.contains('b-all'))ex._cur=ex._steps.length-1;
+    showStep(ex);}
+});
+app.addEventListener('input',e=>{
+  const el=e.target;if(!el.classList.contains('ans')&&!el.classList.contains('memo'))return;
+  el.classList.remove('ok','bad');
+  if(el.classList.contains('dig')){el.value=el.value.replace(/[^0-9]/g,'').slice(-1);if(el.value){const prev=el.closest('.pcard').querySelector(`input.dig[data-i="${el.dataset.i}"][data-k="${+el.dataset.k-1}"]`);if(prev)prev.focus();}}
+});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input')){const c=e.target.closest('.pcard');if(c){e.preventDefault();doCheck(c);}}});
+document.getElementById('logo').addEventListener('click',()=>{location.hash='';renderHome();});
+function route(){const id=location.hash.replace('#','');if(id&&HL[id]){if(!view.h||view.h.id!==id){renderHluti(id);window.scrollTo(0,0);}}else if(view.h||!app.innerHTML)renderHome();}
+window.addEventListener('hashchange',route);
+updStars();route();
+</script>
+
+</body>
+</html>
