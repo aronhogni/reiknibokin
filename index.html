@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Reiknibókin">
+<meta name="apple-mobile-web-app-title" content="Krummi">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
@@ -14,13 +14,13 @@
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
 </head>
 <body>
-<title>Reiknibókin</title>
+<title>Krummi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
 <style>
-/* Layout: rúðustrikuð reiknibók – sex litaðir flokkar (hlutar), dæmin sem spjöld á rúðupappír, útskýring opnast undir hverju dæmi */
+/* Krummi. Layout: rúðustrikuð reiknibók – sex litaðir flokkar (hlutar), dæmin sem spjöld á rúðupappír, útskýring opnast undir hverju dæmi */
 :root{
   --paper:#F5F8FF; --grid:#DFE7FA; --card:#FFFFFF; --ink:#1D2242; --muted:#5A6288; --line:#CDD6EF;
   --blue:#2F6BFF; --teal:#0B9A94; --orange:#EE7410; --purple:#7A4AE8; --pink:#DB3D7A; --green:#1F9D50;
@@ -56,7 +56,9 @@ b{font-weight:800}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--card);border-bottom:2px solid var(--line)}
 .top-in{max-width:980px;margin:0 auto;padding-block:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:4px 0;font-family:var(--font-d);font-weight:700;font-size:1.4rem}
-.logo .owl{width:40px;height:40px}
+.logo .owl{width:42px;height:42px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .owl{filter:drop-shadow(0 0 1.5px rgba(170,180,255,.55))}}
+:root[data-theme="dark"] .owl{filter:drop-shadow(0 0 1.5px rgba(170,180,255,.55))}
 .stars{display:flex;align-items:center;gap:6px;font-family:var(--font-d);font-weight:600;font-size:1.2rem;background:var(--star-bg);padding:4px 14px 4px 8px;border-radius:999px;font-variant-numeric:tabular-nums}
 .stars svg{width:26px;height:26px}
 .stars.pop{animation:pop .5s}
@@ -84,7 +86,42 @@ main{max-width:980px;margin:0 auto;padding-block:22px 80px}
 .hc-name{font-family:var(--font-d);font-weight:600;font-size:1.3rem;line-height:1.15}
 .hc-types{font-size:.92rem;color:var(--muted);line-height:1.4}
 .prog{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-size:.95rem;font-weight:500}
-.bar{flex:1;height:12px;border-radius:99px;background:var(--cs);overflow:hidden}
+.bar{flex:1;height:14px;border-radius:99px;background:var(--cs);overflow:hidden}
+.prog{--cs:color-mix(in srgb,var(--c) 16%,var(--card));flex-direction:column;align-items:stretch;gap:4px}
+.pbar-row{display:flex;align-items:center;gap:10px}
+.ppct{min-width:2.8em;text-align:right;font-weight:700;color:var(--c)}
+.psub{font-size:.82rem;color:var(--muted);font-weight:500}
+.pdone .bar i{background:var(--good)}
+.pdone .psub b{color:var(--good)}
+.pchk{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--good);color:var(--on);vertical-align:middle;animation:pop .5s}
+.pchk svg{width:18px;height:18px}
+.hcard{position:relative}
+.hc-badge{position:absolute;top:-14px;right:-14px;width:46px;height:46px;border-radius:50%;background:var(--good);color:var(--on);display:grid;place-items:center;border:4px solid var(--paper);box-shadow:0 3px 0 color-mix(in srgb,var(--good) 60%,#000)}
+.hc-badge svg{width:26px;height:26px}
+.hcard.hdone{border-color:var(--good);box-shadow:0 6px 0 var(--good)}
+.sym{position:relative}
+.sym-chk{position:absolute;right:-10px;bottom:-10px;width:32px;height:32px;border-radius:50%;background:var(--good);color:var(--on);display:grid;place-items:center;border:3px solid var(--paper)}
+.sym-chk svg{width:20px;height:20px}
+.tab{display:inline-flex;align-items:center;gap:8px}
+.tbadge{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:99px;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 30%,var(--card)) var(--p),var(--paper) var(--p));border:1.5px solid color-mix(in srgb,var(--c) 45%,var(--line));color:var(--ink);line-height:1.4}
+.tab[aria-pressed="true"] .tbadge{border-color:var(--on);background:linear-gradient(90deg,color-mix(in srgb,var(--on) 45%,var(--c)) var(--p),var(--c) var(--p));color:var(--on)}
+.tbadge.tdone{display:inline-grid;place-items:center;width:22px;height:22px;padding:0;border-radius:50%;background:var(--good);border:none;color:#fff}
+.tab[aria-pressed="true"] .tbadge.tdone{background:var(--on);color:var(--good)}
+.tbadge.tdone svg{width:15px;height:15px}
+.lota-h{flex-wrap:wrap}
+.lota-h .lota-p{text-transform:none;letter-spacing:0;margin-left:auto;font-family:var(--font-d);font-size:.9rem;color:var(--muted);font-weight:500}
+.lota-h .lota-done{text-transform:none;letter-spacing:0;font-size:1rem;margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:var(--font-d);font-weight:600;color:var(--good)}
+.lota-h .lota-done svg{width:20px;height:20px}
+.celebr{position:fixed;inset:0;z-index:50;display:grid;place-items:end center;padding:24px;pointer-events:none;opacity:0;transition:opacity .25s}
+.celebr.big{place-items:center;background:color-mix(in srgb,var(--ink) 35%,transparent);pointer-events:auto}
+.celebr.show{opacity:1}
+.cel-in{pointer-events:auto;display:flex;align-items:center;gap:14px;background:var(--card);border:3px solid var(--good);border-radius:22px;padding:14px 20px;font-family:var(--font-d);font-size:1.15rem;box-shadow:0 8px 0 var(--good);max-width:520px;transform:translateY(20px);transition:transform .3s}
+.celebr.show .cel-in{transform:none}
+.celebr.big .cel-in{flex-direction:column;text-align:center;font-size:1.45rem;padding:28px 32px}
+.cel-chk{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--good);color:var(--on);animation:pop .6s}
+.celebr.big .cel-chk{width:96px;height:96px}
+.cel-chk svg{width:60%;height:60%}
+.cel-ok{--bc:var(--good)}
 .bar i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width .5s}
 .medal{font-size:.85rem;color:var(--muted)}
 
@@ -145,7 +182,7 @@ main{max-width:980px;margin:0 auto;padding-block:22px 80px}
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--bc) 62%,#000)}
 .btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .btn svg{width:20px;height:20px;flex:none}
-.b-help{--bc:var(--hint-line);color:var(--ink)}
+.b-help{--bc:#F2C440;color:#2A2000}
 .b-show{background:var(--card);color:var(--ink);--bc:var(--line);box-shadow:0 4px 0 var(--line)}
 .b-help.nudge{animation:nudge 1s 2}
 @keyframes nudge{30%{transform:rotate(-3deg) scale(1.05)}60%{transform:rotate(3deg) scale(1.05)}}
@@ -336,6 +373,77 @@ input{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .cg input.memo{font-size:16px;width:2.2em;height:1.8em}
   .back{min-height:46px}
 }
+/* talnaborð */
+.npad{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:2px solid var(--line);padding:10px max(12px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+.np-in{max-width:900px;margin:0 auto;display:grid;gap:8px;grid-template-columns:repeat(10,1fr) 1.3fr 1.7fr;
+  grid-template-areas:"k1 k2 k3 k4 k5 k6 k7 k8 k9 k0 del ok" "neg neg nx nx nx nx nx nx hide hide hide ok"}
+.nk{font-family:var(--font-d);font-weight:600;font-size:1.6rem;height:62px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);box-shadow:0 3px 0 var(--line);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;padding:0}
+.nk:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line);background:var(--paper)}
+.nk:disabled{opacity:.35}
+.nk-neg,.nk-del{font-size:1.4rem}.nk-next{font-size:1.1rem}.nk-hide{font-size:1.2rem}
+.nk-ok{font-size:1.15rem;background:var(--c,var(--teal));border-color:var(--c,var(--teal));color:var(--on);box-shadow:0 3px 0 color-mix(in srgb,var(--c,var(--teal)) 60%,#000)}
+.nk[data-k="0"]{grid-area:k0}.nk[data-k="1"]{grid-area:k1}.nk[data-k="2"]{grid-area:k2}.nk[data-k="3"]{grid-area:k3}.nk[data-k="4"]{grid-area:k4}.nk[data-k="5"]{grid-area:k5}.nk[data-k="6"]{grid-area:k6}.nk[data-k="7"]{grid-area:k7}.nk[data-k="8"]{grid-area:k8}.nk[data-k="9"]{grid-area:k9}
+.nk-del{grid-area:del}.nk-ok{grid-area:ok;height:auto}.nk-neg{grid-area:neg}.nk-next{grid-area:nx}.nk-hide{grid-area:hide}
+.nk-neg,.nk-next,.nk-hide{height:50px}
+body.pad-open main{padding-bottom:200px}
+@media (max-width:700px){
+  .np-in{max-width:440px;grid-template-columns:repeat(4,1fr);grid-template-areas:"k1 k2 k3 del" "k4 k5 k6 neg" "k7 k8 k9 hide" "nx nx k0 ok"}
+  .nk,.nk-neg,.nk-next,.nk-hide,.nk-ok{height:52px}
+  body.pad-open main{padding-bottom:320px}
+}
+/* skila / einkunn */
+.plist:not(.graded) .pbtns{display:none}
+.plist.graded .pcard.solved .b-check,.plist.graded .pcard.solved .b-show{display:none}
+.pcard.wrong{border-color:var(--bad)}
+.pcard.wrong .plabel{background:var(--bad)}
+.more{flex-direction:column;align-items:stretch}
+.submitbar{background:var(--card);border:2.5px solid var(--c);border-radius:24px;padding:18px 20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 6px 0 color-mix(in srgb,var(--c) 45%,var(--line))}
+.sb-top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.sb-info{font-family:var(--font-d);font-size:1.15rem;font-weight:500}
+.sb-info b{font-size:1.5rem;color:var(--c)}
+.sb-chips,.res-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--muted);font-family:var(--font-d);font-weight:600;text-decoration:none;font-size:1rem}
+.chip.on{background:color-mix(in srgb,var(--c) 18%,var(--card));border-color:var(--c);color:var(--ink)}
+.chip.ok{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.chip.bad{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.chip.fixed{border-style:dashed}
+.sb-warn{background:var(--hint-bg);border:2px solid var(--hint-line);border-radius:14px;padding:10px 14px;font-weight:600}
+.sb-btns{display:flex;justify-content:center}
+.b-submit{font-size:1.45rem;padding:14px 48px;min-width:240px;justify-content:center}
+.result{--c2:var(--g);display:flex;flex-wrap:wrap;gap:22px;align-items:center;background:var(--card);border:3px solid var(--g);border-radius:26px;padding:22px;box-shadow:0 7px 0 var(--g);animation:resin .5s cubic-bezier(.2,1.4,.5,1)}
+@keyframes resin{from{transform:scale(.92);opacity:0}}
+.res-ring{flex:none;width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--g) var(--pct),color-mix(in srgb,var(--g) 15%,var(--card)) 0);display:grid;place-items:center;margin:0 auto}
+.res-ring>div{width:118px;height:118px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-d)}
+.res-ring span{font-size:.85rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.res-ring b{font-size:2.6rem;line-height:1;color:var(--g)}
+.res-body{flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px}
+.res-body h3{margin:0;font-family:var(--font-d);font-size:1.7rem;color:var(--g)}
+.res-body p{margin:0;font-size:1.1rem}
+.res-body p svg{width:18px;height:18px;vertical-align:-3px}
+.res-best{color:var(--muted)}
+.res-tip{color:var(--muted);font-size:1rem!important}
+.res-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.b-fix{--bc:#F2C440;color:#2A2000}
+@media (max-width:560px){.b-submit{width:100%}.res-ring{width:130px;height:130px}.res-ring>div{width:102px;height:102px}}
+/* teiknaðar myndir */
+.ic{width:24px;height:24px;display:block;flex:none;overflow:visible}
+.ic-s{width:22px;height:22px;display:inline-block;vertical-align:middle}
+.ic-l{width:42px;height:42px}
+.ic-xl{width:58px;height:58px}
+.wp{display:flex;gap:18px;align-items:center}
+.wp>p{margin:0;flex:1;min-width:0}
+.wp-hero{position:relative;flex:none;width:86px;height:86px;border-radius:24px;background:color-mix(in srgb,var(--c) 12%,var(--card));border:2px solid color-mix(in srgb,var(--c) 25%,var(--card));display:grid;place-items:center}
+.wp-hero .wp-it,.wp-hero .wp-co{display:grid;place-items:center}
+.wp-hero.has-co .wp-it{position:absolute;right:-10px;bottom:-10px;width:46px;height:46px;border-radius:50%;background:var(--card);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 35%,var(--card)),0 3px 6px rgba(0,0,0,.12)}
+.wp-hero.has-co .wp-it .ic{width:32px;height:32px}
+.itemsrow{gap:5px}
+.itemsrow .ic{width:30px;height:30px}
+.groups.gi .grp{grid-template-columns:repeat(var(--gc,4),28px);gap:4px;background:color-mix(in srgb,var(--c) 6%,var(--card))}
+.groups .ic{width:28px;height:28px}
+.grp.solo{display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--font-d);font-size:1.1rem;padding:8px 12px}
+.plate-items .ic{width:22px;height:22px}
+.plate span{display:inline-flex;align-items:center;gap:4px;min-height:22px}
+@media (max-width:560px){.wp{display:flow-root}.wp-hero{float:left;margin:2px 16px 8px 0;width:62px;height:62px;border-radius:18px}.wp-hero .ic-xl{width:46px;height:46px}.wp-hero.has-co .wp-it{width:38px;height:38px}.wp-hero.has-co .wp-it .ic{width:26px;height:26px}.itemsrow .ic{width:26px;height:26px}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
 @media (max-width:560px){
@@ -353,7 +461,7 @@ input{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 </style>
 
 <header class="top gut"><div class="top-in">
-  <button class="logo" id="logo" type="button" aria-label="Forsíða"><span id="logoOwl"></span>Reiknibókin</button>
+  <button class="logo" id="logo" type="button" aria-label="Forsíða"><span id="logoOwl"></span>Krummi</button>
   <div class="stars" id="stars" title="Stjörnur sem þú hefur safnað"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z" style="fill:var(--star);stroke:color-mix(in srgb,var(--star) 70%,#000);stroke-width:1.2;stroke-linejoin:round"/></svg><span id="starN">0</span></div>
 </div></header>
 <main class="gut" id="app"></main>
@@ -376,6 +484,9 @@ const M=n=>n<0?'−'+(-n):String(n);
 const pad4=x=>String(x).padStart(4,' ').split('').map(c=>c===' '?null:+c);
 const PL=[{k:'Þ',n:'Þúsundir',v:1000,c:'pl1'},{k:'H',n:'Hundruð',v:100,c:'pl2'},{k:'T',n:'Tugir',v:10,c:'pl3'},{k:'E',n:'Einingar',v:1,c:'pl4'}];
 const PN=['Þúsundir','Hundruð','Tugir','Einingar'];
+const ENGIR=['engar þúsundir','engin hundruð','engir tugir','engar einingar'];
+/* tölur sem enda á 1 (nema 11) taka eintölu: „21 nemandi“. Þær forðumst við í orðadæmum. */
+const end1=n=>Math.abs(n)%10===1&&Math.abs(n)%100!==11;
 const PACC=['þúsundirnar','hundruðin','tugina','einingarnar'];
 const PDAT=['þúsundunum','hundruðunum','tugunum','einingunum'];
 const PSEAT=['þúsundasætinu','hundraðasætinu','tugasætinu','einingasætinu'];
@@ -538,10 +649,39 @@ function multDiag(a,b,v){
 }
 
 function dotRows(rows,cols,tot=true){return `<div class="dotrows">${range(rows).map(r=>`<div class="dr"><span class="drd">${range(cols).map(()=>'<i class="dot"></i>').join('')}</span>${tot?`<b>${cols*(r+1)}</b>`:''}</div>`).join('')}</div>`;}
-function groupsVis(n,per){const gc=per<=4?per:per<=9?3:4;return `<div class="groups">${range(n).map(()=>`<div class="grp" style="--gc:${gc}">${range(per).map(()=>'<i class="dot"></i>').join('')}</div>`).join('')}</div>`;}
+/* teiknaðar myndir af hlutum í orðadæmum */
+const ICO={
+  'epli':'<path d="M20 12c-3-3-11-3-12 6 0 8 5 16 9 16 2 0 2-1 3-1s1 1 3 1c4 0 9-8 9-16-1-9-9-9-12-6z" fill="#E8453C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 12c0-3 1-5 3-7" fill="none" stroke="#6B4A2B" stroke-width="2.2" stroke-linecap="round"/><path d="M22 8c3-3 7-3 9-1-2 3-6 4-9 1z" fill="#3DB35B" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="13" cy="19" rx="2.2" ry="3.5" fill="#fff" opacity=".45"/>',
+  'bolti':'<circle cx="20" cy="20" r="15" fill="#fff" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M20 5a15 15 0 0 1 13 7.5L20 20z" fill="#E8453C"/><path d="M33 27.5A15 15 0 0 1 20 35V20z" fill="#2F6BFF"/><path d="M7 27.5A15 15 0 0 1 7 12.5L20 20z" fill="#FFC21A"/><circle cx="20" cy="20" r="15" fill="none" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#fff" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/>',
+  'blyantur':'<g transform="rotate(-40 20 20)"><rect x="6" y="15" width="22" height="10" fill="#FFC21A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M28 15l8 5-8 5z" fill="#F4D3A1" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M33.5 18.5l2.5 1.5-2.5 1.5z" fill="#2A2F4F"/><rect x="2" y="15" width="5" height="10" rx="1.5" fill="#F28BB0" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><line x1="7" y1="20" x2="28" y2="20" stroke="#E0A800" stroke-width="1.2"/></g>',
+  'egg':'<path d="M20 5c-7 0-12 11-12 18a12 12 0 0 0 24 0C32 16 27 5 20 5z" fill="#FFF3DC" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="15" cy="17" rx="2.5" ry="4" fill="#fff"/>',
+  'kaka':'<circle cx="20" cy="20" r="14" fill="#D9A15B" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="14" cy="15" r="2.3" fill="#5B3A1E"/><circle cx="24" cy="13" r="2" fill="#5B3A1E"/><circle cx="25" cy="23" r="2.4" fill="#5B3A1E"/><circle cx="15" cy="25" r="2" fill="#5B3A1E"/><circle cx="20" cy="19" r="1.6" fill="#5B3A1E"/>',
+  'muffa':'<path d="M9 21h22l-3 14H12z" fill="#2F9BFF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 21l1 14M18 21l.5 14M22 21l-.5 14M27 21l-1 14" stroke="#1E6FC0" stroke-width="1.2"/><path d="M8 21c-2-6 3-11 7-10 1-4 9-4 10 0 4-1 9 4 7 10z" fill="#F28BB0" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="9" r="2.6" fill="#E8453C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/>',
+  'limmidi':'<path d="M20 4l4.7 9.6 10.6 1.5-7.7 7.5 1.8 10.5L20 28.2l-9.4 4.9 1.8-10.5-7.7-7.5 10.6-1.5z" fill="#FFC21A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="16.5" cy="18" r="1.3" fill="#2A2F4F"/><circle cx="23.5" cy="18" r="1.3" fill="#2A2F4F"/><path d="M16.5 22c2 2 5 2 7 0" fill="none" stroke="#2A2F4F" stroke-width="1.4" stroke-linecap="round"/>',
+  'konguló':'<g stroke="#2A2F4F" stroke-width="2" stroke-linecap="round" fill="none"><path d="M15 19L6 13M15 22L5 22M15 25L7 31M16 27L11 35M25 19l9-6M25 22h10M25 25l8 6M24 27l5 8"/></g><ellipse cx="20" cy="23" rx="7" ry="8" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="13" r="5" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18" cy="12.5" r="1.6" fill="#fff"/><circle cx="22" cy="12.5" r="1.6" fill="#fff"/>',
+  'stoll':'<rect x="11" y="5" width="18" height="15" rx="3" fill="#E07B39" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><rect x="9" y="20" width="22" height="5" rx="2" fill="#C8632A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 25v11M29 25v11" stroke="#2A2F4F" stroke-width="2.6" stroke-linecap="round"/>',
+  'bok':'<path d="M4 9c6-2 11-1 16 2v22c-5-3-10-4-16-2z" fill="#fff" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M36 9c-6-2-11-1-16 2v22c5-3 10-4 16-2z" fill="#EAF1FF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15c3-1 6-.5 9 1M8 20c3-1 6-.5 9 1M23 16c3-1.5 6-2 9-1M23 21c3-1.5 6-2 9-1" stroke="#9AA6CF" stroke-width="1.3" stroke-linecap="round"/>',
+  'dekk':'<circle cx="20" cy="20" r="15" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="20" r="8" fill="#C9CEDF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="20" r="2.5" fill="#3B3F5C"/>',
+  'bill':'<path d="M5 25v-5l5-8h16l7 8h2v5z" fill="#E8453C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 14h6v6h-9zM21 14h4l5 6h-9z" fill="#CFE6FF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="27" r="4" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="29" cy="27" r="4" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/>',
+  'ruta':'<rect x="3" y="9" width="34" height="19" rx="4" fill="#FFC21A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 13h6v6H6zM14 13h6v6h-6zM22 13h6v6h-6z" fill="#CFE6FF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><rect x="30" y="13" width="5" height="12" rx="1" fill="#CFE6FF" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="11" cy="29" r="4" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="29" cy="29" r="4" fill="#3B3F5C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/>',
+  'litur':'<g transform="rotate(-40 20 20)"><rect x="5" y="15" width="24" height="10" rx="2" fill="#7A4AE8" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M29 16l7 4-7 4z" fill="#7A4AE8" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><rect x="10" y="15" width="3" height="10" fill="#fff" opacity=".55"/><rect x="20" y="15" width="3" height="10" fill="#fff" opacity=".55"/></g>',
+  'dagatal':'<rect x="6" y="8" width="28" height="27" rx="4" fill="#fff" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 12a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v4H6z" fill="#E8453C" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 5v6M27 5v6" stroke="#2A2F4F" stroke-width="2.4" stroke-linecap="round"/><g fill="#9AA6CF"><rect x="10" y="20" width="4" height="4" rx="1"/><rect x="18" y="20" width="4" height="4" rx="1"/><rect x="26" y="20" width="4" height="4" rx="1"/><rect x="10" y="27" width="4" height="4" rx="1"/><rect x="18" y="27" width="4" height="4" rx="1" fill="#E8453C"/></g>',
+  'krakki':'<path d="M9 36c0-8 5-12 11-12s11 4 11 12z" fill="#2FB5A8" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="15" r="8.5" fill="#FFD7B0" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M11.5 13c1-6 5-8 8.5-8s8 2 8.5 8c-3-2-6-3-8.5-3s-5.5 1-8.5 3z" fill="#7A4A2B" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="17" cy="16" r="1.2" fill="#2A2F4F"/><circle cx="23" cy="16" r="1.2" fill="#2A2F4F"/><path d="M17.5 19.5c1.5 1.3 3.5 1.3 5 0" fill="none" stroke="#2A2F4F" stroke-width="1.3" stroke-linecap="round"/>',
+  'hjol':'<circle cx="10" cy="26" r="7" fill="none" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round" stroke-width="2.4"/><circle cx="30" cy="26" r="7" fill="none" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round" stroke-width="2.4"/><path d="M10 26l6-11h12l2 11M16 15l5 11h9M21 26l7-11M14 12h5M27 15l-1-4h4" fill="none" stroke="#2F6BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  'kassi':'<path d="M5 14l15-7 15 7v16l-15 7-15-7z" fill="#D9A15B" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 14l15 7 15-7M20 21v16" fill="none" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/>',
+  'karfa':'<path d="M8 17c0-8 24-8 24 0" fill="none" stroke="#8A5A2B" stroke-width="2.6"/><path d="M4 17h32l-4 17H8z" fill="#C98B4A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 23h28M7 29h26M14 17l1 17M20 17v17M26 17l-1 17" stroke="#8A5A2B" stroke-width="1.3"/>',
+  'poki':'<path d="M11 13h18l3 22H8z" fill="#3DB35B" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 13c0-6 10-6 10 0" fill="none" stroke="#2A2F4F" stroke-width="2"/>',
+  'diskur':'<ellipse cx="20" cy="22" rx="16" ry="9" fill="#fff" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="20" cy="21" rx="10" ry="5" fill="#EAF1FF"/>',
+  'mynt':'<circle cx="20" cy="20" r="14" fill="#FFC21A" stroke="#2A2F4F" stroke-width="1.6" stroke-linejoin="round"/><circle cx="20" cy="20" r="10" fill="none" stroke="#E0A800" stroke-width="1.6"/><text x="20" y="24.5" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="11" fill="#8A5A00">kr</text>'
+};
+const ico=(k,cls='ic')=>ICO[k]?`<svg class="${cls}" viewBox="0 0 40 40" aria-hidden="true">${ICO[k]}</svg>`:'<i class="it"></i>';
+/* myndin efst í orðadæmi: aðalhluturinn og (ef við á) ílátið */
+function wpHero(it,co){return `<div class="wp-hero${co?' has-co':''}" aria-hidden="true">${co?`<span class="wp-co">${ico(co,'ic ic-xl')}</span>`:''}<span class="wp-it">${ico(it,'ic ic-xl')}</span></div>`;}
+function wpHTML(q,it,co){return `<div class="wp">${wpHero(it,co)}<p>${q}</p></div>`;}
+function groupsVis(n,per,it){const gc=per<=4?per:per<=9?3:4,d=it?ico(it):'<i class="dot"></i>';return `<div class="groups${it?' gi':''}">${range(n).map(()=>`<div class="grp" style="--gc:${gc}">${range(per).map(()=>d).join('')}</div>`).join('')}</div>`;}
 function skipBubbles(k,m){return `<div class="skip">${range(1,m).map(i=>`<span class="sk${i===m?' last':''}"><small>${i}.</small>${k*i}</span>`).join('<span class="sk-ar">›</span>')}</div>`;}
-function itemsRow(n){return `<div class="itemsrow">${range(n).map(()=>'<i class="it"></i>').join('')}</div>`;}
-function plates(g,per){return `<div class="plates">${range(g).map(()=>`<div class="plate"><div class="plate-items">${range(per).map(()=>'<i class="it"></i>').join('')}</div><span>${per||''}</span></div>`).join('')}</div>`;}
+function itemsRow(n,it){const d=it?ico(it):'<i class="it"></i>';return `<div class="itemsrow">${range(n).map(()=>d).join('')}</div>`;}
+function plates(g,per,it,co){const d=it?ico(it):'<i class="it"></i>';return `<div class="plates${co?' pl-'+co:''}">${range(g).map(()=>`<div class="plate"><div class="plate-items">${range(per).map(()=>d).join('')}</div><span>${co?ico(co,'ic ic-s'):''}${per||''}</span></div>`).join('')}</div>`;}
 function areaModel(a,n,stage=3){const T=n-n%10,U=n%10;
   const box=(cls,flex,lab,val,show)=>`<div class="ab ${cls}${show?'':' q'}" style="flex:${flex}">${a} · ${lab}<b>${show?'= '+val:'= ?'}</b></div>`;
   return `<div class="area"><div class="area-side">${a}</div><div class="area-body"><div class="area-top"><span class="t" style="flex:${T}">${T}</span>${U?`<span class="e" style="flex:${Math.max(U*1.6,4)}">${U}</span>`:''}</div><div class="area-boxes">${box('ab1',T,T,a*T,stage>=1)}${U?box('ab2',Math.max(U*1.6,4),U,a*U,stage>=2):''}</div></div></div>`;}
@@ -589,10 +729,10 @@ T.saeti={name:'Sætistaflan',desc:'Skrifaðu töluna í sætistöfluna. Einn tö
     check:v=>fields.map((f,i)=>f.blank?(v[i]===null||v[i]===0):v[i]===f.ans),
     explain(v){let diag='';const bi=v.findIndex((x,i)=>x!=null&&x>9&&fields[i].ans>0&&x===fields[i].ans*PL[i].v);
       if(bi>=0)diag=`Þú skrifaðir <b>${v[bi]}</b> í reitinn <b>${PL[bi].n}</b>. Í sætistöflunni fer bara <b>einn tölustafur</b> í hvern reit, svo þar á bara að standa ${fields[bi].ans}. Reiturinn sjálfur segir okkur að þetta séu ${PN[bi].toLowerCase()}.`;
-      else if(v.some(x=>x!=null&&(x>9||isNaN(x))))diag='Mundu: bara <b>einn tölustafur</b> í hvern reit. Ef það eru engir tugir (eða hundruð) skrifum við <b>0</b>.';
-      else if(v.some((x,i)=>x!=null&&x!==fields[i].ans&&!fields[i].blank))diag='Passaðu röðina. Byrjaðu <b>hægra megin</b>: síðasti tölustafurinn er alltaf einingarnar.';
-      const s=String(n),first=4-s.length,steps=[{t:`Byrjum <b>hægra megin</b>. Síðasti tölustafurinn í ${n} er alltaf <b>einingarnar</b>.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:4})}</div>`}];
-      for(let i=3;i>=first;i--){const dd=+d[i];steps.push({t:dd===0?`<b>0</b> stendur í ${PSEAT[i]}. Það þýðir að það eru engir ${PN[i].toLowerCase()}, en við skrifum samt <b>0</b> í reitinn!`:`<b>${dd}</b> stendur í ${PSEAT[i]} → ${dd} ${PNOUN(dd,i)}.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:i,hi:i})}</div>`});}
+      else if(v.some(x=>x!=null&&(x>9||isNaN(x))))diag='Mundu: bara <b>einn tölustafur</b> í hvern reit. Ef það eru engir tugir (eða engin hundruð) skrifum við <b>0</b>.';
+      else if(v.some((x,i)=>x!=null&&x!==fields[i].ans&&!fields[i].blank))diag='Passaðu röðina. Byrjaðu <b>hægra megin</b>: síðasti tölustafurinn stendur alltaf í einingasætinu.';
+      const s=String(n),first=4-s.length,steps=[{t:`Byrjum <b>hægra megin</b>. Síðasti tölustafurinn í ${n} stendur alltaf í <b>einingasætinu</b>.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:4})}</div>`}];
+      for(let i=3;i>=first;i--){const dd=+d[i];steps.push({t:dd===0?`<b>0</b> stendur í ${PSEAT[i]}. Það þýðir að það eru ${ENGIR[i]}, en við skrifum samt <b>0</b> í reitinn!`:`<b>${dd}</b> stendur í ${PSEAT[i]} → ${dd} ${PNOUN(dd,i)}.`,v:`<div class="visstack">${numColored(n)}${pvTable(n,{from:i,hi:i})}</div>`});}
       if(first>0)steps.push({t:`Talan hefur bara ${s.length} tölustafi, svo reiturinn <b>Þúsundir</b> er tómur (eða 0).`});
       return {diag,steps};}};
 }};
@@ -614,9 +754,9 @@ T.einatala={name:'Skrifaðu sem eina tölu',desc:'Settu hlutana saman í eina t�
   return {fields:[{ans:n,w:4}],
     html:`<p>Skrifaðu sem eina tölu. Passaðu þig þegar sæti vantar!</p><div class="bignum sm">${parts.join(' + ')} = [[0]]</div>`,
     explain(v){const x=v[0];let diag='';const nz=+s.split('').filter(c=>c!=='0').join('');
-      if(x===nz&&nz!==n)diag='Það vantar sæti! Þegar engir tugir (eða hundruð) eru í dæminu verðum við samt að skrifa <b>0</b> í það sæti. Annars verður talan allt of lítil.';
+      if(x===nz&&nz!==n)diag='Það vantar sæti! Þegar engir tugir (eða engin hundruð) eru í dæminu verðum við samt að skrifa <b>0</b> í það sæti. Annars verður talan allt of lítil.';
       const first=4-s.length,steps=[{t:'Skoðum hvern hluta og setjum hann í rétt sæti í sætistöflunni.',v:pvTable(n,{to:-1})}];
-      for(let i=first;i<4;i++){const dd=+s[i-first];steps.push({t:dd?`${dd*PL[i].v} = ${dd} ${PNOUN(dd,i)} → skrifum <b>${dd}</b> í ${PSEAT[i]}.`:`Það eru engir ${PN[i].toLowerCase()} í dæminu → skrifum <b>0</b> í ${PSEAT[i]}.`,v:pvTable(n,{from:first,to:i,hi:i})});}
+      for(let i=first;i<4;i++){const dd=+s[i-first];steps.push({t:dd?`${dd*PL[i].v} = ${dd} ${PNOUN(dd,i)} → skrifum <b>${dd}</b> í ${PSEAT[i]}.`:`Það eru ${ENGIR[i]} í dæminu → skrifum <b>0</b> í ${PSEAT[i]}.`,v:pvTable(n,{from:first,to:i,hi:i})});}
       steps.push({t:`Lesum töluna: <b>${n}</b>.`,v:numColored(n)});return {diag,steps};}};
 }};
 T.summa={name:'Skrifaðu sem summu',desc:'Skiptu tölunni í hluta: þúsundir + hundruð + tugi + einingar.',gen(){
@@ -639,7 +779,7 @@ T.ord={name:'Orð í tölustafi',desc:'Lestu töluna í orðum og skrifaðu hana
   return {fields:[{ans:n,w:4}],
     html:`<p>Skrifaðu með tölustöfum.</p><p class="words">„${W.text}“</p>`,
     explain(v){const x=v[0];let diag='';const s=String(n),nz=+s.split('').filter(c=>c!=='0').join('');
-      if(x===nz&&nz!==n)diag='Það vantar <b>0</b>! Þegar engir tugir eða hundruð eru nefnd, verðum við að skrifa 0 í það sæti.';
+      if(x===nz&&nz!==n)diag='Það vantar <b>0</b>! Þegar tugir eða hundruð eru ekki nefnd verðum við að skrifa 0 í það sæti.';
       else if(x!=null&&String(x).length>s.length)diag=`Þú skrifaðir of marga tölustafi. Ekki skrifa „${W.parts[0].v}“ og svo restina á eftir. Settu hvern hluta í sitt sæti í sætistöflunni.`;
       return {diag,steps:[{t:'Skiptum orðunum í hluta:'},...W.parts.map(p=>({t:`„${p.w}“ → <b>${p.v}</b>`})),
         {t:`Setjum hlutana í sætistöfluna. Þar sem ekkert er nefnt kemur <b>0</b>.`,v:pvTable(n)},
@@ -674,7 +814,7 @@ T.rada={name:'Raðaðu tölum',desc:'Raðaðu tölunum eftir stærð. Byrjaðu �
       Object.keys(groups).sort((a,b)=>a-b).forEach(h=>{const g=groups[h];
         if(g.length===1)steps.push({t:`Talan með ${h} hundruð: <b>${g[0]}</b>.`});
         else{const sameT=g.every(x=>Math.floor(x/10)===Math.floor(g[0]/10));
-          steps.push({t:`${g.join(', ')} hafa allar <b>${h} hundruð</b>. Þá berum við saman <b>${sameT?'einingarnar':'tugina'}</b>: ${g.join(' &lt; ')}.`});}});
+          steps.push({t:`${g.join(g.length===2?' og ':', ')} hafa ${g.length===2?'báðar':'allar'} <b>${h} hundruð</b>. Þá berum við saman <b>${sameT?'einingarnar':'tugina'}</b>: ${g.join(' &lt; ')}.`});}});
       steps.push({t:`Röðin er: <b>${sorted.join(' &lt; ')}</b>`});
       return {diag,steps};}};
 }};
@@ -686,7 +826,7 @@ T.merkja={name:'Merktu á talnalínuna',desc:'Hvaða stafur sýnir töluna? Hver
   return {fields:[{type:'choice',opts:chs,ans:k}],
     html:`<p>Hvaða stafur sýnir töluna <b>${M(v)}</b>?</p>${numLine({labels:[-10,-5,0,5,10],letters:vs.map((x,i)=>({v:x,ch:chs[i]}))})}[[0]]`,
     explain(x){let diag='';const j=x[0];
-      if(j!=null&&j!==k&&vs[j]!==undefined){const w=vs[j];diag=w===-v?`Stafurinn ${chs[j]} er við ${M(w)}. Hann er réttu megin frá 0, en <b>öfugu megin</b>. ${v<0?'Mínustölur eru vinstra megin við 0.':'Plústölur eru hægra megin við 0.'}`:`Stafurinn ${chs[j]} er við ${M(w)}, ekki ${M(v)}. Teldu strikin frá 0.`;}
+      if(j!=null&&j!==k&&vs[j]!==undefined){const w=vs[j];diag=w===-v?`Stafurinn ${chs[j]} er við ${M(w)}. Hann er jafnlangt frá 0, en <b>hinum megin</b> við 0. ${v<0?'Mínustölur eru vinstra megin við 0.':'Plústölur eru hægra megin við 0.'}`:`Stafurinn ${chs[j]} er við ${M(w)}, ekki ${M(v)}. Teldu strikin frá 0.`;}
       const sg=v<0?-1:1,hops=range(1,Math.abs(v)).map(i=>({from:sg*(i-1),to:sg*i,color:'var(--orange)'}));
       return {diag,steps:[
         {t:'Finndu fyrst <b>0</b> á línunni.',v:numLine({labels:[-10,-5,5,10],marks:[{v:0,color:'var(--blue)'}]})},
@@ -718,7 +858,7 @@ T.hitamaelir={name:'Hitamælirinn',desc:'Lestu af hitamælinum. Hvert lítið st
       else if(x!=null&&Math.abs(x-t)<=3)diag='Næstum því! Teldu litlu strikin vandlega frá næstu tölu. Hvert strik er 1 gráða.';
       const L=Math.round(t/5)*5,diff=Math.abs(t-L),up=t>L,seq=range(1,diff).map(i=>M(L+(up?i:-i))).join(', ');
       return {diag,steps:[
-        {t:'Stóru strikin eru á 5 gráða fresti. Hvert <b>lítið strik er 1 gráða</b>.',v:thermo(t)},
+        {t:'Stóru strikin eru á 5 gráðu fresti. Hvert <b>lítið strik er 1 gráða</b>.',v:thermo(t)},
         {t:t>=0?'Rauða súlan endar fyrir ofan 0, svo hitinn er í plús.':'Rauða súlan endar <b>fyrir neðan 0</b>, svo hitinn er í <b>mínus</b>.'},
         {t:diff===0?`Súlan endar beint á <b>${M(L)}</b>.`:`Næsta tala við endann á súlunni er ${M(L)}. Teldu ${diff} ${diff===1?'strik':'strik'} ${up?'upp':'niður'}: ${seq}.`,v:thermo(t,{hl:true})},
         {t:`Hitinn er <b>${M(t)} °C</b>.`}]};}};
@@ -733,7 +873,7 @@ T.hitabreyting={name:'Hitinn breytist',desc:'Hækkar = upp (til hægri). Lækkar
       const cross=(s>0&&r<0)||(s<0&&r>0),line=o=>numLine(Object.assign({min:-15,max:15},o));
       const steps=[{t:`Byrjum á <b>${M(s)}</b> á talnalínunni.`,v:line({marks:[{v:s,color:'var(--blue)'}]})}];
       if(cross){const toZero=Math.abs(s),rest=c-toZero;
-        steps.push({t:`${up?'Hækkar':'Lækkar'} þýðir að fara ${up?'til hægri':'til vinstri'}. Frá ${M(s)} að 0 eru <b>${toZero}</b> gráður.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:0,label:(up?'+':'−')+toZero,color:'var(--orange)'}]})});
+        steps.push({t:`${up?'Hækkar':'Lækkar'} þýðir að fara ${up?'til hægri':'til vinstri'}. Frá ${M(s)} að 0 ${toZero===1?'er <b>1</b> gráða':`eru <b>${toZero}</b> gráður`}.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:0,label:(up?'+':'−')+toZero,color:'var(--orange)'}]})});
         steps.push({t:`Við áttum að fara ${c}. ${c} − ${toZero} = ${rest}, svo við förum <b>${rest}</b> í viðbót ${up?'upp':'niður'} frá 0.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:0,label:(up?'+':'−')+toZero,color:'var(--orange)'},{from:0,to:r,label:(up?'+':'−')+rest,color:'var(--pink)'}]})});
       }else steps.push({t:`${up?'Hækkar':'Lækkar'} þýðir að fara ${up?'til hægri':'til vinstri'}. Förum <b>${c}</b> skref.`,v:line({marks:[{v:s,color:'var(--blue)'}],jumps:[{from:s,to:r,label:(up?'+':'−')+c,color:'var(--orange)'}]})});
       steps.push({t:`Við lendum á <b>${M(r)}</b>. Hitinn er ${M(r)} °C.`,v:line({marks:[{v:s,color:'var(--blue)'},{v:r,color:'var(--orange)'}]})});
@@ -764,12 +904,12 @@ T.mismunur={name:'Mismunur',desc:'Mismunur = hversu langt er á milli talnanna �
       const line=o=>numLine(Object.assign({min,max},o)),mk=[{v:a,color:'var(--blue)'},{v:b,color:'var(--orange)'}];
       const steps=[{t:'Finnum báðar tölurnar á talnalínunni.',v:line({marks:mk})}];
       if(mode==='np'){
-        steps.push({t:`Frá ${M(a)} að 0 eru <b>${-a}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'}]})});
-        steps.push({t:`Frá 0 að ${b} eru <b>${b}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'},{from:0,to:b,label:b,color:'var(--orange)'}]})});
+        steps.push({t:`Frá ${M(a)} að 0 ${-a===1?'er':'eru'} <b>${-a}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'}]})});
+        steps.push({t:`Frá 0 að ${b} ${b===1?'er':'eru'} <b>${b}</b>.`,v:line({marks:mk,jumps:[{from:a,to:0,label:-a,color:'var(--blue)'},{from:0,to:b,label:b,color:'var(--orange)'}]})});
         steps.push({t:`Leggjum saman: ${-a} + ${b} = <b>${ans}</b>.`});
       }else{
         steps.push({t:`Teljum frá ${M(lo)} upp í ${M(hi)}.`,v:line({marks:mk,jumps:[{from:lo,to:hi,label:ans,color:'var(--pink)'}]})});
-        steps.push({t:mode==='pp'?`Eða reiknum: ${hi} − ${lo} = <b>${ans}</b>.`:`Það eru <b>${ans}</b> skref á milli. (${-lo} − ${-hi} = ${ans})`});
+        steps.push({t:mode==='pp'?`Eða reiknum: ${hi} − ${lo} = <b>${ans}</b>.`:`Það ${ans===1?'er':'eru'} <b>${ans}</b> ${ans===1?'skref':'skref'} á milli. (${-lo} − ${-hi} = ${ans})`});
       }
       return {diag,steps};}};
 }};
@@ -812,24 +952,25 @@ T.fradrattur={name:'Frádráttur í reitum',desc:'Neðri talan frá efri tölunn
     html:`<p>Reiknaðu í reitunum: <b>${a} − ${b}</b></p><p class="small">Skrifaðu svarið í neðstu röðina. Litlu reitirnir efst eru fyrir lán.</p>${colProblem(a,b,'−')}`,
     explain(v){return {diag:subDiag(a,b,v[0]),steps:subSteps(a,b)};}};
 }};
-const SHOP=['Blýantur','Strokleður','Reglustika','Stílabók','Litakassi','Yddari','Límstifti','Skæri','Tússpennar','Teikniblokk','Pennaveski','Vatnslitir'];
+/* n = nefnifall, a = þolfall (kaupir …), pl = fleirtala (kosta) */
+const SHOP=[{n:'Blýantur',a:'blýant'},{n:'Strokleður',a:'strokleður'},{n:'Reglustika',a:'reglustiku'},{n:'Stílabók',a:'stílabók'},{n:'Litakassi',a:'litakassa'},{n:'Yddari',a:'yddara'},{n:'Límstifti',a:'límstifti'},{n:'Skæri',a:'skæri',pl:1},{n:'Tússpennar',a:'tússpenna',pl:1},{n:'Teikniblokk',a:'teikniblokk'},{n:'Pennaveski',a:'pennaveski'},{n:'Vatnslitir',a:'vatnsliti',pl:1}];
 T.bud={name:'Skólabúðin',desc:'Skoðaðu verðlistann og svaraðu. Til baka = það sem þú borgar − verðið.',
   ctx(){const names=shuffle(SHOP).slice(0,5),ranges=[[45,195],[100,260],[150,390],[250,480],[340,690]],used=new Set();
-    const items=names.map((n,i)=>{let p;do{p=R(ranges[i][0]/5,ranges[i][1]/5)*5;}while(used.has(p)||p%10===0&&Math.random()<.3);used.add(p);return {n,p};});
+    const items=names.map((S0,i)=>{const n=S0.n;let p;do{p=R(ranges[i][0]/5,ranges[i][1]/5)*5;}while(used.has(p)||p%10===0&&Math.random()<.3);used.add(p);return {n,a:S0.a,pl:!!S0.pl,p};});
     return {items,html:`<div class="shop"><h3>Verðlisti skólabúðarinnar</h3><table>${items.map(it=>`<tr><td>${it.n}</td><td>${it.p} kr</td></tr>`).join('')}</table></div>`};},
   gen(ctx,idx){
     const it=ctx.items,kind=['saman','tilbaka1','tilbaka2',pick(['munur','askorun'])][idx%4],[nm,pr]=pick(NAMES);
     const two=()=>{const s=shuffle(it).slice(0,2);return s;};
     let html,ans,explain;
-    if(kind==='saman'){const [x,y]=two();ans=x.p+y.p;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b> og <b>${y.n.toLowerCase()}</b>. Hvað kostar það samtals?</p>`;
+    if(kind==='saman'){const [x,y]=two();ans=x.p+y.p;html=`<p>${nm} kaupir <b>${x.a}</b> og <b>${y.a}</b>. Hvað kostar það samtals?</p>`;
       explain=v=>({diag:addDiag(x.p,y.p,v[0]),steps:[{t:`„Samtals“ þýðir að <b>leggja saman</b>: ${x.p} + ${y.p}.`},...addSteps(Math.max(x.p,y.p),Math.min(x.p,y.p)).slice(0,-1),{t:`Það kostar samtals <b>${ans} kr</b>.`}]});}
-    else if(kind==='tilbaka1'){const x=pick(it),pay=x.p<500?500:1000;ans=pay-x.p;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>${pay} kr</b>. Hvað fær ${pr} til baka?</p>`;
+    else if(kind==='tilbaka1'){const x=pick(it),pay=x.p<500?500:1000;ans=pay-x.p;html=`<p>${nm} kaupir <b>${x.a}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>${pay} kr</b>. Hvað fær ${pr} til baka?</p>`;
       explain=v=>({diag:subDiag(pay,x.p,v[0]),steps:[{t:`Til baka = það sem borgað er − verðið: <b>${pay} − ${x.p}</b>.`},...subSteps(pay,x.p).slice(0,-1),{t:`${nm} fær <b>${ans} kr</b> til baka.`}]});}
-    else if(kind==='tilbaka2'){let x,y;do{[x,y]=two();}while(x.p+y.p>=1000);const s=x.p+y.p;ans=1000-s;html=`<p>${nm} kaupir <b>${x.n.toLowerCase()}</b> og <b>${y.n.toLowerCase()}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>1000 kr</b>. Hvað fær ${pr} til baka?</p>`;
+    else if(kind==='tilbaka2'){let x,y;do{[x,y]=two();}while(x.p+y.p>=1000);const s=x.p+y.p;ans=1000-s;html=`<p>${nm} kaupir <b>${x.a}</b> og <b>${y.a}</b>. ${pr==='hún'?'Hún':'Hann'} borgar með <b>1000 kr</b>. Hvað fær ${pr} til baka?</p>`;
       explain=v=>({diag:v[0]===1000-x.p||v[0]===1000-y.p?'Þú gleymdir öðrum hlutnum. Fyrst þarf að finna hvað <b>báðir hlutirnir</b> kosta saman.':subDiag(1000,s,v[0]),
         steps:[{t:`Þetta eru tvö skref. <b>Fyrst</b> finnum við hvað hlutirnir kosta saman: ${x.p} + ${y.p}.`},...addSteps(Math.max(x.p,y.p),Math.min(x.p,y.p)).slice(1,-1),{t:`Saman kosta þeir <b>${s} kr</b>. <b>Svo</b> reiknum við til baka: 1000 − ${s}.`},...subSteps(1000,s).slice(1,-1),{t:`${nm} fær <b>${ans} kr</b> til baka.`}]});}
-    else if(kind==='munur'){let x,y;do{[x,y]=two();}while(x.p===y.p);if(x.p<y.p)[x,y]=[y,x];ans=x.p-y.p;html=`<p>Hvað kostar <b>${x.n.toLowerCase()}</b> miklu meira en <b>${y.n.toLowerCase()}</b>?</p>`;
-      explain=v=>({diag:subDiag(x.p,y.p,v[0]),steps:[{t:`„Miklu meira“ spyr um <b>mismuninn</b>. Við drögum ódýrara verðið frá dýrara verðinu: ${x.p} − ${y.p}.`},...subSteps(x.p,y.p).slice(0,-1),{t:`${x.n} kostar <b>${ans} kr</b> meira.`}]});}
+    else if(kind==='munur'){let x,y;do{[x,y]=two();}while(x.p===y.p);if(x.p<y.p)[x,y]=[y,x];ans=x.p-y.p;html=`<p>Hvað ${x.pl?'kosta':'kostar'} <b>${x.n.toLowerCase()}</b> miklu meira en <b>${y.n.toLowerCase()}</b>?</p>`;
+      explain=v=>({diag:subDiag(x.p,y.p,v[0]),steps:[{t:`„Miklu meira“ spyr um <b>mismuninn</b>. Við drögum ódýrara verðið frá dýrara verðinu: ${x.p} − ${y.p}.`},...subSteps(x.p,y.p).slice(0,-1),{t:`${x.n} ${x.pl?'kosta':'kostar'} <b>${ans} kr</b> meira.`}]});}
     else{const pairs=[];for(let i=0;i<it.length;i++)for(let j=i+1;j<it.length;j++)pairs.push({a:it[i],b:it[j],s:it[i].p+it[j].p});
       const sums=pairs.map(p=>p.s).sort((a,b)=>a-b);let B=pick([500,600,700,800]);while(B<sums[0])B+=100;
       const okp=pairs.filter(p=>p.s<=B),best=okp.reduce((m,p)=>p.s>m.s?p:m,okp[0]);ans=B-best.s;
@@ -842,14 +983,14 @@ T.bud={name:'Skólabúðin',desc:'Skoðaðu verðlistann og svaraðu. Til baka =
 };
 T.ordplus={name:'Orðadæmi',desc:'Lestu vel. Á að leggja saman eða draga frá?',gen(){
   const [nm,pr]=pick(NAMES);
-  const tpl=pick([
+  let tpl;const TPL=[
     ()=>{const a=R(320,690),b=R(110,a-100);return {a,b,op:'−',q:`Í skólanum eru ${a} nemendur. ${b} þeirra eru stelpur. Hversu margir eru strákar?`,why:'Við tökum stelpurnar frá öllum nemendunum. Þá eru strákarnir eftir.',u:'strákar'};},
     ()=>{const a=R(1200,4800),b=R(120,890);return {a,b,op:'+',q:`Á bókasafninu voru ${a} bækur. Svo voru keyptar ${b} nýjar bækur. Hvað eru bækurnar margar núna?`,why:'Það bætast bækur við, svo við <b>leggjum saman</b>.',u:'bækur'};},
     ()=>{const a=R(160,390),b=R(60,a-40);return {a,b,op:'−',q:`Í flugvél eru ${a} sæti. ${b} farþegar eru komnir um borð. Hversu mörg sæti eru laus?`,why:'Við tökum fullu sætin frá öllum sætunum.',u:'sæti'};},
     ()=>{const a=R(260,880),b=R(180,790);return {a,b,op:'+',q:`Á laugardaginn komu ${a} á fótboltaleik og á sunnudaginn komu ${b}. Hversu margir komu samtals?`,why:'„Samtals“ þýðir að <b>leggja saman</b>.',u:'manns'};},
-    ()=>{const a=R(52,98)*10,b=R(15,a/10-12)*10+pick([0,5]);return {a,b,op:'−',q:`${nm} átti ${a} kr. ${pr==='hún'?'Hún':'Hann'} keypti bók á ${b} kr. Hvað á ${pr} mikið eftir?`,why:'Peningurinn minnkar þegar keypt er, svo við <b>drögum frá</b>.',u:'kr'};},
+    ()=>{const a=R(52,98)*10,b=R(15,a/10-12)*10+pick([0,5]);return {a,b,op:'−',q:`${nm} átti ${a} kr. ${pr==='hún'?'Hún':'Hann'} keypti bók á ${b} kr. Hvað á ${pr} mikið eftir?`,why:'Peningarnir minnka þegar maður kaupir eitthvað, svo við <b>drögum frá</b>.',u:'kr'};},
     ()=>({a:1491,b:914,op:'−',q:'Hekla er 1491 m á hæð og Esja er 914 m á hæð. Hvað er Hekla mörgum metrum hærri en Esja?',why:'„Hvað er … hærri“ spyr um <b>mismuninn</b>, svo við drögum frá.',u:'m'})
-  ])();
+  ];do{tpl=pick(TPL)();}while(end1(tpl.a)||end1(tpl.b)||end1(tpl.op==='+'?tpl.a+tpl.b:tpl.a-tpl.b));
   const {a,b,op}=tpl,ans=op==='+'?a+b:a-b;
   return {fields:[{ans,w:4}],
     html:`<p>${tpl.q}</p><div class="svar">Svar: [[0]] ${tpl.u}</div>`,
@@ -868,7 +1009,7 @@ T.endurtekin={name:'Margföldun = endurtekin samlagning',desc:'Skrifaðu sem mar
       if(!((v[0]===a&&v[1]===n)||(v[0]===n&&v[1]===a))&&(v[0]!=null||v[1]!=null))diag=`Fyrri talan er talan sem er lögð saman. Seinni talan segir <b>hversu oft</b> hún kemur fyrir. Teldu hversu oft ${a} kemur fyrir.`;
       else if(v[2]!=null&&v[2]!==p)diag=multDiag(a,n,v[2])||'Teldu aftur, eina röð í einu.';
       return {diag,steps:[
-        {t:`Talan <b>${a}</b> kemur <b>${n} sinnum</b> fyrir. Hver röð er einn ${a}.`,v:dotRows(n,a,false)},
+        {t:`Talan <b>${a}</b> kemur <b>${n} sinnum</b> fyrir. Í hverri röð eru ${a}.`,v:dotRows(n,a,false)},
         {t:`Þá getum við skrifað <b>${a} · ${n}</b>. (${n} · ${a} gefur sama svar.)`},
         {t:`Teljum ${a} í einu, eina röð í einu: ${range(1,n).map(i=>a*i).join(', ')}.`,v:dotRows(n,a,true)},
         {t:`${a} · ${n} = <b>${p}</b>`}]};}};
@@ -912,20 +1053,22 @@ T.tugir={name:'Sinnum 10, 100 og tugir',desc:'Hvað gerist við töluna þegar �
       else if(x!=null&&x!==ans&&kind==='T0')diag=`Byrjaðu á ${a} · ${b/10}. Bættu svo 0 aftan við.`;
       return {diag,steps};}};
 }};
-T.ordmarg={name:'Orðadæmi',desc:'Finndu hversu margir hópar eru og hversu margir eru í hverjum hóp.',gen(){
+T.ordmarg={name:'Orðadæmi',desc:'Finndu hversu margir hópar eru og hversu margir eru í hverjum hópi.',gen(){
   const [nm,pr]=pick(NAMES);
-  const t=pick([
-    ()=>{const a=R(6,12),n=R(3,8);return {a,n,q:`Í einum kassa eru ${a} egg. Hversu mörg egg eru í ${n} kössum?`,g:'kassar',u:'egg'};},
-    ()=>{const a=R(2,9)*10,n=R(3,6);return {a,n,q:`Eitt epli kostar ${a} kr. Hvað kosta ${n} epli?`,g:'epli',u:'kr',tens:true};},
-    ()=>{const n=R(3,9);return {a:8,n,q:`Kónguló hefur 8 fætur. Hversu margir fætur eru á ${n} köngulóm?`,g:'köngulær',u:'fætur'};},
-    ()=>{const a=R(4,8),n=R(3,6);return {a,n,q:`Í stofunni eru ${n} raðir af stólum og ${a} stólar í hverri röð. Hversu margir stólar eru í stofunni?`,g:'raðir',u:'stólar'};},
-    ()=>{const a=R(5,9),n=R(3,7);return {a,n,q:`${nm} les ${a} blaðsíður á dag. Hversu margar blaðsíður les ${pr} á ${n} dögum?`,g:'dagar',u:'blaðsíður'};},
-    ()=>{const n=R(3,9);return {a:4,n,q:`Bíll hefur 4 dekk. Hversu mörg dekk eru á ${n} bílum?`,g:'bílar',u:'dekk'};}
-  ])();
+  let t;const TPL=[
+    ()=>{const a=R(6,12),n=R(3,8);return {a,n,q:`Í einum kassa eru ${a} egg. Hversu mörg egg eru í ${n} kössum?`,g:'kassar',u:'egg',it:'egg',co:'kassi'};},
+    ()=>{const a=R(2,9)*10,n=R(3,6);return {a,n,q:`Eitt epli kostar ${a} kr. Hvað kosta ${n} epli?`,g:'epli',u:'kr',tens:true,it:'epli',co:'mynt'};},
+    ()=>{const n=R(3,9);return {a:8,n,q:`Kónguló hefur 8 fætur. Hversu margir fætur eru á ${n} köngulóm?`,g:'köngulær',u:'fætur',it:'konguló',vis:'konguló'};},
+    ()=>{const a=R(4,8),n=R(3,6);return {a,n,q:`Í stofunni eru ${n} raðir af stólum og ${a} stólar í hverri röð. Hversu margir stólar eru í stofunni?`,g:'raðir',u:'stólar',it:'stoll'};},
+    ()=>{const a=R(5,9),n=R(3,7);return {a,n,q:`${nm} les ${a} blaðsíður á dag. Hversu margar blaðsíður les ${pr} á ${n} dögum?`,g:'dagar',u:'blaðsíður',it:'bok',co:'dagatal'};},
+    ()=>{const n=R(3,9);return {a:4,n,q:`Bíll hefur 4 dekk. Hversu mörg dekk eru á ${n} bílum?`,g:'bílar',u:'dekk',it:'dekk',co:'bill'}},
+    ()=>{const a=R(3,6),n=R(3,8);return {a,n,q:`Í hverjum poka eru ${a} boltar. Hversu margir boltar eru í ${n} pokum?`,g:'pokar',u:'boltar',it:'bolti',co:'poki'}},
+    ()=>{const a=R(4,10),n=R(3,7);return {a,n,q:`Í einum pakka eru ${a} blýantar. ${nm} kaupir ${n} pakka. Hversu marga blýanta fær ${pr}?`,g:'pakkar',u:'blýantar',it:'blyantur',co:'kassi'};}
+  ];do{t=pick(TPL)();}while(end1(t.a)||end1(t.n)||end1(t.a*t.n));
   const {a,n}=t,ans=a*n;
-  return {fields:[{ans,w:3}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+  return {fields:[{ans,w:3}],html:`${wpHTML(t.q,t.it,t.co)}<div class="svar">Svar: [[0]] ${t.u}</div>`,
     explain(v){const x=v[0];const diag=x===a+n?'Þú lagðir saman. Hér eru margir <b>jafnstórir hópar</b>, svo við margföldum.':multDiag(a,n,x);
-      const steps=[{t:`Það eru <b>${n} hópar</b> (${t.g}) og <b>${a}</b> í hverjum hóp.`,v:a<=12&&!t.tens?groupsVis(n,a):''},{t:`Jafnstórir hópar → við <b>margföldum</b>: ${n} · ${a}.`}];
+      const steps=[{t:`Það eru <b>${n} hópar</b> (${t.g}) og <b>${a}</b> í hverjum hópi.`,v:t.vis?`<div class="groups gi">${range(n).map(()=>`<div class="grp solo">${ico(t.vis,'ic ic-l')}<b>${a}</b></div>`).join('')}</div>`:t.tens?`<div class="groups gi">${range(n).map(()=>`<div class="grp solo">${ico('epli','ic ic-l')}<b>${a} kr</b></div>`).join('')}</div>`:a<=12?groupsVis(n,a,t.it):''},{t:`Jafnstórir hópar → við <b>margföldum</b>: ${n} · ${a}.`}];
       if(t.tens)steps.push({t:`${a} kr = ${a/10} tugir. ${n} · ${a/10} tugir = ${n*a/10} tugir = ${ans}.`});else steps.push({t:`Teljum ${a} í einu: ${range(1,n).map(i=>a*i).join(', ')}.`,v:skipBubbles(a,n)});
       steps.push({t:`Svar: <b>${ans} ${t.u}</b>`});return {diag,steps};}};
 }};
@@ -958,16 +1101,16 @@ T.reikna12={name:'Reiknaðu',desc:'Þú mátt velja aðferð. Gott ráð: skiptu
 }};
 T.ord12={name:'Orðadæmi',desc:'Lestu vel og finndu margföldunardæmið.',gen(){
   const [nm,pr]=pick(NAMES);
-  const t=pick([
-    ()=>{const a=R(2,5),n=R(32,58);return {a,n,q:`Bekkurinn fer í ferð með ${a} rútum. Í hverri rútu eru ${n} sæti. Hversu mörg sæti eru samtals?`,u:'sæti'};},
-    ()=>{const a=R(3,8),n=R(5,19)*5;return {a,n,q:`Eitt límmiðaspjald kostar ${n} kr. Hvað kosta ${a} límmiðaspjöld?`,u:'kr'};},
-    ()=>{const a=R(3,7),n=pick([12,18,24,36]);return {a,n,q:`Í einum litakassa eru ${n} litir. Hversu margir litir eru í ${a} kössum?`,u:'litir'};},
-    ()=>{const n=R(12,20);return {a:7,n,q:`Ein vika hefur 7 daga. Hversu margir dagar eru í ${n} vikum?`,u:'dagar'};},
-    ()=>{const a=R(3,6),n=R(21,28);return {a,n,q:`Í hverjum bekk eru ${n} nemendur. Í árganginum eru ${a} bekkir. Hversu margir nemendur eru í árganginum?`,u:'nemendur'};},
-    ()=>{const a=R(4,9),n=R(13,25);return {a,n,q:`${nm} hjólar ${n} km á viku. Hversu marga km hjólar ${pr} á ${a} vikum?`,u:'km'};}
-  ])();
+  let t;const TPL=[
+    ()=>{const a=R(2,5),n=R(32,58);return {a,n,q:`Bekkurinn fer í ferð með ${a} rútum. Í hverri rútu eru ${n} sæti. Hversu mörg sæti eru samtals?`,u:'sæti',it:'ruta'};},
+    ()=>{const a=R(3,8),n=R(5,19)*5;return {a,n,q:`Eitt límmiðaspjald kostar ${n} kr. Hvað kosta ${a} límmiðaspjöld?`,u:'kr',it:'limmidi',co:'mynt'};},
+    ()=>{const a=R(3,7),n=pick([12,18,24,36]);return {a,n,q:`Í einum litakassa eru ${n} litir. Hversu margir litir eru í ${a} kössum?`,u:'litir',it:'litur',co:'kassi'};},
+    ()=>{const n=R(12,20);return {a:7,n,q:`Ein vika hefur 7 daga. Hversu margir dagar eru í ${n} vikum?`,u:'dagar',it:'dagatal'};},
+    ()=>{const a=R(3,6),n=R(21,28);return {a,n,q:`Í hverjum bekk eru ${n} nemendur. Í árganginum eru ${a} bekkir. Hversu margir nemendur eru í árganginum?`,u:'nemendur',it:'krakki'};},
+    ()=>{const a=R(4,9),n=R(13,25);return {a,n,q:`${nm} hjólar ${n} km á viku. Hversu marga km hjólar ${pr} á ${a} vikum?`,u:'km',it:'hjol'};}
+  ];do{t=pick(TPL)();}while(end1(t.a)||end1(t.n)||end1(t.a*t.n));
   const {a,n}=t;
-  return {fields:[{ans:a*n,w:4}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+  return {fields:[{ans:a*n,w:4}],html:`${wpHTML(t.q,t.it,t.co)}<div class="svar">Svar: [[0]] ${t.u}</div>`,
     explain(v){return {diag:mult12Diag(a,n,v[0]),steps:[{t:`Það eru <b>${a}</b> jafnstórir hópar með <b>${n}</b> í hverjum. Dæmið er <b>${a} · ${n}</b>.`},...mult12Steps(a,n),{t:`Svar: <b>${a*n} ${t.u}</b>`}]};}};
 }};
 T.askorun12={name:'Áskorun: hvort er meira?',desc:'Reiknaðu bæði dæmin og berðu saman.',count:10,gen(){
@@ -982,21 +1125,22 @@ T.askorun12={name:'Áskorun: hvort er meira?',desc:'Reiknaðu bæði dæmin og b
 
 /* --- Lota 2 / Hluti 3: Deiling og skíðabrekkan --- */
 T.skipta={name:'Skiptu jafnt',desc:'Deiling er að skipta jafnt. Þú mátt teikna.',gen(){
-  const g=R(2,6),k=R(2,9),p=g*k;
+  let g,k,p;do{g=R(2,6);k=R(2,9);p=g*k;}while(end1(p));
   const t=pick([
-    {q:`${p} kökum er skipt jafnt á ${g} diska. Hversu margar kökur fara á hvern disk?`,th:'kökur',co:'diska',one:'disk'},
-    {q:`${p} blýöntum er skipt jafnt á ${g} hópa. Hversu marga blýanta fær hver hópur?`,th:'blýanta',co:'hópa',one:'hóp'},
-    {q:`${p} eplum er skipt jafnt í ${g} körfur. Hversu mörg epli fara í hverja körfu?`,th:'epli',co:'körfur',one:'körfu'},
-    {q:`${p} límmiðum er skipt jafnt á milli ${g} krakka. Hversu marga límmiða fær hvert barn?`,th:'límmiða',co:'krakka',one:'barn'}]);
-  return {fields:[{ans:k,w:1}],html:`<p>${t.q}</p>${itemsRow(p)}<div class="bignum sm">${p} : ${g} = [[0]]</div>`,
-    explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==k?`Prófum: ef ${x} færu á hvern ${t.one} þyrftum við ${g} · ${x} = ${g*x} ${t.th}. En við eigum ${p}.`:'';
-      const steps=[{t:`Við eigum <b>${p}</b> ${t.th} og <b>${g}</b> ${t.co}.`,v:`<div class="visstack">${itemsRow(p)}${plates(g,0)}</div>`},
-        {t:`Setjum <b>eina</b> á hvern ${t.one} í einu. Eftir eina umferð eru ${g} farnar.`,v:`<div class="visstack">${itemsRow(p-g)}${plates(g,1)}</div>`}];
-      if(k>2)steps.push({t:`Höldum áfram, eina umferð í einu…`,v:`<div class="visstack">${itemsRow(p-2*g)}${plates(g,2)}</div>`});
-      steps.push({t:`Nú er allt búið. Á hverjum ${t.one} eru <b>${k}</b>. Svo ${p} : ${g} = ${k}.`,v:plates(g,k)});
+    {q:`${p} kökum er skipt jafnt á ${g} diska. Hversu margar kökur fara á hvern disk?`,th:'kökur',co:'diska',one:'disk',it:'kaka',c:'diskur',acc:'á hvern disk',dat:'Á hverjum diski',e1:'eina',far:'farnar'},
+    {q:`${p} blýöntum er skipt jafnt á ${g} hópa. Hversu marga blýanta fær hver hópur?`,th:'blýanta',co:'hópa',one:'hóp',it:'blyantur',c:'krakki',acc:'í hvern hóp',dat:'Hver hópur fær',e1:'einn',far:'farnir'},
+    {q:`${p} eplum er skipt jafnt í ${g} körfur. Hversu mörg epli fara í hverja körfu?`,th:'epli',co:'körfur',one:'körfu',it:'epli',c:'karfa',acc:'í hverja körfu',dat:'Í hverri körfu eru',e1:'eitt',far:'farin'},
+    {q:`${p} límmiðum er skipt jafnt á milli ${g} krakka. Hversu marga límmiða fær hvert barn?`,th:'límmiða',co:'krakka',one:'barn',it:'limmidi',c:'krakki',acc:'til hvers barns',ifx:x=>`ef hvert barn fengi ${x}`,dat:'Hvert barn fær',e1:'einn',far:'farnir'},
+    {q:`${p} boltum er skipt jafnt í ${g} körfur. Hversu margir boltar fara í hverja körfu?`,th:'bolta',co:'körfur',one:'körfu',it:'bolti',c:'karfa',acc:'í hverja körfu',dat:'Í hverri körfu eru',e1:'einn',far:'farnir'}]);
+  return {fields:[{ans:k,w:1}],html:`${wpHTML(t.q,t.it,t.c)}${itemsRow(p,t.it)}<div class="bignum sm">${p} : ${g} = [[0]]</div>`,
+    explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==k?`Prófum: ${t.ifx?t.ifx(x):`ef ${x} færu ${t.acc}`} þyrftum við ${g} · ${x} = ${g*x} ${t.th}. En við eigum ${p}.`:'';
+      const steps=[{t:`Við eigum <b>${p}</b> ${t.th} og <b>${g}</b> ${t.co}.`,v:`<div class="visstack">${itemsRow(p,t.it)}${plates(g,0,t.it,t.c)}</div>`},
+        {t:(t.ifx?`Gefum hverju barni <b>${t.e1}</b> í einu.`:`Setjum <b>${t.e1}</b> ${t.acc} í einu.`)+` Eftir eina umferð eru ${g} ${t.far}.`,v:`<div class="visstack">${itemsRow(p-g,t.it)}${plates(g,1,t.it,t.c)}</div>`}];
+      if(k>2)steps.push({t:`Höldum áfram, eina umferð í einu…`,v:`<div class="visstack">${itemsRow(p-2*g,t.it)}${plates(g,2,t.it,t.c)}</div>`});
+      steps.push({t:`Nú er allt búið. ${t.dat.startsWith('Á')?t.dat+' eru':t.dat} <b>${k}</b>. Svo ${p} : ${g} = ${k}.`,v:plates(g,k,t.it,t.c)});
       steps.push({t:`Prófum með margföldun: ${g} · ${k} = ${p} ✓`});return {diag,steps};}};
 }};
-T.fjolskylda={name:'Margföldun og deiling eiga saman',desc:'Skrifaðu tvö deilidæmi út frá margföldunardæminu.',gen(){
+T.fjolskylda={name:'Margföldun og deiling eiga saman',desc:'Skrifaðu tvö deilingardæmi út frá margföldunardæminu.',gen(){
   let a,b;do{a=R(2,9);b=R(2,9);}while(a===b);const p=a*b;
   return {fields:[{ans:a,w:1},{ans:b,w:1},{ans:b,w:1},{ans:a,w:1}],
     html:`<div class="rows2"><div class="bignum sm">${a} · ${b} = ${p} →</div><div class="bignum sm">${p} : [[0]] = [[1]]</div><div class="bignum sm">${p} : [[2]] = [[3]]</div></div>`,
@@ -1025,14 +1169,14 @@ T.skidabrekka={name:'Skíðabrekkan',desc:'Deildu skref fyrir skref. Svarið kem
       return {diag,steps:ldSteps(D,d)};}};
 }};
 T.ordeiling={name:'Orðadæmi',desc:'Notaðu skíðabrekkuna. Orð eins og „jafnt“ og „í hvern“ segja okkur að deila.',gen(){
-  const {D,d,q}=ldNum();
+  let D,d,q;do{({D,d,q}=ldNum());}while(end1(D)||end1(q));
   const t=pick([
-    {q:`${D} nemendur fara í ferð með ${d} jafnstórum rútum. Hversu margir nemendur eru í hverri rútu?`,u:'nemendur',w:'„jafnstórum“'},
-    {q:`Bakarinn á ${D} múffur. Hann setur ${d} múffur í hvern kassa. Hversu marga kassa getur hann fyllt?`,u:'kassar',w:'„í hvern“'},
-    {q:`${D} krakkar á íþróttamóti skiptast í ${d} jafnstór lið. Hversu margir eru í hverju liði?`,u:'krakkar',w:'„jafnstór“'},
-    {q:`Bóndinn á ${D} egg og setur ${d} egg í hvern bakka. Hversu marga bakka fyllir hann?`,u:'bakkar',w:'„í hvern“'},
-    {q:`Bók er ${D} blaðsíður. ${NAMES[R(0,9)][0]} les hana á ${d} dögum og les jafnmargar síður á hverjum degi. Hversu margar síður á dag?`,u:'síður',w:'„jafnmargar“'}]);
-  return {fields:[{ans:q,w:3}],html:`<p>${t.q}</p><div class="svar">Svar: [[0]] ${t.u}</div>`,
+    {q:`${D} nemendur fara í ferð með ${d} jafnstórum rútum. Hversu margir nemendur eru í hverri rútu?`,u:'nemendur',w:'„jafnstórum“',it:'krakki',co:'ruta'},
+    {q:`Bakarinn á ${D} múffur. Hann setur ${d} múffur í hvern kassa. Hversu marga kassa getur hann fyllt?`,u:'kassar',w:'„í hvern“',it:'muffa',co:'kassi'},
+    {q:`${D} krakkar á íþróttamóti skiptast í ${d} jafnstór lið. Hversu margir eru í hverju liði?`,u:'krakkar',w:'„jafnstór“',it:'krakki',co:'bolti'},
+    {q:`Bóndinn á ${D} egg og setur ${d} egg í hvern bakka. Hversu marga bakka fyllir hann?`,u:'bakkar',w:'„í hvern“',it:'egg',co:'kassi'},
+    {q:`Bók er ${D} blaðsíður. ${NAMES[R(0,9)][0]} les hana á ${d} dögum og les jafnmargar síður á hverjum degi. Hversu margar síður á dag?`,u:'síður',w:'„jafnmargar“',it:'bok',co:'dagatal'}]);
+  return {fields:[{ans:q,w:3}],html:`${wpHTML(t.q,t.it,t.co)}<div class="svar">Svar: [[0]] ${t.u}</div>`,
     explain(v){const x=v[0];const diag=x!=null&&!isNaN(x)&&x!==q?(x===D*d?'Þú margfaldaðir. Hér er verið að skipta jafnt, svo við <b>deilum</b>.':x===D-d?'Þú dróst frá. Hér er verið að skipta jafnt, svo við <b>deilum</b>.':`Prófum með margföldun: ${x} × ${d} = ${x*d}, en það á að vera ${D}.`):'';
       return {diag,steps:[{t:`Orðið ${t.w} segir okkur að við eigum að <b>deila</b>: ${D} : ${d}.`},...ldSteps(D,d).slice(0,-1),{t:`Svar: <b>${q} ${t.u}</b>. Prófum: ${q} × ${d} = ${D} ✓`}]};}};
 }};
@@ -1048,16 +1192,17 @@ const LOTUR=[
     {id:'tveggjastafa',name:'Eins stafs tala sinnum tveggja stafa tala',sym:'7·4',c:'--pink',types:['eydur','reikna12','ord12','askorun12']},
     {id:'deiling',name:'Deiling og skíðabrekkan',sym:'÷',c:'--green',types:['skipta','fjolskylda','deila','skidabrekka','ordeiling']}]}];
 const HL={};LOTUR.forEach(l=>l.hlutar.forEach((h,i)=>{h.lota=l;h.idx=i+1;HL[h.id]=h;}));
-T.blandad={name:'Blandað',desc:'Allskonar dæmi úr þessum hluta, í bland.',mixed:true};
+T.blandad={name:'Blandað',desc:'Alls konar dæmi úr þessum hluta, í bland.',mixed:true};
 
 /* ================= state ================= */
 const store={get(k,d){try{const v=localStorage.getItem('reiknibok_'+k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem('reiknibok_'+k,JSON.stringify(v));}catch(e){}}};
-let S=store.get('state',null);if(!S||typeof S!=='object')S={stars:0,done:{}};if(!S.done)S.done={};
+let S=store.get('state',null);if(!S||typeof S!=='object')S={stars:0,done:{}};if(!S.done)S.done={};if(!S.dt)S.dt={};if(!S.best)S.best={};
 const save=()=>store.set('state',S);
 let view={h:null,type:null,problems:[],ctx:null};let pidN=0;
 const app=document.getElementById('app');
 
-const OWL=`<svg class="owl" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 14l8 8M50 14l-8 8" style="stroke:var(--purple);stroke-width:5;stroke-linecap:round"/><ellipse cx="32" cy="38" rx="22" ry="23" style="fill:var(--purple)"/><ellipse cx="32" cy="45" rx="13" ry="13" style="fill:color-mix(in srgb,var(--purple) 35%,#fff)"/><circle cx="23" cy="30" r="9" style="fill:#fff"/><circle cx="41" cy="30" r="9" style="fill:#fff"/><circle cx="24" cy="31" r="4.5" style="fill:#1D2242"/><circle cx="40" cy="31" r="4.5" style="fill:#1D2242"/><circle cx="25.5" cy="29.5" r="1.5" style="fill:#fff"/><circle cx="41.5" cy="29.5" r="1.5" style="fill:#fff"/><path d="M29 37l3 5 3-5z" style="fill:#FFB400"/><path d="M15 22c3-4 10-5 13-2M49 22c-3-4-10-5-13-2" style="fill:none;stroke:#1D2242;stroke-width:2;stroke-linecap:round"/></svg>`;
+/* Krummi – lukkudýr appsins */
+const OWL=`<svg class="owl" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 46L3 55l4 1-2 4 6-2 1 4 6-7z" style="fill:#23264A"/><path d="M38 54l-1 7M33 54l-2 7M37 61h4M30 61h4" style="stroke:#6B7099;stroke-width:2.4;stroke-linecap:round"/><ellipse cx="31" cy="41" rx="18" ry="16" style="fill:#2E3156"/><ellipse cx="36" cy="44" rx="10.5" ry="10.5" style="fill:#454A82"/><path d="M15 36c4-6 12-7 16-3-1 8-6 16-14 17-4-3-5-9-2-14z" style="fill:#23264A"/><path d="M17 43c3 1 6 0 8-2M18 47c3 1 6 0 8-2" style="fill:none;stroke:#3E4378;stroke-width:1.6;stroke-linecap:round"/><path d="M30 9c1-4 4-6 6-6-1 2-1 4 0 5 2-3 5-4 7-3-2 1-3 3-3 5z" style="fill:#2E3156"/><circle cx="36" cy="21" r="14" style="fill:#2E3156"/><path d="M26 14c3-4 9-5 13-4" style="fill:none;stroke:#5A60A0;stroke-width:2;stroke-linecap:round;opacity:.8"/><circle cx="31" cy="20" r="5.6" style="fill:#fff"/><circle cx="43" cy="20" r="5.6" style="fill:#fff"/><circle cx="32.3" cy="20.8" r="3" style="fill:#1D2242"/><circle cx="44.3" cy="20.8" r="3" style="fill:#1D2242"/><circle cx="33.3" cy="19.6" r="1.1" style="fill:#fff"/><circle cx="45.3" cy="19.6" r="1.1" style="fill:#fff"/><path d="M34 24.5C40 21.5 51 22.5 58 29.5 52 29.8 44 29.8 36.5 29.5z" style="fill:#9096CC"/><path d="M36.5 29.5C44 29.8 51 29.8 56 30.2 50 34 41 34.5 36.5 31z" style="fill:#5C629C"/><path d="M39 25.2c4-1 9-.4 13 2.2" style="fill:none;stroke:#C3C8F0;stroke-width:1.2;stroke-linecap:round;opacity:.8"/><circle cx="27" cy="27" r="2.6" style="fill:#FF8FB0;opacity:.55"/></svg>`;
 document.getElementById('logoOwl').innerHTML=OWL;
 const PRAISE=['Frábært!','Vel gert!','Snillingur!','Hárrétt!','Glæsilegt!','Rétt hjá þér!','Flott!','Algjör meistari!'];
 const ICON={check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"/></svg>',
@@ -1066,14 +1211,27 @@ const ICON={check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l
   dice:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round"/><circle cx="8.5" cy="8.5" r="1.6" style="fill:currentColor"/><circle cx="15.5" cy="15.5" r="1.6" style="fill:currentColor"/><circle cx="12" cy="12" r="1.6" style="fill:currentColor"/></svg>'};
 
 function updStars(pop){document.getElementById('starN').textContent=S.stars;if(pop){const e=document.getElementById('stars');e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');}}
-function progHTML(h){const n=S.done[h.id]||0,goal=n<20?20:n<50?50:100;return `<div class="prog"><div class="bar"><i style="width:${Math.min(100,n/goal*100)}%"></i></div><span>${n} rétt</span></div>`;}
+/* framvinda: hver tegund er búin þegar GOAL dæmi eru rétt; hluti er búinn þegar allar tegundir eru búnar */
+const GOAL=10;
+const typeN=t=>Math.min(GOAL,S.dt[t]||0);
+const typeDone=t=>typeN(t)>=GOAL;
+function hProg(h){const got=h.types.reduce((a,t)=>a+typeN(t),0),all=h.types.length*GOAL,nd=h.types.filter(typeDone).length;return {got,all,nd,nt:h.types.length,pct:Math.round(got/all*100),done:nd===h.types.length};}
+const CHECKMARK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2L18.5 8" style="fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round"/></svg>';
+function progHTML(h){const g=hProg(h);
+  return `<div class="prog${g.done?' pdone':''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${g.pct}" aria-label="Framvinda í ${h.name}">
+    <div class="pbar-row"><div class="bar"><i style="width:${g.pct}%"></i></div><span class="ppct">${g.done?`<span class="pchk">${CHECKMARK}</span>`:g.pct+'%'}</span></div>
+    <div class="psub">${g.done?'<b>Allt búið!</b> Vel gert!':`${g.nd} af ${g.nt} tegundum búnar`}</div></div>`;}
+function tabBadge(t){if(t==='blandad')return '';const n=typeN(t);
+  return typeDone(t)?`<span class="tbadge tdone" aria-label="búið">${CHECKMARK}</span>`:`<span class="tbadge" style="--p:${n/GOAL*100}%" aria-label="${n} af ${GOAL}">${n}/${GOAL}</span>`;}
+function tabsHTML(h){return [...h.types,'blandad'].map(t=>`<button class="tab${t!=='blandad'&&typeDone(t)?' tab-done':''}" type="button" data-t="${t}" aria-pressed="${t===view.type}">${t==='blandad'?ICON.dice.replace('<svg','<svg style="width:16px;height:16px;vertical-align:-2px"')+' ':''}${T[t].name}${tabBadge(t)}</button>`).join('');}
+function lotaProg(l){const d=l.hlutar.filter(h=>hProg(h).done).length;return d===l.hlutar.length?`<span class="lota-done">${CHECKMARK} Lota búin!</span>`:`<span class="lota-p">${d} af ${l.hlutar.length} hlutum búnir</span>`;}
 
 /* ================= rendering ================= */
 function renderHome(){
   view.h=null;
-  app.innerHTML=`<section class="hero">${OWL}<div><h1>Hæ! Hvað viltu æfa í dag?</h1><p>Veldu flokk. Skrifaðu svarið í kassann og ýttu á <b>Athuga svar</b>. Ef eitthvað er snúið getur þú ýtt á <b>Útskýring</b> og séð hvernig á að reikna.</p></div></section>`+
-  LOTUR.map(l=>`<section class="lota"><div class="lota-h"><span>${l.num}</span><h2>${l.name}</h2></div><div class="hgrid">${l.hlutar.map(h=>`
-    <button class="hcard" type="button" data-h="${h.id}" style="--c:var(${h.c})"><div class="hc-top"><div class="sym">${h.sym}</div><div><div class="hc-num">Hluti ${h.idx}</div><div class="hc-name">${h.name}</div></div></div>
+  app.innerHTML=`<section class="hero">${OWL}<div><h1>Hæ! Ég heiti Krummi.</h1><p>Hvað viltu æfa í dag? Veldu flokk og skrifaðu svörin í kassana. Þegar þú ert búinn ýtir þú á <b>Skila</b> neðst og færð einkunn. Ef eitthvað er snúið getur þú skoðað <b>Útskýringu</b> og séð hvernig á að reikna.</p></div></section>`+
+  LOTUR.map(l=>`<section class="lota"><div class="lota-h"><span>${l.num}</span><h2>${l.name}</h2>${lotaProg(l)}</div><div class="hgrid">${l.hlutar.map(h=>`
+    <button class="hcard${hProg(h).done?' hdone':''}" type="button" data-h="${h.id}" style="--c:var(${h.c})">${hProg(h).done?`<span class="hc-badge" aria-label="Hluti búinn">${CHECKMARK}</span>`:''}<div class="hc-top"><div class="sym">${h.sym}</div><div><div class="hc-num">Hluti ${h.idx}</div><div class="hc-name">${h.name}</div></div></div>
     <div class="hc-types">${h.types.map(t=>T[t].name).join(' · ')}</div>${progHTML(h)}</button>`).join('')}</div></section>`).join('');
   window.scrollTo(0,0);
 }
@@ -1082,12 +1240,22 @@ function renderHluti(id,type){
   view.h=h;view.type=type&&(h.types.includes(type)||type==='blandad')?type:h.types[0];
   const tabs=[...h.types,'blandad'];
   app.innerHTML=`<div style="--c:var(${h.c})"><button class="back" type="button" id="back">← Allir flokkar</button>
-   <header class="hhead"><div class="sym">${h.sym}</div><div style="flex:1;min-width:200px"><div class="hc-num">${h.lota.num} · Hluti ${h.idx}</div><h2>${h.name}</h2></div><div id="hprog" style="flex:1;min-width:180px;max-width:300px">${progHTML(h)}</div></header>
-   <nav class="tabs" aria-label="Tegundir dæma">${tabs.map(t=>`<button class="tab" type="button" data-t="${t}" aria-pressed="${t===view.type}">${t==='blandad'?ICON.dice.replace('<svg','<svg style="width:16px;height:16px;vertical-align:-2px"')+' ':''}${T[t].name}</button>`).join('')}</nav>
+   <header class="hhead"><div class="sym">${h.sym}<span class="sym-chk" id="symchk"${hProg(h).done?'':' hidden'}>${CHECKMARK}</span></div><div style="flex:1;min-width:200px"><div class="hc-num">${h.lota.num} · Hluti ${h.idx}</div><h2>${h.name}</h2></div><div id="hprog" style="flex:1;min-width:180px;max-width:300px">${progHTML(h)}</div></header>
+   <nav class="tabs" id="tabs" aria-label="Tegundir dæma">${tabsHTML(h)}</nav>
    <div class="tdesc" id="tdesc"></div><div class="ctx" id="ctx"></div><div class="plist" id="plist"></div>
-   <div class="more"><button class="btn big b-new" type="button" id="newset">${ICON.dice} Ný dæmi</button></div></div>`;
+   <div class="more" id="more"></div></div>`;
   newSet();
 }
+function refreshProg(){const h=view.h;if(!h)return;const hp=document.getElementById('hprog');if(hp)hp.innerHTML=progHTML(h);
+  const tb=document.getElementById('tabs');if(tb)tb.innerHTML=tabsHTML(h);const sc=document.getElementById('symchk');if(sc)sc.hidden=!hProg(h).done;}
+function celebrate(html,big){document.querySelector('.celebr')?.remove();
+  const d=document.createElement('div');d.className='celebr'+(big?' big':'');d.setAttribute('role','status');
+  d.innerHTML=`<div class="cel-in"><span class="cel-chk">${CHECKMARK}</span><div>${html}</div>${big?'<button type="button" class="btn cel-ok">Áfram!</button>':''}</div>`;
+  document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'));
+  const close=()=>{d.classList.remove('show');setTimeout(()=>d.remove(),300);};
+  d.addEventListener('click',close);if(!big)setTimeout(close,2600);
+  if(big&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){const cols=['var(--blue)','var(--orange)','var(--pink)','var(--green)','var(--star)','var(--purple)'];
+    for(let i=0;i<60;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`position:fixed;--x:${innerWidth/2}px;--y:${innerHeight/2}px;--dx:${R(-innerWidth/2,innerWidth/2)}px;--dy:${R(-innerHeight/2,innerHeight/3)}px;--r:${R(-500,500)}deg;background:${pick(cols)};z-index:60`;d.appendChild(c);}}}
 function newSet(){
   const h=view.h,tp=T[view.type];
   document.getElementById('tdesc').textContent=tp.desc;
@@ -1095,24 +1263,70 @@ function newSet(){
   document.getElementById('ctx').innerHTML=view.ctx?view.ctx.html:'';
   const cnt=tp.count||12;view.problems=[];
   for(let i=0;i<(tp.mixed?12:cnt);i++){let p;
-    if(tp.mixed){const tk=pick(h.types),tt=T[tk];const c=tt.ctx?tt.ctx():null;p=tt.gen(c,R(0,3));p.tag=tt.name;if(c)p.pre=c.html;}
-    else p=tp.gen(view.ctx,i);
+    if(tp.mixed){const tk=pick(h.types),tt=T[tk];const c=tt.ctx?tt.ctx():null;p=tt.gen(c,R(0,3));p.tk=tk;p.tag=tt.name;if(c)p.pre=c.html;}
+    else{p=tp.gen(view.ctx,i);p.tk=view.type;}
     p.pid='p'+(pidN++);p.state={tries:0,scored:false,revealed:false};view.problems.push(p);}
-  document.getElementById('plist').innerHTML=view.problems.map((p,i)=>cardHTML(p,i)).join('');
+  view.graded=false;view.confirm=false;
+  const pl=document.getElementById('plist');pl.classList.remove('graded');
+  pl.innerHTML=view.problems.map((p,i)=>cardHTML(p,i)).join('');
+  renderFooter();
 }
+/* ---- skila og einkunn ---- */
+const LET=i=>'abcdefghijklmnop'[i];
+function answered(card){const p=probOf(card);return p&&getVals(card,p).some(x=>x!==null);}
+function renderFooter(){const el=document.getElementById('more');if(!el)return;
+  if(view.graded){el.innerHTML=resultHTML();return;}
+  const cards=[...document.querySelectorAll('#plist .pcard')],n=cards.filter(answered).length,tot=cards.length,miss=cards.filter(c=>!answered(c)).map(c=>LET(+c.dataset.idx));
+  el.innerHTML=`<div class="submitbar">
+    <div class="sb-top"><div class="sb-info"><b>${n}</b> af ${tot} svarað</div><div class="sb-chips">${cards.map(c=>`<a href="#" class="chip${answered(c)?' on':''}" data-go="${c.id}">${LET(+c.dataset.idx)}</a>`).join('')}</div></div>
+    ${view.confirm&&miss.length?`<div class="sb-warn">Þú átt eftir að svara <b>${miss.join(', ')}</b>. Viltu skila samt?</div>`:''}
+    <div class="sb-btns"><button class="btn big b-submit" type="button" id="submit">${ICON.check}${view.confirm&&miss.length?'Skila samt':'Skila'}</button></div></div>`;}
+function updFooter(){if(!view.graded)renderFooter();}
+function gradeTxt(g){return g.toFixed(1).replace('.',',');}
+function resultHTML(){const r=view.result,g=r.grade,col=g>=9?'var(--good)':g>=7?'var(--blue)':g>=5?'var(--orange)':'var(--bad)';
+  const head=g>=10?'Fullkomið! Allt rétt!':g>=9?'Frábært!':g>=7?'Mjög vel gert!':g>=5?'Gott hjá þér!':'Höldum áfram að æfa!';
+  const nWrong=r.tot-r.right;
+  return `<div class="result" style="--g:${col}">
+    <div class="res-ring" style="--pct:${g*10}%"><div><span>Einkunn</span><b>${gradeTxt(g)}</b></div></div>
+    <div class="res-body"><h3>${head}</h3>
+      <p><b>${r.right} af ${r.tot}</b> rétt${r.stars?` · +${r.stars} ${ICON.star||'⭐'}`:''}${r.best?` · <span class="res-best">Besta einkunn: ${gradeTxt(r.best)}</span>`:''}</p>
+      <div class="res-chips">${r.marks.map((ok,i)=>`<a href="#" class="chip ${ok?'ok':'bad'}" data-go="${view.problems[i].pid}">${LET(i)} ${ok?'✓':'✗'}</a>`).join('')}</div>
+      ${nWrong?`<p class="res-tip">Ýttu á dæmi sem er rangt til að skoða <b>Útskýringu</b>, lagaðu svo svarið og ýttu á <b>Athuga aftur</b>.</p>`:''}
+      <div class="res-btns">${nWrong?`<button class="btn big b-fix" type="button" id="gofix">Fara yfir villurnar</button>`:''}<button class="btn big b-new" type="button" id="newset">${ICON.dice} Ný dæmi</button></div></div></div>`;}
+function doSubmit(){
+  const cards=[...document.querySelectorAll('#plist .pcard')];
+  if(!view.confirm&&cards.some(c=>!answered(c))){view.confirm=true;renderFooter();return;}
+  padHide&&padHide();document.activeElement&&document.activeElement.blur&&document.activeElement.blur();
+  const before=S.stars;const marks=cards.map(c=>gradeCard(c,true));
+  const right=marks.filter(Boolean).length,tot=marks.length,grade=Math.round(right/tot*100)/10;
+  const tk=view.type,prev=S.best[tk];S.best[tk]=Math.max(prev||0,grade);save();
+  view.graded=true;view.result={right,tot,grade,marks,stars:S.stars-before,best:prev!==undefined?S.best[tk]:0};
+  document.getElementById('plist').classList.add('graded');
+  renderFooter();refreshProg();updStars(true);
+  const el=document.getElementById('more');el.scrollIntoView({behavior:'smooth',block:'center'});
+  if(grade>=9)bigConfetti();
+  if(view.pendingCel){const c=view.pendingCel;view.pendingCel=null;setTimeout(()=>celebrate(c.html,c.big),1400);}
+}
+function bigConfetti(){if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cols=['var(--blue)','var(--orange)','var(--pink)','var(--green)','var(--star)','var(--purple)'],box=document.createElement('div');box.className='confbox';document.body.appendChild(box);
+  for(let i=0;i<70;i++){const c=document.createElement('i');c.className='conf';c.style.cssText=`position:fixed;--x:${innerWidth/2}px;--y:${innerHeight*0.55}px;--dx:${R(-innerWidth/2,innerWidth/2)}px;--dy:${R(-innerHeight/2,innerHeight/4)}px;--r:${R(-500,500)}deg;background:${pick(cols)}`;box.appendChild(c);}
+  setTimeout(()=>box.remove(),1200);}
+/* Á snertiskjá (iPad) notum við eigið talnaborð í stað kerfislyklaborðsins */
+const PAD_ON=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
+const IM=PAD_ON?'none':'numeric';
 function fieldHTML(pid,f,i){
   if(f.type==='choice')return `<span class="choices" data-i="${i}" role="group">${f.opts.map((o,j)=>`<button type="button" class="choice" id="${pid}-c${i}-${j}" data-j="${j}">${o}</button>`).join('')}</span>`;
-  return `<span class="fwrap"><input id="${pid}-f${i}" class="ans" data-i="${i}" style="--w:${f.w||3}" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Svar">${f.neg?`<button type="button" class="neg" data-i="${i}" aria-label="Setja eða taka mínus">±</button>`:''}</span>`;
+  return `<span class="fwrap"><input id="${pid}-f${i}" class="ans" data-i="${i}" style="--w:${f.w||3}" inputmode="${IM}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Svar">${f.neg?`<button type="button" class="neg" data-i="${i}" aria-label="Setja eða taka mínus">±</button>`:''}</span>`;
 }
 function cardHTML(p,idx){
   let body=p.html;if(!/\[\[/.test(body))body+='<div class="svar">Svar: [[0]]</div>';
   body=body.replace(/\[\[(m|\d+)(?::(\d+))?\]\]/g,(m,i,k)=>{
-    if(i==='m')return `<input class="memo" id="${p.pid}-m${k}" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Minnisreitur">`;
-    if(k!==undefined)return `<input class="ans dig" id="${p.pid}-f${i}-${k}" data-i="${i}" data-k="${k}" maxlength="1" inputmode="numeric" autocomplete="off" aria-label="Tölustafur">`;
+    if(i==='m')return `<input class="memo" id="${p.pid}-m${k}" inputmode="${IM}" maxlength="2" autocomplete="off" aria-label="Minnisreitur">`;
+    if(k!==undefined)return `<input class="ans dig" id="${p.pid}-f${i}-${k}" data-i="${i}" data-k="${k}" maxlength="1" inputmode="${IM}" autocomplete="off" aria-label="Tölustafur">`;
     return fieldHTML(p.pid,p.fields[+i],+i);});
   return `<article class="pcard" id="${p.pid}" data-idx="${idx}">
     <div class="ptop"><span class="plabel">${'abcdefghijklmnop'[idx]}</span><div class="pq">${p.tag?`<span class="ptag">${p.tag}</span>`:''}${p.pre||''}${body}</div></div>
-    <div class="pbtns"><button class="btn b-check" type="button">${ICON.check}Athuga svar</button><button class="btn b-help" type="button">${ICON.bulb}Útskýring</button><button class="btn b-show" type="button">${ICON.eye}Sýna svar</button></div>
+    <div class="pbtns"><button class="btn b-check" type="button">${ICON.check}Athuga aftur</button><button class="btn b-help" type="button">${ICON.bulb}Útskýring</button><button class="btn b-show" type="button">${ICON.eye}Sýna svar</button></div>
     <div class="pmsg" aria-live="polite"></div><div class="pexp" hidden></div></article>`;
 }
 
@@ -1127,24 +1341,30 @@ function fieldEls(card,i,f){if(f.type==='choice')return [...card.querySelectorAl
 function clearMarks(card){card.querySelectorAll('.ok,.bad').forEach(e=>e.classList.remove('ok','bad'));}
 function msg(card,cls,txt){const m=card.querySelector('.pmsg');m.className='pmsg '+cls;m.innerHTML=txt;}
 
-function doCheck(card){
-  const p=probOf(card);if(!p)return;const v=getVals(card,p);
-  if(v.every(x=>x===null)){msg(card,'info','Skrifaðu svarið þitt í kassann fyrst.');return;}
-  const ok=checkVals(p,v);clearMarks(card);
+function gradeCard(card,bulk){
+  const p=probOf(card);if(!p)return false;const v=getVals(card,p);
+  if(!bulk&&v.every(x=>x===null)){msg(card,'info','Skrifaðu svarið þitt í kassann fyrst.');return false;}
+  const ok=checkVals(p,v),all=ok.every(Boolean);clearMarks(card);card.classList.remove('solved','wrong');
   p.fields.forEach((f,i)=>{const els=fieldEls(card,i,f);void card.offsetWidth;els.forEach(e=>e.classList.add(ok[i]?'ok':'bad'));});
   p.state.tries++;
-  if(ok.every(Boolean)){
+  if(all){
     let extra='';
-    if(!p.state.revealed&&!p.state.scored){p.state.scored=true;const g=p.state.tries===1?2:1;S.stars+=g;S.done[view.h.id]=(S.done[view.h.id]||0)+1;save();updStars(true);extra=` +${g} ${g===1?'stjarna':'stjörnur'}`;const hp=document.getElementById('hprog');if(hp)hp.innerHTML=progHTML(view.h);}
-    msg(card,'good',pick(PRAISE)+extra);card.classList.add('solved');confetti(card);
+    if(!p.state.revealed&&!p.state.scored){p.state.scored=true;const g=p.state.tries===1?2:1;S.stars+=g;S.done[view.h.id]=(S.done[view.h.id]||0)+1;const wasT=typeDone(p.tk),wasH=hProg(view.h).done;S.dt[p.tk]=(S.dt[p.tk]||0)+1;save();extra=` +${g} ${g===1?'stjarna':'stjörnur'}`;
+      let cel=null;if(!wasH&&hProg(view.h).done)cel={html:`Þú kláraðir allan hlutann <b>${view.h.name}</b>!`,big:true};else if(!wasT&&typeDone(p.tk))cel={html:`<b>${T[p.tk].name}</b> er búið! ${GOAL} rétt dæmi.`,big:false};
+      if(cel){if(bulk){if(!view.pendingCel||cel.big)view.pendingCel=cel;}else setTimeout(()=>celebrate(cel.html,cel.big),600);}
+      if(!bulk){updStars(true);refreshProg();}}
+    msg(card,'good',pick(PRAISE)+extra);card.classList.add('solved');if(!bulk)confetti(card);
     const ex=card.querySelector('.pexp');if(!ex.hidden&&ex.dataset.diag==='1')openExplain(card,true);
   }else{
-    const n=ok.filter(x=>!x).length,tot=ok.length;
-    msg(card,'bad',(tot>1&&n<tot?`Næstum því! ${n} af ${tot} ${n===1?'reit er':'reitum eru'} ekki rétt${n===1?'ur':'ir'}. `:'Ekki alveg rétt. ')+'Prófaðu aftur eða ýttu á <b>Útskýring</b>.');
-    const hb=card.querySelector('.b-help');hb.classList.remove('nudge');void hb.offsetWidth;hb.classList.add('nudge');
+    card.classList.add('wrong');
+    const n=ok.filter(x=>!x).length,tot=ok.length,empty=v.every(x=>x===null);
+    msg(card,'bad',empty?'Þessu var ekki svarað. Prófaðu núna, eða ýttu á <b>Útskýring</b>.':(tot>1&&n<tot?`Næstum því! ${n} af ${tot} reitum ${n===1?'er ekki réttur':'eru ekki réttir'}. `:'Ekki rétt. ')+(empty?'':'Skoðaðu <b>Útskýringu</b>, lagaðu svarið og ýttu á <b>Athuga aftur</b>.'));
     const ex=card.querySelector('.pexp');if(!ex.hidden)openExplain(card,true);
   }
+  if(view.graded&&view.result){const idx=+card.dataset.idx;view.result.marks[idx]=view.result.marks[idx]||all;}
+  return all;
 }
+function doCheck(card){const r=gradeCard(card,false);if(view.graded){const ch=document.querySelector(`.res-chips .chip[data-go="${card.id}"]`);if(ch&&r){ch.className='chip ok fixed';ch.textContent=LET(+card.dataset.idx)+' ✓';}}return r;}
 function openExplain(card,force){
   const p=probOf(card);if(!p)return;const ex=card.querySelector('.pexp');
   if(!ex.hidden&&!force){ex.hidden=true;return;}
@@ -1152,7 +1372,7 @@ function openExplain(card,force){
   let E;try{E=p.explain(v,ok);}catch(e){E={diag:'',steps:[{t:'Úps, útskýringin fannst ekki.'}]};}
   const diag=wrong?(E.diag||'Svarið passar ekki alveg. Förum saman í gegnum dæmið skref fyrir skref og sjáum hvar munar.'):'';
   ex.dataset.diag=diag?'1':'0';
-  ex.innerHTML=`<div class="exp-head">${OWL}<h4>${wrong?'Ugla hjálpar þér':'Svona reiknum við'}</h4></div>
+  ex.innerHTML=`<div class="exp-head">${OWL}<h4>${wrong?'Krummi hjálpar þér':'Svona reiknum við'}</h4></div>
     ${diag?`<div class="diag"><h5>Hvað fór úrskeiðis?</h5><p>${diag}</p></div><div class="exp-sub">Svona reiknum við:</div>`:''}
     <div class="pvis"></div><ol class="psteps">${E.steps.map(s=>`<li><div>${s.t}</div></li>`).join('')}</ol>
     <div class="pnav"><button class="btn b-prev" type="button">← Til baka</button><button class="btn b-next" type="button">Næsta skref →</button><button class="btn b-all" type="button">Sýna öll skref</button><span class="cnt"></span></div>`;
@@ -1178,7 +1398,7 @@ function doShow(card){
 }
 function confetti(card){
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const cols=['var(--blue)','var(--orange)','var(--pink)','var(--green)','var(--star)','var(--purple)'],b=card.querySelector('.b-check'),x=b.offsetLeft+b.offsetWidth/2,y=b.offsetTop;
+  const cols=['var(--blue)','var(--orange)','var(--pink)','var(--green)','var(--star)','var(--purple)'],b=card.querySelector('.plabel'),x=b.offsetLeft+b.offsetWidth/2,y=b.offsetTop;
   for(let i=0;i<18;i++){const s=document.createElement('i');s.className='conf';s.style.cssText=`--x:${x}px;--y:${y}px;--dx:${R(-140,140)}px;--dy:${R(-150,-30)}px;--r:${R(-300,300)}deg;background:${pick(cols)}`;card.appendChild(s);setTimeout(()=>s.remove(),950);}
 }
 
@@ -1189,11 +1409,13 @@ app.addEventListener('click',e=>{
   if(t.id==='back'){location.hash='';renderHome();return;}
   if(t.classList.contains('tab')){view.type=t.dataset.t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b===t));newSet();return;}
   if(t.id==='newset'){newSet();document.getElementById('tdesc').scrollIntoView({behavior:'smooth',block:'start'});return;}
+  if(t.id==='submit'){doSubmit();return;}
+  if(t.id==='gofix'){const w=document.querySelector('#plist .pcard.wrong');if(w){w.scrollIntoView({behavior:'smooth',block:'start'});const hb=w.querySelector('.b-help');hb.classList.remove('nudge');void hb.offsetWidth;hb.classList.add('nudge');}return;}
   if(!card)return;
   if(t.classList.contains('b-check'))doCheck(card);
   else if(t.classList.contains('b-help'))openExplain(card,false);
   else if(t.classList.contains('b-show'))doShow(card);
-  else if(t.classList.contains('choice')){t.parentElement.querySelectorAll('.choice').forEach(b=>b.classList.remove('sel','ok','bad'));t.classList.add('sel');}
+  else if(t.classList.contains('choice')){t.parentElement.querySelectorAll('.choice').forEach(b=>b.classList.remove('sel','ok','bad'));t.classList.add('sel');updFooter();}
   else if(t.classList.contains('neg')){const el=card.querySelector(`input.ans[data-i="${t.dataset.i}"]`);let s=el.value.replace(/[−–—]/g,'-').trim();el.value=s.startsWith('-')?s.slice(1):'−'+s;el.classList.remove('ok','bad');el.focus();}
   else{const ex=t.closest('.pexp');if(!ex)return;
     if(t.classList.contains('b-next'))ex._cur=Math.min(ex._steps.length-1,ex._cur+1);
@@ -1201,15 +1423,56 @@ app.addEventListener('click',e=>{
     else if(t.classList.contains('b-all'))ex._cur=ex._steps.length-1;
     showStep(ex);}
 });
+app.addEventListener('click',e=>{const a=e.target.closest('a.chip');if(!a)return;e.preventDefault();const c=document.getElementById(a.dataset.go);if(c)c.scrollIntoView({behavior:'smooth',block:'start'});});
+app.addEventListener('input',e=>{if(e.target.matches('input.ans,input.memo'))setTimeout(updFooter,0);});
 app.addEventListener('input',e=>{
   const el=e.target;if(!el.classList.contains('ans')&&!el.classList.contains('memo'))return;
   el.classList.remove('ok','bad');
   if(el.classList.contains('dig')){el.value=el.value.replace(/[^0-9]/g,'').slice(-1);if(el.value){const prev=el.closest('.pcard').querySelector(`input.dig[data-i="${el.dataset.i}"][data-k="${+el.dataset.k-1}"]`);if(prev)prev.focus();}}
 });
-app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input')){const c=e.target.closest('.pcard');if(c){e.preventDefault();doCheck(c);}}});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input')){const c=e.target.closest('.pcard');if(!c)return;e.preventDefault();
+  if(view.graded&&c.classList.contains('wrong')){doCheck(c);return;}
+  focusNext(e.target);}});
+function focusNext(el){const card=el.closest('.pcard'),all=[...card.querySelectorAll('input.ans,input.memo')],fields=all.filter(x=>!x.classList.contains('memo'));
+  const order=el.classList.contains('dig')?fields:all,i=order.indexOf(el);
+  let nx=order.slice(i+1).find(x=>!x.value)||order.slice(i+1)[0];
+  if(!nx){let nc=card.nextElementSibling;while(nc&&!nx){nx=[...nc.querySelectorAll('input.ans')].find(x=>!x.value)||nc.querySelector('input.ans');nc=nc.nextElementSibling;}}
+  if(nx){nx.focus();return true;}
+  el.blur();if(typeof padHide==='function')padHide();const sb=document.getElementById('submit');if(sb){sb.scrollIntoView({behavior:'smooth',block:'center'});sb.focus({preventScroll:true});}return false;}
 document.getElementById('logo').addEventListener('click',()=>{location.hash='';renderHome();});
 function route(){const id=location.hash.replace('#','');if(id&&HL[id]){if(!view.h||view.h.id!==id){renderHluti(id);window.scrollTo(0,0);}}else if(view.h||!app.innerHTML)renderHome();}
 window.addEventListener('hashchange',route);
+/* ---- talnaborð ---- */
+let padEl=null,padFor=null;
+function padInit(){
+  padEl=document.createElement('div');padEl.className='npad';padEl.hidden=true;padEl.setAttribute('role','group');padEl.setAttribute('aria-label','Talnaborð');
+  const K=(k,l,c='')=>`<button type="button" class="nk ${c}" data-k="${k}" aria-label="${l}">${l}</button>`;
+  padEl.innerHTML=`<div class="np-in">${[1,2,3,4,5,6,7,8,9].map(n=>K(n,n)).join('')}${K('neg','±','nk-neg')}${K(0,0)}${K('del','⌫','nk-del')}${K('next','Næsti reitur →','nk-next')}${K('ok','Áfram ↵','nk-ok')}${K('hide','Loka ▾','nk-hide')}</div>`;
+  document.body.appendChild(padEl);
+  padEl.addEventListener('pointerdown',e=>e.preventDefault());   // halda fókus í reitnum
+  padEl.addEventListener('mousedown',e=>e.preventDefault());
+  padEl.addEventListener('click',e=>{const b=e.target.closest('.nk');if(!b||!padFor)return;padKey(b.dataset.k);});
+}
+function padShow(el){padFor=el;padEl.hidden=false;padEl.style.setProperty('--c',getComputedStyle(el).getPropertyValue('--c'));document.body.classList.add('pad-open');
+  const neg=!!el.closest('.fwrap')?.querySelector('.neg');padEl.querySelector('.nk-neg').disabled=!neg;const okb=padEl.querySelector('.nk-ok'),cw=view.graded&&el.closest('.pcard')?.classList.contains('wrong');okb.textContent=cw?'✓ Athuga':'Áfram ↵';
+  requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),top=padEl.getBoundingClientRect().top;if(r.bottom>top-16)window.scrollBy({top:r.bottom-top+60,behavior:'smooth'});else if(r.top<80)window.scrollBy({top:r.top-120,behavior:'smooth'});});}
+function padHide(){padFor=null;if(padEl){padEl.hidden=true;}document.body.classList.remove('pad-open');}
+function padInputs(card){return [...card.querySelectorAll('input.ans,input.memo')];}
+function padKey(k){const el=padFor;if(!el)return;const card=el.closest('.pcard');
+  if(k==='hide'){el.blur();padHide();return;}
+  if(k==='ok'){if(view.graded&&card.classList.contains('wrong'))doCheck(card);else focusNext(el);return;}
+  if(k==='neg'){el.closest('.fwrap')?.querySelector('.neg')?.click();el.focus();return;}
+  if(k==='next'){focusNext(el);return;}
+  if(k==='del'){if(el.value)el.value=el.value.slice(0,-1).replace(/^−$/,'−');
+    else if(el.classList.contains('dig')){const nb=card.querySelector(`input.dig[data-i="${el.dataset.i}"][data-k="${+el.dataset.k+1}"]`);if(nb){nb.focus();nb.value='';}}
+    el.dispatchEvent(new Event('input',{bubbles:true}));return;}
+  const max=+el.getAttribute('maxlength')||0;
+  if(el.classList.contains('dig'))el.value=k;else if(!max||el.value.replace('−','').length<max)el.value+=k;
+  el.dispatchEvent(new Event('input',{bubbles:true}));}
+if(PAD_ON){padInit();
+  app.addEventListener('focusin',e=>{if(e.target.matches('input.ans,input.memo'))padShow(e.target);});
+  app.addEventListener('focusout',e=>{if(e.target.matches('input.ans,input.memo'))setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input.ans,input.memo'))padHide();},60);});
+  window.addEventListener('hashchange',padHide);}
 updStars();route();
 </script>
 

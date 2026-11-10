@@ -1,17 +1,19 @@
-# Reiknibókin
+# Krummi
 
 **Opna appið:** https://aronhogni.github.io/reiknibokin/
 
-Gagnvirkt stærðfræðiapp á íslensku fyrir 9 ára krakka. Dæmin fylgja sömu flokkum og uppsetningu og vinnuheftin.
+Krummi er gagnvirkt stærðfræðiapp á íslensku fyrir 9 ára krakka. Dæmin fylgja sömu flokkum og uppsetningu og vinnuheftin.
 
 - **Lota 1 · Heilar tölur:** Tugakerfið · Talnalína og neikvæðar tölur · Samlagning, frádráttur og peningar
 - **Lota 2 · Margföldun og deiling:** Margföldun · Eins stafs tala sinnum tveggja stafa tala · Deiling og skíðabrekkan
 
-Í hverju dæmi er reiknikassi og þrír hnappar:
+Hvert sett er 12 dæmi (a, b, c …), eins og í vinnuheftunum:
 
-- **Athuga svar** segir hvort svarið er rétt eða rangt.
-- **Útskýring** segir hvað fór úrskeiðis og fer í gegnum útreikninginn skref fyrir skref með myndum.
-- **Sýna svar** fyllir inn rétta svarið.
+- Svörin eru skrifuð í reiknikassana. Rétta svarið sést ekki fyrr en búið er að skila.
+- **Skila** neðst fer yfir öll svörin í einu og gefur **einkunn** (0–10) og stjörnur.
+- Eftir að skilað er sést hvaða dæmi eru rétt og röng. Við röng dæmi er hægt að skoða **Útskýringu** skref fyrir skref, laga svarið og ýta á **Athuga aftur**, eða ýta á **Sýna svar**.
+- Í orðadæmum um margföldun og deilingu eru teiknaðar myndir af hlutunum, t.d. eplum, boltum og blýöntum.
+- Hver hluti hefur framvindustiku. Grænt hak birtist þegar dæmategund er búin (10 rétt) og þegar allur hlutinn er búinn.
 
 Ný dæmi eru búin til af handahófi og þau klárast aldrei.
 
@@ -21,7 +23,7 @@ Ný dæmi eru búin til af handahófi og þau klárast aldrei.
 |---|---|
 | `reiknibokin.html` | Upprunaskráin. Allur kóði er í henni og hún er birt sem Claude Artifact. |
 | `index.html` | Heilt HTML-skjal sem `build.sh` býr til. Opnaðu þessa í vafra. |
-| `apple-touch-icon.png` | Táknmyndin sem birtist þegar appinu er bætt á heimaskjá iPad. |
+| `apple-touch-icon.png` | Krummi, táknið á heimaskjá iPad. |
 | `build.sh` | Býr til `index.html` úr `reiknibokin.html`. |
 
 ## Á iPad
@@ -29,11 +31,11 @@ Ný dæmi eru búin til af handahófi og þau klárast aldrei.
 1. Opnaðu https://aronhogni.github.io/reiknibokin/ í Safari.
 2. Veldu **Deila → Bæta á heimaskjá** (Add to Home Screen).
 
-Þá opnast appið eins og venjulegt app, á öllum skjánum og með uglutákni.
+Þá opnast appið eins og venjulegt app, á öllum skjánum og með Krumma sem tákni.
 
 Appið er lagað að snertiskjá:
 - Snertifletir eru stórir, um 46 px.
-- Talnalyklaborð birtist í svarreitum.
+- Í svarreitum birtist **eigið talnaborð** Krumma (0–9, ±, ⌫, næsti reitur), ekki allt lyklaborð iPad.
 - Skjárinn þysjar ekki inn þegar ýtt er tvisvar.
 - Ekkert festist í „hover“-stöðu eftir snertingu.
 
