@@ -1282,7 +1282,7 @@ function renderFooter(){const el=document.getElementById('more');if(!el)return;
     ${view.confirm&&miss.length?`<div class="sb-warn">Þú átt eftir að svara <b>${miss.join(', ')}</b>. Viltu skila samt?</div>`:''}
     <div class="sb-btns"><button class="btn big b-submit" type="button" id="submit">${ICON.check}${view.confirm&&miss.length?'Skila samt':'Skila'}</button></div></div>`;}
 function updFooter(){if(!view.graded)renderFooter();}
-function gradeTxt(g){return g.toFixed(1).replace('.',',');}
+function gradeTxt(g){return Number.isInteger(g)?String(g):g.toFixed(1).replace('.',',');}
 function resultHTML(){const r=view.result,g=r.grade,col=g>=9?'var(--good)':g>=7?'var(--blue)':g>=5?'var(--orange)':'var(--bad)';
   const head=g>=10?'Fullkomið! Allt rétt!':g>=9?'Frábært!':g>=7?'Mjög vel gert!':g>=5?'Gott hjá þér!':'Höldum áfram að æfa!';
   const nWrong=r.tot-r.right;
@@ -1316,7 +1316,7 @@ const PAD_ON=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
 const IM=PAD_ON?'none':'numeric';
 function fieldHTML(pid,f,i){
   if(f.type==='choice')return `<span class="choices" data-i="${i}" role="group">${f.opts.map((o,j)=>`<button type="button" class="choice" id="${pid}-c${i}-${j}" data-j="${j}">${o}</button>`).join('')}</span>`;
-  return `<span class="fwrap"><input id="${pid}-f${i}" class="ans" data-i="${i}" style="--w:${f.w||3}" inputmode="${IM}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Svar">${f.neg?`<button type="button" class="neg" data-i="${i}" aria-label="Setja eða taka mínus">±</button>`:''}</span>`;
+  return `<span class="fwrap"><input id="${pid}-f${i}" class="ans" data-i="${i}" style="--w:${f.w||3}" maxlength="${Math.max(f.w||3,String(f.disp!==undefined?f.disp:f.ans).replace(/[^0-9]/g,'').length)+(f.neg?1:0)}" inputmode="${IM}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Svar">${f.neg?`<button type="button" class="neg" data-i="${i}" aria-label="Setja eða taka mínus">±</button>`:''}</span>`;
 }
 function cardHTML(p,idx){
   let body=p.html;if(!/\[\[/.test(body))body+='<div class="svar">Svar: [[0]]</div>';
@@ -1433,10 +1433,19 @@ app.addEventListener('input',e=>{
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input')){const c=e.target.closest('.pcard');if(!c)return;e.preventDefault();
   if(view.graded&&c.classList.contains('wrong')){doCheck(c);return;}
   focusNext(e.target);}});
-function focusNext(el){const card=el.closest('.pcard'),all=[...card.querySelectorAll('input.ans,input.memo')],fields=all.filter(x=>!x.classList.contains('memo'));
-  const order=el.classList.contains('dig')?fields:all,i=order.indexOf(el);
-  let nx=order.slice(i+1).find(x=>!x.value)||order.slice(i+1)[0];
-  if(!nx){let nc=card.nextElementSibling;while(nc&&!nx){nx=[...nc.querySelectorAll('input.ans')].find(x=>!x.value)||nc.querySelector('input.ans');nc=nc.nextElementSibling;}}
+/* „næsti reitur“: hver dálkareikningur telst einn reitur (byrjað í einingunum), minnisreitir eru valfrjálsir */
+function entryPoints(card){const out=[],seen=new Set();
+  card.querySelectorAll('input.ans').forEach(x=>{
+    if(x.classList.contains('dig')){const g=x.dataset.i;if(seen.has(g))return;seen.add(g);
+      const ds=[...card.querySelectorAll(`input.dig[data-i="${g}"]`)].sort((a,b)=>b.dataset.k-a.dataset.k);
+      out.push({el:ds.find(d=>!d.value)||ds[0],key:'g'+g,empty:ds.some(d=>!d.value)});}
+    else out.push({el:x,key:'f'+x.dataset.i,empty:!x.value});});
+  return out;}
+function focusNext(el){const card=el.closest('.pcard'),eps=entryPoints(card);
+  const cur=el.classList.contains('memo')?null:(el.classList.contains('dig')?'g':'f')+el.dataset.i;
+  const rest=cur===null?eps:eps.slice(eps.findIndex(e=>e.key===cur)+1);
+  let nx=(rest.find(e=>e.empty)||rest[0])?.el;
+  if(!nx){let nc=card.nextElementSibling;while(nc&&!nx){const e2=entryPoints(nc);nx=(e2.find(e=>e.empty)||e2[0])?.el;nc=nc.nextElementSibling;}}
   if(nx){nx.focus();return true;}
   el.blur();if(typeof padHide==='function')padHide();const sb=document.getElementById('submit');if(sb){sb.scrollIntoView({behavior:'smooth',block:'center'});sb.focus({preventScroll:true});}return false;}
 document.getElementById('logo').addEventListener('click',()=>{location.hash='';renderHome();});
@@ -1466,7 +1475,7 @@ function padKey(k){const el=padFor;if(!el)return;const card=el.closest('.pcard')
   if(k==='del'){if(el.value)el.value=el.value.slice(0,-1).replace(/^−$/,'−');
     else if(el.classList.contains('dig')){const nb=card.querySelector(`input.dig[data-i="${el.dataset.i}"][data-k="${+el.dataset.k+1}"]`);if(nb){nb.focus();nb.value='';}}
     el.dispatchEvent(new Event('input',{bubbles:true}));return;}
-  const max=+el.getAttribute('maxlength')||0;
+  const max=(+el.getAttribute('maxlength')||0)-(el.closest('.fwrap')?.querySelector('.neg')?1:0);
   if(el.classList.contains('dig'))el.value=k;else if(!max||el.value.replace('−','').length<max)el.value+=k;
   el.dispatchEvent(new Event('input',{bubbles:true}));}
 if(PAD_ON){padInit();
